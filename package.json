@@ -18,7 +18,7 @@
     "build:dev": "tsc && vite build",
     "build:test": "tsc && vite build --mode test",
     "build:sim": "tsc && vite build --mode sim",
-    "build": "tsc && vite build --mode online",
+    "build": "vite build --mode online",
     "serve": "vite preview",
     "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx",
     "release": "yunque-release --skipBuild",
