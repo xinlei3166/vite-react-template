@@ -1,26 +1,11 @@
 export default [
-  {
-    hidden: true,
-    breadcrumb: '首页',
-    name: 'home',
-    noLazy: true,
-    index: true,
-    element: () => import('@/views/home')
-  },
-  {
-    hidden: true,
-    path: '/404',
-    element: () => import('@/components/layout/Outlet'),
-    children: [
-      {
-        hidden: true,
-        breadcrumb: '404',
-        name: '404',
-        index: true,
-        element: () => import('@/views/404')
-      }
-    ]
-  },
+  // {
+  //   hidden: true,
+  //   breadcrumb: '首页',
+  //   name: 'home',
+  //   index: true,
+  //   element: () => import('@/views/home')
+  // },
   {
     hidden: true,
     breadcrumb: '登录',
@@ -30,7 +15,9 @@ export default [
   },
   {
     hidden: true,
-    path: '*',
-    element: () => import('@/views/404/Navigate')
+    breadcrumb: '404',
+    name: '404',
+    path: '/404',
+    element: () => import('@/views/404')
   }
 ]

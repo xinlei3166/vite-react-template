@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@loadable/component": "^5.15.0",
     "@reduxjs/toolkit": "^1.6.2",
     "antd": "^4.17.0-alpha.10",
     "axios": "^0.24.0",
@@ -54,6 +55,7 @@
     "windicss": "^3.2.1"
   },
   "devDependencies": {
+    "@types/loadable__component": "^5.13.4",
     "@types/mockjs": "^1.0.4",
     "@types/node": "^16.11.7",
     "@types/qs": "^6.9.7",

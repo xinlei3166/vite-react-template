@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 
 export type Request = Record<string, any>
 
@@ -43,15 +43,17 @@ export interface TabList {
   slots?: Object
 }
 
+export type IRouteElementPromise = () => Promise<any>
+
 export interface IRoute {
   auth?: boolean
   hidden?: boolean
-  icon: string
+  icon?: string
   breadcrumb?: string
   name?: string
   index?: boolean
-  path: string
-  element: ReactNode
+  path?: string
+  element: ReactElement | IRouteElementPromise
   children?: IRoute[]
   caseSensitive?: boolean
   [key: string]: any

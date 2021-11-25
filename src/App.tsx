@@ -1,32 +1,59 @@
 import {
   BrowserRouter as Router,
-  useRoutes as _useRoutes
+  Routes,
+  Route,
+  Navigate
 } from 'react-router-dom'
-import { createRoutes, useMenus } from '@/router'
-import Layout from '@/components/layout'
+import { useMenus } from '@/router'
+import { IRoute } from '@/interface'
+import loadable from '@/components/loadable'
 
-function useRoutes() {
+function childRoutes(routes: IRoute[]) {
+  return routes.map((route: IRoute) => (
+    <Route
+      key={route.name || route.path}
+      path={route.path}
+      element={loadable(route.element)}
+    >
+      {route.children?.map((childRoute: IRoute) => (
+        <Route
+          key={route.path}
+          path={childRoute.path}
+          element={loadable(childRoute.element)}
+        />
+      ))}
+    </Route>
+  ))
+}
+
+function useRouter() {
   const routes = useMenus()
   return function App() {
-    // 这里只能有一个首页组件，添加其他组件在routes配置
-    return _useRoutes([
-      {
-        path: '/',
-        element: <Layout />,
-        children: createRoutes(routes)
-      }
-    ])
+    return (
+      <Router>
+        <Routes>
+          <Route
+            key="root"
+            path="/"
+            element={loadable(() => import('@/components/layout'))}
+          >
+            <Route
+              key="home"
+              index
+              element={loadable(() => import('@/views/home'))}
+            />
+            {childRoutes(routes)}
+          </Route>
+          <Route path="*" element={<Navigate to="/404" />} />
+        </Routes>
+      </Router>
+    )
   }
 }
 
 function App() {
-  const Routes = useRoutes()
-
-  return (
-    <Router>
-      <Routes />
-    </Router>
-  )
+  const Router = useRouter()
+  return <Router />
 }
 
 export default App

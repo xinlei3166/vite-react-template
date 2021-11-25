@@ -99,12 +99,12 @@ function BaseLayout() {
   const menuItem = (menu: MenuItem) =>
     location?.pathname === menu.path ? (
       <span className="menu-item-link">
-        <Icon type={menu.icon} className="icon" />
+        <Icon type={menu.icon!} className="icon" />
         <span className="menu-item-title">{menu.breadcrumb}</span>
       </span>
     ) : (
-      <Link className="menu-item-link" to={menu.path}>
-        <Icon type={menu.icon} className="icon" />
+      <Link className="menu-item-link" to={menu.path!}>
+        <Icon type={menu.icon!} className="icon" />
         <span className="menu-item-title">{menu.breadcrumb}</span>
       </Link>
     )
@@ -117,7 +117,7 @@ function BaseLayout() {
       <Menu.SubMenu
         key={menu.name}
         title={<span className="menu-item-title">{menu.breadcrumb}</span>}
-        icon={<Icon type={menu.icon} className="icon" />}
+        icon={<Icon type={menu.icon!} className="icon" />}
       >
         {menu.children &&
           menuItems(menu.children.filter(r => !r.hidden && r.path))}

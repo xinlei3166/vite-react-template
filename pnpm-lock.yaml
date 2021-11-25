@@ -2,7 +2,9 @@ lockfileVersion: 5.3
 
 specifiers:
   '@ant-design/icons': ^4.7.0
+  '@loadable/component': ^5.15.0
   '@reduxjs/toolkit': ^1.6.2
+  '@types/loadable__component': ^5.13.4
   '@types/mockjs': ^1.0.4
   '@types/node': ^16.11.7
   '@types/qs': ^6.9.7
@@ -64,6 +66,7 @@ specifiers:
 
 dependencies:
   '@ant-design/icons': 4.7.0_react-dom@17.0.2+react@17.0.2
+  '@loadable/component': 5.15.0_react@17.0.2
   '@reduxjs/toolkit': 1.6.2_react-redux@7.2.6+react@17.0.2
   antd: 4.17.0_react-dom@17.0.2+react@17.0.2
   axios: 0.24.0
@@ -92,6 +95,7 @@ dependencies:
   windicss: 3.2.1
 
 devDependencies:
+  '@types/loadable__component': 5.13.4
   '@types/mockjs': 1.0.4
   '@types/node': 16.11.7
   '@types/qs': 6.9.7
@@ -508,6 +512,18 @@ packages:
     engines: {node: '>=6.9.0'}
     dev: true
 
+  /@loadable/component/5.15.0_react@17.0.2:
+    resolution: {integrity: sha512-g63rQzypPOZi0BeGsK4ST2MYhsFR+i7bhL8k/McUoWDNMDuTTdUlQ2GACKxqh5sI/dNC/6nVoPrycMnSylnAgQ==}
+    engines: {node: '>=8'}
+    peerDependencies:
+      react: '>=16.3.0'
+    dependencies:
+      '@babel/runtime': 7.16.3
+      hoist-non-react-statics: 3.3.2
+      react: 17.0.2
+      react-is: 16.13.1
+    dev: false
+
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -569,6 +585,12 @@ packages:
 
   /@types/json-schema/7.0.9:
     resolution: {integrity: sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==}
+    dev: true
+
+  /@types/loadable__component/5.13.4:
+    resolution: {integrity: sha512-YhoCCxyuvP2XeZNbHbi8Wb9EMaUJuA2VGHxJffcQYrJKIKSkymJrhbzsf9y4zpTmr5pExAAEh5hbF628PAZ8Dg==}
+    dependencies:
+      '@types/react': 17.0.35
     dev: true
 
   /@types/minimist/1.2.2:
