@@ -30,7 +30,7 @@ function useRouter() {
   const routes = useMenus()
   return function App() {
     return (
-      <Router>
+      <Router basename={import.meta.env.VITE_APP_BASE as string}>
         <Routes>
           <Route
             key="root"
