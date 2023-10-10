@@ -17,11 +17,12 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "types": ["vite/client", "node"],
-//    "baseUrl": "./",
-//    "paths": {
-//      "@/*": ["src/*"]
-//    }
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "features/*": ["../../features/*"]
+    }
   },
-  "include": ["packages/**/*.ts", "packages/**/*.d.ts", "packages/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"]
 }

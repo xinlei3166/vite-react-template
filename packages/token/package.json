@@ -1,0 +1,15 @@
+{
+  "name": "@packages/token",
+  "version": "1.0.0",
+  "description": "@packages/token",
+  "main": "index.ts",
+  "keywords": [],
+  "license": "MIT",
+  "peerDependencies": {
+    "antd": ">=5.8.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "antd": "^5.8.6"
+  }
+}

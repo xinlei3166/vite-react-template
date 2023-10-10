@@ -1,0 +1,132 @@
+.trigger {
+  font-size: 16px;
+  margin: 0 16px;
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: theme('colors.primary');
+  }
+}
+
+.ant-layout-sider-trigger {
+  padding: 0 16px;
+  border-top: 1px solid rgb(0 0 0 / 6%);
+  background: transparent !important;
+}
+
+.menu-item-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menu-item-icon {
+  font-size: 16px !important;
+  vertical-align: -0.2em !important;
+}
+
+.layout-sider .ant-menu-sub.ant-menu-inline {
+  //background: 0 0;
+}
+
+// .ant-menu-inline .ant-menu-item) remove width
+.layout-sider .ant-menu-inline .ant-menu-submenu-title {
+  width: 100%;
+}
+
+.layout-sider {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  height: 100%;
+}
+
+.layout-sider.ant-layout-sider-collapsed {
+  .ant-menu-submenu-title {
+    margin-bottom: 8px;
+  }
+
+  .menu-item-icon {
+    font-size: 18px !important;
+  }
+}
+
+// scroll bar
+.layout-sider .ant-layout-sider-children ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.layout-sider .ant-layout-sider-children ::-webkit-scrollbar-thumb {
+  background: hsl(0deg 0% 100% / 20%);
+  border-radius: 3px;
+  box-shadow: inset 0 0 5px hsl(0deg 0% 100% / 5%);
+}
+
+.ant-layout-sider-light .ant-layout-sider-children ::-webkit-scrollbar-thumb {
+  background: rgb(0 0 0 / 12%);
+  border-radius: 3px;
+  box-shadow: inset 0 0 5px rgb(0 21 41 / 5%);
+}
+
+.layout-sider .ant-layout-sider-children ::-webkit-scrollbar-track {
+  //background: hsla(0, 0%, 100%, 0.15);
+  border-radius: 3px;
+  //-webkit-box-shadow: inset 0 0 5px rgb(37 37 37 / 5%);
+}
+
+.ant-layout-sider-light .ant-layout-sider-children ::-webkit-scrollbar-track {
+  //background: rgba(0, 0, 0, 0.06);
+  border-radius: 3px;
+  //-webkit-box-shadow: inset 0 0 5px rgb(0 21 41 / 5%);
+}
+
+.layout-sider .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.layout-menu-wrap {
+  flex: 1 1 0%;
+  width: 100%;
+  overflow: hidden auto;
+}
+
+// about theme
+.ant-layout-sider-dark {
+  .ant-menu-submenu-active,
+  .ant-menu-submenu-open {
+    color: #fff;
+  }
+}
+
+.ant-layout-sider-light {
+  box-shadow: 2px 0 8px 0 rgb(29 35 41 / 5%);
+}
+
+.ant-menu-inline,
+.ant-menu-vertical,
+.ant-menu-vertical-left {
+  border-right-color: transparent;
+  border-inline-end-color: transparent !important;
+}
+
+.layout-sider-mix {
+  //padding-top: calc(v-bind('theme.height') + 4px);
+}
+
+html.dark {
+  .trigger {
+    color: rgb(255 255 255 / 65%);
+
+    &:hover {
+      color: #fff !important;
+    }
+  }
+
+  .ant-layout-sider-trigger {
+    border: none;
+  }
+}
