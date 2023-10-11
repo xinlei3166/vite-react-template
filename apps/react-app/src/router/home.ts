@@ -13,10 +13,22 @@ const routes = [
     element: () => import('@/views/login')
   },
   {
+    id: '403',
+    path: '/403',
+    handle: { title: '403', hidden: true, noUseLayout: true },
+    element: () => import('@/components/exception/403')
+  },
+  {
     id: '404',
     path: '/404',
     handle: { title: '404', hidden: true, noUseLayout: true },
-    element: () => import('@/views/404')
+    element: () => import('@/components/exception/404')
+  },
+  {
+    id: '500',
+    path: '/500',
+    handle: { title: '500', hidden: true, noUseLayout: true },
+    element: () => import('@/components/exception/500')
   }
 ]
 

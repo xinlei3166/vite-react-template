@@ -19,13 +19,13 @@ const userSlice = createSlice({
       state: UserState,
       action: PayloadAction<UserState['userinfo']>
     ) {
-      return { ...state, ...action.payload }
+      return { ...state, userinfo: action.payload }
     },
     setPermissions(
       state: UserState,
       action: PayloadAction<UserState['permissions']>
     ) {
-      return { ...state, ...action.payload }
+      return { ...state, permissions: action.payload }
     },
     cleanupUser(state: UserState) {
       return { ...state, userinfo: {}, permissions: [] }
@@ -53,6 +53,6 @@ export const fetchPermissions = createAsyncThunk(
   async (_, { dispatch }) => {
     const res: any = await getPermissions()
     if (!res || res.code !== 0) return
-    dispatch(setPermissions(res.data))
+    dispatch(setPermissions(res.data.list))
   }
 )

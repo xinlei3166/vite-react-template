@@ -1,9 +1,5 @@
-import { Card } from 'antd'
+import { Navigate } from 'react-router-dom'
 
-export default function IndexPage() {
-  return (
-    <Card className="h-full">
-      <div className="title">404</div>
-    </Card>
-  )
+export default function NavigateHome() {
+  return <Navigate to="/404" />
 }

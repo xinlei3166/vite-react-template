@@ -1,12 +1,14 @@
 import { memo } from 'react'
 import type { MenuProps } from 'antd'
-import { Dropdown } from 'antd'
+import { Dropdown, message } from 'antd'
 import {
   BellOutlined,
   UserOutlined,
   SettingOutlined,
   LoginOutlined
 } from '@ant-design/icons'
+import { logoutCleanup } from '@packages/utils'
+import { logout } from '@/api'
 import { useAppSelector } from '@/store'
 import avatar from '@/assets/avatar.png'
 import './Nav.less'
@@ -44,10 +46,31 @@ const items: MenuProps['items'] = [
 function Nav() {
   const theme = useAppSelector(state => state.theme)
 
+  const onLogout = async () => {
+    const res = await logout()
+    if (!res || res.code !== 0) return
+    message.success({
+      content: '退出登录成功',
+      duration: 1,
+      onClose: () => {
+        logoutCleanup()
+      }
+    })
+  }
+
+  const onClick: MenuProps['onClick'] = ({ key }) => {
+    if (key === 'logout') {
+      onLogout()
+    }
+  }
+
   return (
     <div className="layout-nav">
       <BellOutlined className="layout-header-icon" />
-      <Dropdown overlayClassName="layout-nav-dropdown" menu={{ items }}>
+      <Dropdown
+        overlayClassName="layout-nav-dropdown"
+        menu={{ items, onClick }}
+      >
         <span
           className="dropdown-link"
           style={{ height: theme.height, lineHeight: theme.height }}

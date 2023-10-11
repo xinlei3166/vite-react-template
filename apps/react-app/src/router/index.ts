@@ -5,7 +5,7 @@ import home from './home'
 import components from './components'
 import { typeOf } from '@packages/utils'
 import Layout from '@/components/layout'
-import Component404 from '@/views/404/Navigate'
+import Error404 from '@/views/404'
 
 const menus = [...home, ...components]
 
@@ -39,7 +39,7 @@ export const useRouter = () => {
       },
       {
         path: '*',
-        Component: Component404
+        Component: Error404
       }
     ],
     { basename: import.meta.env.BASE_URL }
