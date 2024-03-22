@@ -31,7 +31,9 @@ function BaseBreadcrumb() {
     const title = breadcrumb.unlink ? (
       breadcrumb.handle?.title
     ) : (
-      <Link to={breadcrumb.path}>{breadcrumb.handle?.title}</Link>
+      <Link to={breadcrumb.handle.firstChildrenRoutePath || breadcrumb.path}>
+        {breadcrumb.handle?.title}
+      </Link>
     )
     return { title }
   })

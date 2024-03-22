@@ -182,6 +182,9 @@ const generateRouteMenus = (
         ...route.children,
         ...generateRouteMenus(menu.childMenuList, parentMenu, level + 1)
       ]
+      if (level === 1 && _component === 'layout') {
+        route.handle.firstChildrenRoutePath = route.children[0].path
+      }
     }
 
     return route
