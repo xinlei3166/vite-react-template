@@ -15,7 +15,7 @@ export default defineConfig({
       prefixedOnly: false
       // ignoreAttributes: []
     }),
-    presetRemToPx()
+    presetRemToPx() as any
   ],
   // rules: [[/^opacity-brand-(\w+)$/, ([, d]) => ({ opacity: `var(--${d}-opacity)` })]],
   theme: {
