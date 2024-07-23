@@ -2,7 +2,7 @@ import { useState, createContext } from 'react'
 import { Card, Button } from 'antd'
 import Child from './Child'
 
-export const ProvideContext = createContext({})
+export const ProvideContext = createContext(0)
 
 export default function ProvidePage() {
   const [number, setNumber] = useState(0)
