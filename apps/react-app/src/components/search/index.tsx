@@ -24,6 +24,9 @@ interface SearchProps {
   showSearchBtn?: boolean
   showResetBtn?: boolean
   showBtn?: boolean
+  btnAlign?: string // left/right
+  btnClass?: string
+  btnStyle?: Record<string, any>
   extraBtn?: ReactNode
   onEnter?: (...args: any) => {}
   onChange?: (...args: any) => {}
@@ -52,6 +55,9 @@ function _Search(
     showSearchBtn = true,
     showResetBtn = true,
     showBtn = true,
+    btnAlign = 'left',
+    btnClass = '',
+    btnStyle = {},
     extraBtn,
     onEnter: _onEnter,
     onChange: _onChange,
@@ -251,7 +257,13 @@ function _Search(
         </div>
       ))}
       {showBtn && (
-        <div className="search-item search-btn mb-4 mr-0 ml-auto space-x-4">
+        <div
+          className={classNames([
+            'search-item search-btn mb-4 mr-0 ml-auto space-x-4',
+            btnClass
+          ])}
+          style={{ marginLeft: btnAlign === 'right' ? 'auto' : 0, ...btnStyle }}
+        >
           {showSearchBtn && (
             <Button type="primary" onClick={onSearch}>
               查询

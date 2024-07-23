@@ -1,10 +1,11 @@
 import { useState, useMemo } from 'react'
 import { useMount } from 'ahooks'
-import { Card, Table, Select } from 'antd'
+import { Card, Table, Select, Button } from 'antd'
 import Search from '@/components/search'
 import { useData } from '@packages/hooks'
 import { getList } from '@/api'
 import { createColumns, createTableColumns } from './columns'
+import Buttons from '@/components/exception/buttons'
 
 export default function DemoPage() {
   const [search, setSearch] = useState<Record<string, any>>({
@@ -101,6 +102,7 @@ export default function DemoPage() {
         setModel={setSearch}
         onSearch={onSearch}
         onReset={onReset}
+        extraBtn={<Button type="primary">导出</Button>}
       />
       <Card>
         <Table

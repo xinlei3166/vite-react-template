@@ -10,6 +10,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "antd": "^5.10.2"
+    "antd": "^5.19.3"
   }
 }

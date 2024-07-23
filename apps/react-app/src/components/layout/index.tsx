@@ -44,7 +44,7 @@ function BaseLayout() {
   const route = matchRoutes.at(-1)
   // @ts-ignore
   const routeTitle = route?.route?.title ? `${route?.route?.title} - ` : ''
-  const title = `${routeTitle}umi-react-template`
+  const title = `${routeTitle}vite-react-template`
 
   return (
     <ConfigProvider {...configProvider}>
