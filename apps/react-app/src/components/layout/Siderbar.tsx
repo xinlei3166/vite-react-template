@@ -66,7 +66,7 @@ function Siderbar() {
     }
   }
 
-  const onCollapse = async (collapsed: boolean) => {
+  const onCollapse =   (collapsed: boolean) => {
     dispatch(setTheme({ collapsed }))
     if (collapsed) {
       setOpenKeys([])

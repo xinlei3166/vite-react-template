@@ -2,7 +2,7 @@ export function findRoute(routes: any[]) {}
 
 // 滚动到页面底部
 export const scroll = (el = '.layout-content-wrap', scrollHeight?: number) => {
-  const element = document.querySelector(el) as HTMLElement
+  const element = document.querySelector(el)!
   element.scrollTop =
     typeof scrollHeight === 'number' ? scrollHeight : element.scrollHeight
 }

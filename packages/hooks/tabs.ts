@@ -1,10 +1,11 @@
 import { useState } from 'react'
+// @ts-ignore
 import router from '@/router'
-import type { TabList, TabListRef } from '@packages/types'
+import type { TabList, } from '@packages/types'
 import { auth, typeOf } from '@packages/utils'
 
 export function useTabs(
-  tabs: TabList[] | TabListRef,
+  tabs: TabList[] ,
   verify = true,
   emptyHandle: Boolean | Function = true
 ) {

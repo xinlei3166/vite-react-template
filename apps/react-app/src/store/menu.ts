@@ -20,15 +20,15 @@ export interface LeftMenu {
     [key: string]: any
   }
   element?: any
-  children?: Array<LeftMenu>
+  children?: LeftMenu[]
   caseSensitive?: boolean
   redirect?: any
   [key: string]: any
 }
 export interface MenuState {
   menus: Record<string, any>[]
-  leftMenus: Array<LeftMenu>
-  routeMenus: Array<LeftMenu>
+  leftMenus: LeftMenu[]
+  routeMenus: LeftMenu[]
   hasSetRoutes: boolean
 }
 const initialState: MenuState = {
@@ -137,7 +137,7 @@ const generateRouteMenus = (
     } = menu
     const link = !expand
     // 第一级路由使用main layout,其他使用route-view
-    const layout = level === 1 ? layouts['layout'] : layouts['routerView']
+    const layout = level === 1 ? layouts.layout : layouts.routerView
     const element = _component === 'layout' ? layout : _import(_component)
     const parentMenuName = level === 1 ? parentMenu : undefined
     const routeModel = {
@@ -157,7 +157,7 @@ const generateRouteMenus = (
       (m: Record<string, any>) => m.menuType === 1
     )
     const childrenLength =
-      childMenuList && childMenuList.length ? childMenuList.length : 0
+      childMenuList?.length ? childMenuList.length : 0
     const needHandleConditions: any[] = [
       level === 1 && link && !hidden,
       level > 1 && link && !hidden && _childMenuList?.length

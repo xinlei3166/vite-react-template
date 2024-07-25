@@ -27,7 +27,7 @@ interface PrometheusGetMonitorConfig {
   format?: string
   valueFormat?: Function
   title?: string
-  name?: string | Array<string>
+  name?: string | string[]
   yAxisName?: string
 }
 
@@ -147,9 +147,9 @@ export const usePrometheus = (options?: PrometheusOptions) => {
         legendData: []
       }
       const names: string[] = [].concat((config.name || []) as any)
-      const result = res.data.result as any
+      const result = res.data.result
       for (const [i, r] of result.entries()) {
-        const nameKey = ![null, '', undefined].includes(config.field!)
+        const nameKey = ![null, '', undefined].includes(config.field)
           ? config.field
           : '__name__'
         const name = names[i] || r.metric[nameKey as string]

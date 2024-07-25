@@ -9,7 +9,7 @@ function StorePage() {
   const dispatch = useAppDispatch()
   const [name, setName] = useState('君惜')
   const onSubmit = () => {
-    dispatch(setUserinfo({ userinfo: { ...user.userinfo, name } }))
+    dispatch(setUserinfo({ ...user.userinfo, name }))
   }
 
   useMount(onSubmit)

@@ -1,4 +1,5 @@
 import { message } from 'antd'
+// @ts-ignore
 import store, { fetchTmpKeys } from '@/store'
 
 export interface UploadRes {

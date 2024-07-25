@@ -2,7 +2,7 @@
 import Excel from 'exceljs'
 
 // 具体 api 参考 exceljs 官网文档
-export type ExcelColumn = {
+export interface ExcelColumn {
   header: string
   key: string
   style: Object

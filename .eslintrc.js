@@ -1,26 +1,35 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    parser: '@typescript-eslint/parser', // Specifies the ESLint parser
-    ecmaVersion: 2020, // Allows for the parsing of modern ECMAScript features
-    sourceType: 'module', // Allows for the use of imports
-    ecmaFeatures: {
-      tsx: true,
-      jsx: true
-    }
-  },
   env: {
     node: true,
     browser: true,
-    es6: true,
-    jest: true
+    es2020: true
   },
-  plugins: ['@typescript-eslint', 'react', 'react-hooks'],
   extends: [
-    'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
-    'plugin:prettier/recommended' // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended-type-checked',
+    'plugin:@typescript-eslint/stylistic-type-checked',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended',
   ],
+  plugins: ['@typescript-eslint', 'react-refresh'],
+  ignorePatterns: ['dist', '.eslintrc.js', '.eslintrc.cjs'],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: true,
+    tsconfigRootDir: __dirname,
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    ecmaFeatures: {
+      tsx: true,
+      jsx: true
+    },
+  },
   rules: {
+    'react-refresh/only-export-components': [
+      'warn',
+      { allowConstantExport: true },
+    ],
     // js
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -42,6 +51,18 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 0,
     '@typescript-eslint/no-unused-vars': 1,
     '@typescript-eslint/no-var-requires': 0,
+    '@typescript-eslint/no-misused-promises': 0,
+    '@typescript-eslint/no-unsafe-member-access': 0,
+    '@typescript-eslint/no-unsafe-assignment': 0,
+    '@typescript-eslint/no-unsafe-argument': 0,
+    '@typescript-eslint/no-floating-promises': 0,
+    '@typescript-eslint/no-unsafe-return': 0,
+    '@typescript-eslint/no-unsafe-call': 0,
+    '@typescript-eslint/prefer-nullish-coalescing': 0,
+    '@typescript-eslint/non-nullable-type-assertion-style': 0,
+    // react
+    'react/display-name': 0,
+    'react-hooks/rules-of-hooks': 0,
     // 强制 typescript 类型导入的一致使用
     '@typescript-eslint/consistent-type-imports': 1
   }

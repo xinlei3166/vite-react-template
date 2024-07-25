@@ -65,7 +65,7 @@ export const fetchTmpKeys = createAsyncThunk(
     console.log('cos-getState', state)
     if (dateNow > state.cos.expires) {
       // 初次和失效后调取
-      const res = (await getQcloudTmpkeys()) as Response
+      const res = (await getQcloudTmpkeys())
       if (!res || res.code !== 0) return
       const data = res.data as Record<string, any>
       dispatch(setExpires(data))

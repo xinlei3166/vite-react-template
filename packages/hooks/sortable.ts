@@ -39,8 +39,8 @@ const insertNodeAt = (
 }
 
 const updatePosition = (list: any[], oldIndex: number, newIndex: number) => {
-  const item = list.splice(oldIndex!, 1)[0]
-  list.splice(newIndex!, 0, { ...item })
+  const item = list.splice(oldIndex, 1)[0]
+  list.splice(newIndex, 0, { ...item })
 }
 
 export function useSortable(
@@ -87,8 +87,9 @@ export function useSortable(
   }
 
   useMount(() => {
-    const el = document.querySelector(selector) as HTMLElement
-    sortable.current = Sortable.create(el, mergedOptions)
+    const el = document.querySelector(selector)!
+    // @ts-ignore
+    sortable.current = Sortable.create((el as HTMLElement), mergedOptions)
   })
 
   return { sortable, drag, list }

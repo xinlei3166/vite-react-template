@@ -26,7 +26,7 @@ export function createRoutes(routes: any[]) {
     }
     routerRoutes.push(obj)
   }
-  return routerRoutes as RouteObject[]
+  return routerRoutes
 }
 
 export const useRouter = () => {

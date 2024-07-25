@@ -22,6 +22,6 @@
 //      "@/*": ["src/*"]
 //    }
   },
-  "include": ["packages/**/*.ts", "packages/**/*.d.ts", "packages/**/*.tsx"],
+  "include": ["scripts/**/*.ts", "packages/**/*.ts", "packages/**/*.d.ts", "packages/**/*.tsx"],
   "exclude": ["node_modules"]
 }

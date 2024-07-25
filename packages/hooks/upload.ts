@@ -43,7 +43,7 @@ export function useUpload({
   const onRemove: UploadProps['onRemove'] = file => {
     const index = fileList?.indexOf(file)
     const newFileList = fileList?.slice()
-    newFileList?.splice(index!, 1)
+    newFileList?.splice(index, 1)
     setFileList(newFileList)
   }
 

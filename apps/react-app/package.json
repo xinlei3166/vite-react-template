@@ -2,6 +2,7 @@
   "name": "react-app",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xinlei3166/vite-react-template.git",

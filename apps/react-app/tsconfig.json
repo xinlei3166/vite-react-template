@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "allowJs": false,
     "noImplicitAny": true,
     "skipLibCheck": false,
@@ -16,13 +20,30 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vite/client", "node"],
+    "types": [
+      "vite/client",
+      "node"
+    ],
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"],
-      "features/*": ["../../features/*"]
+      "@/*": [
+        "src/*"
+      ],
+      "features/*": [
+        "../../features/*"
+      ]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "vite.config.ts",
+    "uno.config.ts",
+    "postcss.config.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "upload.js"
+  ]
 }

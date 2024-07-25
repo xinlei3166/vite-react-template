@@ -1,7 +1,6 @@
 import { message } from 'antd'
 
 export function typeOf(obj: any) {
-  const { toString } = Object.prototype
   const map = {
     '[object Boolean]': 'boolean',
     '[object Number]': 'number',
@@ -15,7 +14,7 @@ export function typeOf(obj: any) {
     '[object Object]': 'object'
   }
   // @ts-ignore
-  return map[toString.call(obj)]
+  return map[Object.prototype.toString.call(obj)]
 }
 
 export function validateFields(

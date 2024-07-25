@@ -10,7 +10,7 @@ export const formatDatetime = (datetime: dayjs.ConfigType, format?: string) => {
 
 // 10位或者13位时间戳格式化成字符串
 export const unifiedTimeStamp = (
-  datetime: dayjs.ConfigType,
+  datetime: string | number,
   format?: string
 ) => {
   const str = datetime + ''
