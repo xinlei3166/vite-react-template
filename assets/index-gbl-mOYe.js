@@ -1,1 +1,0 @@
-import{j as e}from"./index-Bf4oMwZ6.js";import{C as s}from"./index-vAI0mefv.js";function r(){return e.jsxs(s,{className:"h-full",children:[e.jsx("div",{className:"title",children:"Home"}),e.jsx("div",{className:"title",children:"各组件展示了React的基本用法"})]})}export{r as default};

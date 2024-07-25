@@ -1,0 +1,1 @@
+import{a4 as a,j as e}from"./index-Btk-EsWo.js";import{C as r}from"./index-CVZLShpJ.js";function n(){const s=a(),t=()=>{s("/")};return e.jsxs(r,{className:"h-full",children:[e.jsx("div",{className:"title",children:"Router"}),e.jsx("div",{className:"title cursor-pointer",onClick:t,children:"点击跳转到首页"})]})}export{n as default};

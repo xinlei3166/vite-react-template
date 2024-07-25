@@ -1,1 +1,0 @@
-import{r as a,j as e}from"./index-Bf4oMwZ6.js";function o(){const[t,s]=a.useState({in:"请输入"}),n=r=>{s({in:r.target.value})};return e.jsxs("div",{children:[e.jsx("p",{children:"Hello React"}),e.jsxs("p",{children:["当前时间：",new Date().toLocaleTimeString()]}),e.jsx("p",{children:e.jsx("input",{type:"text",onChange:n})}),e.jsxs("p",{children:["输入内容：",t.in]})]})}export{o as default};
