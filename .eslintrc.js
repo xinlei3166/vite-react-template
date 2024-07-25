@@ -60,6 +60,7 @@ module.exports = {
     '@typescript-eslint/no-unsafe-call': 0,
     '@typescript-eslint/prefer-nullish-coalescing': 0,
     '@typescript-eslint/non-nullable-type-assertion-style': 0,
+    '@typescript-eslint/consistent-indexed-object-style': 0,
     // react
     'react/display-name': 0,
     'react-hooks/rules-of-hooks': 0,
