@@ -1,1 +1,0 @@
-import{a3 as a,j as e}from"./index-37b3e965.js";import{C as r}from"./index-6332c94d.js";function n(){const s=a(),t=()=>{s("/")};return e.jsxs(r,{className:"h-full",children:[e.jsx("div",{className:"title",children:"Router"}),e.jsx("div",{className:"title cursor-pointer",onClick:t,children:"点击跳转到首页"})]})}export{n as default};
