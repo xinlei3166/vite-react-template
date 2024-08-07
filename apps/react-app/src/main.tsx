@@ -1,5 +1,5 @@
 import React from 'react'
-import { createRoot } from 'react-dom/client'
+import ReactDOM from 'react-dom/client'
 import App from './App'
 import '@packages/styles/index.less'
 import '@packages/styles/reset.less'
@@ -8,8 +8,11 @@ import 'animate.css'
 import 'virtual:uno.css'
 import('./mock')
 
-const root = createRoot(document.getElementById('root')!)
-root.render(<App />)
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
 
 // import * as serviceWorker from './serviceWorker'
 // If you want your app to work offline and load faster, you can change

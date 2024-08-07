@@ -34,7 +34,6 @@
 //   const routes = useMenus()
 //   return function App() {
 //     return (
-//       // <React.StrictMode></React.StrictMode>
 //       <Provider store={store}>
 //         <Router basename={import.meta.env.BASE_URL}>
 //           <Routes>
@@ -68,7 +67,6 @@ import store from '@/store'
 
 function App() {
   return (
-    // <React.StrictMode></React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
