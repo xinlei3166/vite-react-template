@@ -4,6 +4,17 @@ dist
 dist-ssr
 *.local
 
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# next.js
+coverage
+.next/
+out/
+build
+*.pem
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
 # local env files
 .env.local
 .env.*.local
@@ -13,6 +24,15 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# Dependencies
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # Editor directories and files
 .idea
