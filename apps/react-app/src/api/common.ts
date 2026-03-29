@@ -5,5 +5,5 @@ export function getQcloudTmpkeys(
   data?: Request,
   config?: Config
 ): Promise<Response> {
-  return requests.post('/api/getQcloudTmpkeys', data, config)
+  return requests.post('/getQcloudTmpkeys', data, config)
 }
