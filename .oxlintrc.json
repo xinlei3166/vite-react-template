@@ -1,0 +1,29 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript"],
+  "categories": {
+    "correctness": "warn"
+  },
+  "env": {
+    "builtin": true
+  },
+  "rules": {
+    "no-var": "error",
+    "@typescript-eslint/consistent-type-imports": "warn",
+    "no-unused-vars": "warn",
+    "react/only-export-components": [
+      "warn",
+      {
+        "allowConstantExport": true
+      }
+    ]
+  },
+  "ignorePatterns": [
+    "dist",
+    "public",
+    "node_modules",
+    "iconfont.js",
+    "packages/docs/.vitepress/cache",
+    "components.d.ts"
+  ]
+}

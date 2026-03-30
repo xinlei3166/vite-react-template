@@ -21,7 +21,6 @@ export const getAge = (birthday: number | string, sMonth = true): string => {
     _birthday = unifiedTimeStamp(birthday, 'YYYY-MM-DD')
   } else if (Object.prototype.toString.call(birthday) === '[object String]') {
     const b = birthday as string
-    // eslint-disable-next-line prefer-destructuring
     _birthday = b.split(' ')[0]
   }
   if (!_birthday) return ''

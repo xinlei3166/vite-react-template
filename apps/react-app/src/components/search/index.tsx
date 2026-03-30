@@ -66,7 +66,6 @@ function _Search(
   } = props
 
   const parseValue = (value: string, int: true) => {
-    // eslint-disable-next-line
     return int ? parseInt(value) : value
   }
 

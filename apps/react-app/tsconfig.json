@@ -2,11 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "noImplicitAny": true,
     "skipLibCheck": false,
@@ -20,18 +16,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": [
-      "vite/client",
-      "node"
-    ],
+    "types": ["vite/client", "node"],
     "baseUrl": "./",
     "paths": {
-      "@/*": [
-        "src/*"
-      ],
-      "features/*": [
-        "../../features/*"
-      ]
+      "@/*": ["src/*"],
+      "features/*": ["../../features/*"]
     }
   },
   "include": [
@@ -42,8 +31,5 @@
     "uno.config.ts",
     "postcss.config.mjs"
   ],
-  "exclude": [
-    "node_modules",
-    "upload.js"
-  ]
+  "exclude": ["node_modules", "upload.js"]
 }

@@ -156,8 +156,7 @@ const generateRouteMenus = (
     const childMenuList = _childMenuList.filter(
       (m: Record<string, any>) => m.menuType === 1
     )
-    const childrenLength =
-      childMenuList?.length ? childMenuList.length : 0
+    const childrenLength = childMenuList?.length ? childMenuList.length : 0
     const needHandleConditions: any[] = [
       level === 1 && link && !hidden,
       level > 1 && link && !hidden && _childMenuList?.length

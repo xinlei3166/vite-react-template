@@ -29,7 +29,7 @@ export interface RequestConfig {
 export type Config = RequestConfig & AxiosRequestConfig
 export type InternalConfig = RequestConfig & InternalAxiosRequestConfig
 
-export type Request = Record<string, any>;
+export type Request = Record<string, any>
 
 export type RequestMethod = 'get' | 'post' | 'put' | 'patch' | 'delete'
 export type ResponseData = null | any[] | Record<string, any>

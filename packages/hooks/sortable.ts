@@ -89,7 +89,7 @@ export function useSortable(
   useMount(() => {
     const el = document.querySelector(selector)!
     // @ts-ignore
-    sortable.current = Sortable.create((el as HTMLElement), mergedOptions)
+    sortable.current = Sortable.create(el as HTMLElement, mergedOptions)
   })
 
   return { sortable, drag, list }

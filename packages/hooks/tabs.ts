@@ -1,13 +1,13 @@
 import { useState } from 'react'
 // @ts-ignore
 import router from '@/router'
-import type { TabList, } from '@packages/types'
+import type { TabList } from '@packages/types'
 import { auth, typeOf } from '@packages/utils'
 
 export function useTabs(
-  tabs: TabList[] ,
+  tabs: TabList[],
   verify = true,
-  emptyHandle: Boolean | Function = true
+  emptyHandle: boolean | Function = true
 ) {
   const tabList = tabs.filter(tab => !verify || auth(tab.permission!))
 

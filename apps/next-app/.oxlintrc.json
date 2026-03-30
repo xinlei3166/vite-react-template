@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "nextjs"],
+  "categories": {
+    "correctness": "warn",
+    "perf": "warn"
+  },
+  "rules": {
+    "no-var": "error",
+    "react/jsx-no-target-blank": "warn",
+    "react-hooks/rules-of-hooks": "error",
+    "@typescript-eslint/consistent-type-imports": "warn"
+  },
+  "ignorePatterns": [
+    "dist",
+    "public",
+    "node_modules",
+    "iconfont.js",
+    "packages/docs/.vitepress/cache",
+    "components.d.ts"
+  ]
+}
