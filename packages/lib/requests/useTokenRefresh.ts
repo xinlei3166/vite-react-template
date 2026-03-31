@@ -44,7 +44,7 @@ export const useTokenRefresh = (options: UseTokenRefreshOptions = {}) => {
         isRefreshing = false
         requestsQueue = []
         // 此处可以触发全局退出事件
-        errorHandler?.('登录超时111')
+        errorHandler?.('登录超时')
         return Promise.reject(error)
       }
     } else {
