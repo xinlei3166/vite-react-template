@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript"],
+  "plugins": ["typescript", "react"],
   "categories": {
     "correctness": "warn"
   },
@@ -11,12 +11,10 @@
     "no-var": "error",
     "@typescript-eslint/consistent-type-imports": "warn",
     "no-unused-vars": "warn",
-    "react/only-export-components": [
-      "warn",
-      {
-        "allowConstantExport": true
-      }
-    ]
+    // react
+    "react/display-name": 0,
+    "react/rules-of-hooks": 0,
+    "react/only-export-components": ["warn", { "allowConstantExport": true }]
   },
   "ignorePatterns": [
     "dist",
