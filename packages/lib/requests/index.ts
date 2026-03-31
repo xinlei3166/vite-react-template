@@ -1,4 +1,4 @@
-import { message } from 'ant-design-vue'
+import { message } from 'antd'
 import axios from 'axios'
 import type { Config, RequestsConfig, Method } from '@packages/types'
 import { ContentTypeEnum } from '@packages/types/enums'
