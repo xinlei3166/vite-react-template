@@ -12,8 +12,8 @@
     "@typescript-eslint/consistent-type-imports": "warn",
     "no-unused-vars": "warn",
     // react
-    "react/display-name": 0,
-    "react/rules-of-hooks": 0,
+    "react/display-name": "off",
+    "react/rules-of-hooks": "off",
     "react/only-export-components": ["warn", { "allowConstantExport": true }]
   },
   "ignorePatterns": [

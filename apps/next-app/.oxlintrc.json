@@ -1,15 +1,18 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "nextjs"],
+  "plugins": ["typescript", "react", "nextjs"],
   "categories": {
     "correctness": "warn",
     "perf": "warn"
   },
   "rules": {
     "no-var": "error",
+    "@typescript-eslint/consistent-type-imports": "warn",
+    // react
     "react/jsx-no-target-blank": "warn",
-    "react-hooks/rules-of-hooks": "error",
-    "@typescript-eslint/consistent-type-imports": "warn"
+    "react/display-name": "off",
+    "react/rules-of-hooks": "off",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }]
   },
   "ignorePatterns": [
     "dist",
