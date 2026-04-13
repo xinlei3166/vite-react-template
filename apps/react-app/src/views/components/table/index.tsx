@@ -1,9 +1,9 @@
-import { useState, useMemo } from 'react'
 import { useMount } from 'ahooks'
 import { Card, Table, Select } from 'antd'
-import Search from '@/components/search'
+import { useState, useMemo } from 'react'
 import { useData } from '@packages/hooks'
 import { getList } from '@/api'
+import Search from '@/components/search'
 import { createColumns, createTableColumns } from './columns'
 
 export default function TablePage() {
@@ -25,7 +25,7 @@ export default function TablePage() {
             return (
               <Select
                 value={model.name5}
-                className="!w-240px"
+                className="w-full"
                 allowClear
                 placeholder="请选择性别"
                 getPopupContainer={triggerNode => triggerNode.parentNode}
@@ -84,11 +84,11 @@ export default function TablePage() {
     await onSearch(_state)
   }
 
-  function onEdit() {
+  const onEdit = () => {
     window.open('https://baidu.com')
   }
 
-  function onPreview() {
+  const onPreview = () => {
     window.open('https://baidu.com')
   }
 

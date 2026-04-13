@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
 import { useMount } from 'ahooks'
 import { Card, Table } from 'antd'
+import { useMemo } from 'react'
 import { useData } from '@packages/hooks'
 import { getList } from '@/api'
 import { createTableColumns } from './columns'
@@ -32,11 +32,11 @@ export default function FixedTablePage() {
 
   useMount(init)
 
-  function onEdit() {
+  const onEdit = () => {
     window.open('https://baidu.com')
   }
 
-  function onPreview() {
+  const onPreview = () => {
     window.open('https://baidu.com')
   }
 
