@@ -1,22 +1,22 @@
 {
   "name": "vite-react-template",
   "version": "2.0.0",
-  "description": "vite-react-template",
   "private": true,
+  "description": "vite-react-template",
+  "keywords": [
+    "ant-design",
+    "monorepo",
+    "react",
+    "template",
+    "typescript",
+    "vite"
+  ],
+  "license": "MIT",
+  "author": "君惜",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xinlei3166/vite-react-template.git"
   },
-  "keywords": [
-    "react",
-    "vite",
-    "template",
-    "ant-design",
-    "typescript",
-    "monorepo"
-  ],
-  "author": "君惜",
-  "license": "MIT",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "prepare": "simple-git-hooks",
@@ -92,8 +92,8 @@
     "lint-staged": "^15.2.7",
     "mockjs": "^1.1.0",
     "npm-run-all": "^4.1.5",
-    "oxfmt": "^0.42.0",
-    "oxlint": "^1.57.0",
+    "oxfmt": "^0.45.0",
+    "oxlint": "^1.60.0",
     "picocolors": "latest",
     "postcss": "^8.4.39",
     "prop-types": "^15.8.1",
@@ -113,7 +113,7 @@
   },
   "lint-staged": {
     "*": [
-      "oxlint --fix",
+      "oxlint --fix --no-error-on-unmatched-pattern",
       "oxfmt --no-error-on-unmatched-pattern"
     ]
   },
