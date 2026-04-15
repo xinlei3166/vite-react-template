@@ -1,4 +1,4 @@
-import { message } from 'antd'
+import { MessagePlugin } from 'tdesign-react'
 // @ts-ignore
 import store, { fetchTmpKeys } from '@/store'
 
@@ -37,7 +37,7 @@ export function useCosUpload(type: string) {
           if (err) {
             if (err.statusCode === 403) {
               store.fetchTmpKeys()
-              message.error('Access Key失效，请重新上传')
+              MessagePlugin.error('Access Key失效，请重新上传')
             } else {
               console.log(err)
             }

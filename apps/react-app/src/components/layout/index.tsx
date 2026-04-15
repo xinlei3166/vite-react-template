@@ -1,22 +1,20 @@
-import { ConfigProvider, Layout } from 'antd'
-import zhCN from 'antd/es/locale/zh_CN'
+import { useMount } from 'ahooks'
+import classNames from 'classnames'
+import { Helmet } from 'react-helmet'
 import {
   Outlet,
   useLocation,
   useMatches,
   useOutletContext
 } from 'react-router-dom'
-import { Helmet } from 'react-helmet'
-import { useMount } from 'ahooks'
-import classNames from 'classnames'
-import Nav from './Nav'
-import Siderbar from './Siderbar'
-import Breadcrumb from './Breadcrumb'
-import Setting from './Setting'
-import Logo from './Logo'
-import TokenContextHolder from '@packages/token/TokenContextHolder'
-import { useAppSelector, useAppDispatch } from '@/store'
+import { Layout } from 'tdesign-react'
 import { noUseLayoutPaths } from '@/router/home'
+import { useAppSelector, useAppDispatch } from '@/store'
+import Breadcrumb from './Breadcrumb'
+import Logo from './Logo'
+import Nav from './Nav'
+import Setting from './Setting'
+import Siderbar from './Siderbar'
 import './index.less'
 
 function BaseLayout() {
@@ -26,19 +24,9 @@ function BaseLayout() {
   const theme = useAppSelector(state => state.theme)
   const dispatch = useAppDispatch()
 
-  const configProvider = {
-    locale: zhCN,
-    theme: { token: theme.token }
-  }
-
   // don't use layout
   if (noUseLayoutPaths.includes(location?.pathname)) {
-    return (
-      <ConfigProvider {...configProvider}>
-        <TokenContextHolder />
-        <Outlet />
-      </ConfigProvider>
-    )
+    return <Outlet />
   }
 
   const route = matchRoutes.at(-1)
@@ -47,8 +35,7 @@ function BaseLayout() {
   const title = `${routeTitle}vite-react-template`
 
   return (
-    <ConfigProvider {...configProvider}>
-      <TokenContextHolder />
+    <>
       <Helmet>
         <title>{title}</title>
       </Helmet>
@@ -106,7 +93,7 @@ function BaseLayout() {
         </Layout>
       </Layout>
       <Setting />
-    </ConfigProvider>
+    </>
   )
 }
 

@@ -1,6 +1,6 @@
 import { useMount } from 'ahooks'
-import { Card, Table } from 'antd'
 import { useMemo } from 'react'
+import { Card, Table } from 'tdesign-react'
 import { useData } from '@packages/hooks'
 import { getList } from '@/api'
 import { createTableColumns } from './columns'

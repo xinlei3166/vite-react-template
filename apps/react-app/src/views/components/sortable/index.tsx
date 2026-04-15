@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Card } from 'antd'
 import { ReactSortable } from 'react-sortablejs'
+import { Card } from 'tdesign-react'
 import './index.less'
 
 interface Fruit {

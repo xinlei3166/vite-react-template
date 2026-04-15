@@ -2,16 +2,19 @@ import { useState } from 'react'
 import type { Pagination } from '@packages/types'
 
 const defaultPagination: Pagination = {
-  size: 'small',
   current: 1,
   defaultCurrent: 1,
-  pageSize: 10,
+  pageSize: 20,
   total: 0,
-  showTotal: (total: number | string) => `共${total}条`,
-  showLessItems: true,
-  showQuickJumper: true,
-  showSizeChanger: true,
-  pageSizeOptions: ['10', '20', '30', '50', '100']
+  totalContent: true,
+  size: 'medium',
+  theme: 'default',
+  pageSizeOptions: ['10', '20', '30', '50', '100'],
+  showFirstAndLastPageBtn: false,
+  showJumper: true,
+  showPageNumber: true,
+  showPageSize: true,
+  showPreviousAndNextBtn: true
 }
 
 export function usePagination(_pagination?: Record<string, any>) {

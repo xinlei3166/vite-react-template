@@ -1,4 +1,4 @@
-import { Card } from 'antd'
+import { Card } from 'tdesign-react'
 
 export default function IndexPage() {
   return (

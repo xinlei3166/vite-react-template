@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios'
-import { message } from 'antd'
 import axios from 'axios'
 import dayjs from 'dayjs'
+import { MessagePlugin } from 'tdesign-react'
 import { deepClone, getToken } from '@packages/utils'
 
 const config = {
@@ -176,7 +176,7 @@ export const usePrometheus = (options?: PrometheusOptions) => {
 
       return data
     } catch (e) {
-      message.error('请求失败')
+      MessagePlugin.error('请求失败')
       return
     }
   }
@@ -200,8 +200,8 @@ export const usePrometheus = (options?: PrometheusOptions) => {
         })),
         legendData: result.map((r: Record<string, any>) => r.metric.name)
       }
-    } catch (e) {
-      message.error('请求失败')
+    } catch (e: any) {
+      MessagePlugin.error('请求失败')
       return
     }
   }
@@ -225,8 +225,8 @@ export const usePrometheus = (options?: PrometheusOptions) => {
         })),
         legendData: result.map((r: Record<string, any>) => r.metric.name)
       }
-    } catch (e) {
-      message.error('请求失败')
+    } catch (e: any) {
+      MessagePlugin.error('请求失败')
       return
     }
   }

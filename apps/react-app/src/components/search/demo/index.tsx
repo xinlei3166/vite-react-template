@@ -1,6 +1,6 @@
 import { useMount } from 'ahooks'
-import { Card, Table, Select, Button } from 'antd'
 import { useState, useMemo } from 'react'
+import { Card, Table, Select, Button } from 'tdesign-react'
 import { useData } from '@packages/hooks'
 import { getList } from '@/api'
 import Buttons from '@/components/exception/buttons'
@@ -27,7 +27,7 @@ export default function DemoPage() {
               <Select
                 value={model.name5}
                 className="w-full"
-                allowClear
+                clearable
                 placeholder="请选择性别"
                 getPopupContainer={triggerNode => triggerNode.parentNode}
                 onChange={value => onChange('name5', value)}

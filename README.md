@@ -1,6 +1,6 @@
 # vite-react-template
 
-这个模板可以帮助你快速使用 `React18`, `TypeScript` 和 `Vite` 进行项目开发。
+这个模板可以帮助你快速使用 `React`, `TypeScript` 和 `Vite` 进行项目开发。
 
 **安装pnpm**
 

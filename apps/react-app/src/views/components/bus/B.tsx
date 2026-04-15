@@ -1,17 +1,17 @@
-import { useState } from 'react'
 import { useMount, useUnmount } from 'ahooks'
-import { useBus } from '@packages/lib'
+import { useState } from 'react'
+import { useEvent } from '@packages/hooks'
 
 export default function B() {
   const [number, setNumber] = useState(0)
-  const bus = useBus()
+  const event = useEvent()
 
   useMount(() => {
-    bus.on('change-number', setNumber)
+    event.on('change-number', setNumber)
   })
 
   useUnmount(() => {
-    bus.off('change-number', setNumber)
+    event.off('change-number', setNumber)
   })
 
   return (

@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { message } from 'antd'
-import { usePagination } from './table'
-import { useExcel } from './excel'
+import { MessagePlugin } from 'tdesign-react'
 import type { Pagination } from '@packages/types'
 import type { ExcelColumn } from '@packages/utils'
+import { useExcel } from './excel'
+import { usePagination } from './table'
 
 interface DataOptions {
   params?: Record<string, any>
@@ -15,7 +15,7 @@ interface DataOptions {
   codeKey?: string
   successCode?: string | number
 }
-let s = 100
+
 /**
  * get data
  * @param api 请求方法
@@ -33,7 +33,7 @@ export function useData(
   {
     params,
     pagination = {},
-    dataKey = 'list',
+    dataKey = 'records',
     cb,
     onTableChange: _onTableChange,
     method = 'get',
@@ -54,11 +54,11 @@ export function useData(
 
   const init = async (_params: Record<string, any> = {}) => {
     setLoading(true)
+    const page = pagination ? pag.current : undefined
     const pageSize = pagination ? pag.pageSize : undefined
-    const pageNo = pagination ? pag.current : undefined
     let mergedParams: Record<string, any> = {
-      pageSize,
-      pageNo,
+      page,
+      page_size: pageSize,
       ...params,
       ..._params
     }
@@ -77,32 +77,27 @@ export function useData(
     }
     setPagination((state: any) => ({
       ...state,
-      total: s++ || res.data?.total || 0
+      total: res.data?.total || 0
     }))
     cb?.({ sourceData, data })
   }
 
   const onSearch = async (_params: Record<string, any> = {}) => {
     setPagination((state: any) => ({ ...state, current: 1 }))
-    await init({ ..._params, pageNo: 1 })
+    await init({ ..._params, page: 1 })
   }
 
-  async function onTableChange(
-    pagination: Pagination,
-    filters: any,
-    sorter: any,
-    { currentDataSource }: any
-  ) {
+  async function onTableChange(data: any, context: any) {
     setPagination((state: any) => ({
       ...state,
-      current: pagination.current,
-      pageSize: pagination.pageSize
+      current: data.pagination.current,
+      pageSize: data.pagination.pageSize
     }))
     await init({
-      pageNo: pagination.current,
-      pageSize: pagination.pageSize
+      page: data.pagination.current,
+      page_size: data.pagination.pageSize
     })
-    _onTableChange?.(pagination, filters, sorter, { currentDataSource })
+    _onTableChange?.(data, context)
   }
 
   return {
@@ -144,7 +139,7 @@ export function useExport(
     excelFields,
     filename = 'excel.xlsx',
     msg = '导出成功',
-    dataKey = 'list',
+    dataKey = 'records',
     codeKey = 'code',
     successCode = 0
   }: ExportOptions
@@ -171,7 +166,7 @@ export function useExport(
   const onExport = async () => {
     const res = await exportExcel(filename)
     if (!res) return
-    message.success(msg)
+    MessagePlugin.success(msg)
   }
 
   return { downloadLoading, onExport }

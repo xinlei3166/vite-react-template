@@ -1,4 +1,4 @@
-import { Card } from 'antd'
+import { Card } from 'tdesign-react'
 import A from './A'
 import B from './B'
 

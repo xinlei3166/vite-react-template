@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Button } from 'antd'
+import { Button } from 'tdesign-react'
 
 export default function Buttons() {
   const navigate = useNavigate()

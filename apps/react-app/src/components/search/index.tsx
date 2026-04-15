@@ -1,5 +1,7 @@
 import type { Property } from 'csstype'
 import type { PropsWithChildren, HTMLAttributes, ReactNode } from 'react'
+import classNames from 'classnames'
+import { memo } from 'react'
 import {
   Row,
   Col,
@@ -11,9 +13,7 @@ import {
   Cascader,
   DatePicker,
   Button
-} from 'antd'
-import classNames from 'classnames'
-import { memo } from 'react'
+} from 'tdesign-react'
 import { typeOf } from '@packages/utils'
 
 interface SearchProps {
@@ -146,7 +146,7 @@ function _Search(
         value={model[column.key]}
         className="search-item-input search-item-component w-full"
         style={mergeColumnStyle(column.style)}
-        allowClear={column.allowClear}
+        clearable={column.clearable}
         type={column.type}
         maxLength={column.maxLength}
         placeholder={column.placeholder}
@@ -174,7 +174,7 @@ function _Search(
         value={model[column.key]}
         className="search-item-select search-item-component w-full"
         style={mergeColumnStyle(column.style)}
-        allowClear={column.allowClear}
+        clearable={column.clearable}
         mode={column.mode}
         showSearch={column.showSearch}
         labelInValue={column.labelInValue || false}
@@ -201,7 +201,7 @@ function _Search(
         treeData={column.treeData}
         treeCheckable={column.treeCheckable}
         multiple={column.multiple}
-        allowClear={column.allowClear}
+        clearable={column.clearable}
         showSearch={column.showSearch}
         showCheckedStrategy={column.showCheckedStrategy}
         treeDefaultExpandAll={column.treeDefaultExpandAll}
@@ -214,7 +214,7 @@ function _Search(
         value={model[column.key]}
         className="search-item-cascader search-item-component w-full"
         style={mergeColumnStyle(column.style)}
-        allowClear={column.allowClear}
+        clearable={column.clearable}
         fieldNames={
           column.fieldNames || {
             label: 'label',
@@ -234,7 +234,7 @@ function _Search(
         value={model[column.key]}
         className="search-item-date-picker search-item-component w-full"
         style={mergeColumnStyle(column.style)}
-        allowClear={column.allowClear}
+        clearable={column.clearable}
         format={column.format || 'YYYY-MM-DD'}
         showTime={column.showTime}
         placeholder={column.placeholder}
@@ -246,7 +246,7 @@ function _Search(
         value={model[column.key]}
         className="search-item-range-picker search-item-component w-full"
         style={mergeColumnStyle(column.style)}
-        allowClear={column.allowClear}
+        clearable={column.clearable}
         format={column.format || 'YYYY-MM-DD'}
         showTime={column.showTime}
         placeholder={column.placeholder}

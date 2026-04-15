@@ -7,7 +7,7 @@ export const columns: Record<string, any>[] = [
     searchType: 'input',
     type: 'text',
     key: 'name1',
-    allowClear: true,
+    clearable: true,
     placeholder: '请输入姓名'
   },
   {
@@ -15,7 +15,7 @@ export const columns: Record<string, any>[] = [
     searchType: 'input',
     type: 'number',
     key: 'name2',
-    allowClear: true,
+    clearable: true,
     placeholder: '请输入年龄'
   },
   {
@@ -27,7 +27,7 @@ export const columns: Record<string, any>[] = [
       2: '听音乐'
     },
     key: 'name3',
-    allowClear: true,
+    clearable: true,
     placeholder: '请选择爱好'
   },
   {
@@ -40,7 +40,7 @@ export const columns: Record<string, any>[] = [
       { label: '成都', value: 'chengdu' }
     ],
     key: 'name4',
-    allowClear: true,
+    clearable: true,
     placeholder: '请选择城市'
   },
   {

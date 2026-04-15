@@ -1,8 +1,10 @@
-import type { TablePaginationConfig } from 'antd'
+import type { PaginationProps } from 'tdesign-react'
 
 export * from './requests'
 
-export type Pagination = TablePaginationConfig & Record<string, any>
+export interface Pagination extends PaginationProps {
+  [key: string]: any
+}
 
 // tab list
 export interface TabList {

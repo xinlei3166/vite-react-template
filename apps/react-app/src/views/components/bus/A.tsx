@@ -1,15 +1,15 @@
 import { useState } from 'react'
-import { Button } from 'antd'
-import { useBus } from '@packages/lib'
+import { Button } from 'tdesign-react'
+import { useEvent } from '@packages/hooks'
 
 export default function A() {
   const [number, setNumber] = useState(0)
-  const bus = useBus()
+  const event = useEvent()
 
   const onAdd = () => {
     const newNumber = number + 1
     setNumber(newNumber)
-    bus.emit('change-number', newNumber)
+    event.emit('change-number', newNumber)
   }
 
   return (

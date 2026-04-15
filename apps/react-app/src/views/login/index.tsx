@@ -1,8 +1,11 @@
-import { useState, useRef } from 'react'
-import { message, Form, Button, Input, Checkbox } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { useState, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Form, Button, Input, Checkbox } from 'tdesign-react'
+import { MessagePlugin } from 'tdesign-react'
 import { setToken } from '@packages/utils'
+import { login } from '@/api'
+import logo from '@/assets/logo.svg'
 import {
   useAppSelector,
   useAppDispatch,
@@ -10,8 +13,6 @@ import {
   fetchPermissions,
   fetchMenus
 } from '@/store'
-import { login } from '@/api'
-import logo from '@/assets/logo.svg'
 import './index.less'
 
 function Login() {
@@ -47,7 +48,7 @@ function Login() {
     }
     await dispatch(fetchUserinfo())
     await dispatch(fetchPermissions())
-    message.success({
+    MessagePlugin.success({
       content: '登录成功',
       duration: 1,
       onClose: () => {
@@ -87,7 +88,7 @@ function Login() {
             >
               <Input
                 size="large"
-                allowClear
+                clearable
                 placeholder="账号：admin"
                 prefix={
                   <UserOutlined className="text-primary text-3.5" type="user" />
@@ -108,7 +109,7 @@ function Login() {
               <Input.Password
                 size="large"
                 type="password"
-                allowClear
+                clearable
                 placeholder="密码：123456"
                 prefix={
                   <LockOutlined className="text-primary text-3.5" type="user" />

@@ -1,12 +1,12 @@
-import { loadEnv, defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
-import UnoCSS from 'unocss/vite'
-import { createHtmlPlugin } from 'vite-plugin-html'
-import AutoImport from 'unplugin-auto-import/vite'
 import path from 'path'
+import UnoCSS from 'unocss/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import { loadEnv, defineConfig } from 'vite'
 
 // @ts-ignore
 export default ({ mode, command }) => {
+  const isBuild = command === 'build'
   console.log('mode', mode)
   // const env = loadEnv(mode, process.cwd())
   const envDir = path.resolve(process.cwd(), 'env')
@@ -20,38 +20,56 @@ export default ({ mode, command }) => {
     },
     envDir,
     build: {
-      outDir: env.VITE_OUTDIR || 'dist'
+      outDir: env.VITE_OUTDIR || 'dist',
+      rolldownOptions: {
+        output: {
+          minify: {
+            compress: {
+              dropConsole: isBuild,
+              dropDebugger: isBuild
+            }
+          }
+        }
+      }
     },
     css: {
       preprocessorOptions: {
         less: {
-          javascriptEnabled: true,
-          // modifyVars: {},
-          additionalData: `@import "@packages/styles/theme.less";`
+          javascriptEnabled: true
+          // modifyVars: {
+          //   '@brand-color': '#0077FA'
+          // }
+          // additionalData: `@import "@packages/styles/theme.less";`
         }
       }
     },
     plugins: [
       react(),
+      UnoCSS(),
       AutoImport({
         imports: ['react', 'react-router-dom'],
         dts: false
-      }),
-      UnoCSS(),
-      createHtmlPlugin({
-        inject: {
-          data: {
-            // title: env.VITE_APP_TITLE,
-            // injectScript: `<script src="./inject.js"></script>`
-          }
-        }
       })
+      // {
+      //   name: 'html-transform',
+      //   transformIndexHtml(html) {
+      //     return {
+      //       html: html.replace('%title%', env.VITE_APP_TITLE),
+      //       tags: [
+      //         {
+      //           tag: 'script',
+      //           attrs: { src: './inject.js' },
+      //           injectTo: 'head'
+      //         }
+      //       ]
+      //     }
+      //   }
+      // }
     ],
     base: env.VITE_APP_BASE || '/',
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),
-        vue: 'vue/dist/vue.esm-bundler.js',
         features: path.resolve(__dirname, '../../features')
       },
       extensions: [
@@ -66,9 +84,6 @@ export default ({ mode, command }) => {
         '.scss',
         '.css'
       ]
-    },
-    esbuild: {
-      drop: command === 'build' ? ['console', 'debugger'] : []
     },
     server: {
       // proxy: {

@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { Breadcrumb } from 'antd'
 import { Link, useNavigate, useLocation, useMatches } from 'react-router-dom'
+import { Breadcrumb } from 'tdesign-react'
 
 function cleanupBreadcrumbs(breadcrumbs: any[]) {
   breadcrumbs[breadcrumbs.length - 1].unlink = true

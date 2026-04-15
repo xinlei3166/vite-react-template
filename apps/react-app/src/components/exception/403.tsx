@@ -1,4 +1,4 @@
-import { Result } from 'antd'
+import { Result } from 'tdesign-react'
 import Buttons from './buttons'
 import './index.less'
 

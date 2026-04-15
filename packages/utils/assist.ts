@@ -1,4 +1,4 @@
-import { message } from 'antd'
+import { MessagePlugin } from 'tdesign-react'
 
 export function typeOf(obj: any) {
   const map = {
@@ -23,7 +23,7 @@ export function validateFields(
 ) {
   for (const [k, v] of Object.entries(form)) {
     if (!v) {
-      messages[k] && message.error(messages[k])
+      messages[k] && MessagePlugin.error(messages[k])
       return
     }
   }

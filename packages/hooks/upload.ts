@@ -1,6 +1,6 @@
+import type { UploadProps, UploadFile } from 'tdesign-react'
 import { useState } from 'react'
-import { message } from 'antd'
-import type { UploadProps, UploadFile } from 'antd'
+import { MessagePlugin } from 'tdesign-react'
 
 export interface UploadConfig {
   upload?: boolean
@@ -20,11 +20,11 @@ export function useUpload({
 
   const beforeUpload: UploadProps['beforeUpload'] = file => {
     if (maxCount && fileList.length === maxCount) {
-      message.error(`最多只能上传${maxCount}个文件`)
+      MessagePlugin.error(`最多只能上传${maxCount}个文件`)
       return false
     }
     if (maxSize && file.size > maxSize * 1024 * 1024) {
-      message.error(`上传文件大小不能超过${maxSize}MB`)
+      MessagePlugin.error(`上传文件大小不能超过${maxSize}MB`)
       setFileList(fileList.slice(0, -1))
       return false
     }
@@ -32,7 +32,7 @@ export function useUpload({
     const sIndex = file.name.lastIndexOf('.')
     const suffix = file.name.slice(sIndex).toLowerCase()
     if (suffixes?.length && !suffixes.includes(suffix)) {
-      message.error(`文件格式错误，请上传${accept}格式的文件`)
+      MessagePlugin.error(`文件格式错误，请上传${accept}格式的文件`)
       return false
     }
     if (upload) return true
@@ -61,11 +61,11 @@ export function useUpload({
     //   .then(() => {
     //     setFileList([])
     //     setUploading(false)
-    //     message.success('upload successfully.')
+    //     MessagePlugin.success('upload successfully.')
     //   })
     //   .catch(() => {
     //     setUploading(false)
-    //     message.error('upload failed.')
+    //     MessagePlugin.error('upload failed.')
     //   })
   }
 

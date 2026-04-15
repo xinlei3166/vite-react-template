@@ -1,4 +1,4 @@
-import { Card } from 'antd'
+import { Card } from 'tdesign-react'
 import './error-403.less'
 
 export default function Error403() {

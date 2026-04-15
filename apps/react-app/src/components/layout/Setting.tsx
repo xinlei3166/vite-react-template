@@ -1,8 +1,8 @@
+import { SettingOutlined, CloseOutlined } from '@ant-design/icons'
 import { useState } from 'react'
+import { Drawer, Select, Switch, Input } from 'tdesign-react'
 import type { ThemeState } from '@/store'
 import { useAppSelector, useAppDispatch, setTheme } from '@/store'
-import { Drawer, Select, Switch, Input } from 'antd'
-import { SettingOutlined, CloseOutlined } from '@ant-design/icons'
 import './Setting.less'
 
 const colors = [

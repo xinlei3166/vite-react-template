@@ -1,6 +1,6 @@
 import { useMount } from 'ahooks'
-import { Card, Table, Select } from 'antd'
 import { useState, useMemo } from 'react'
+import { Card, Table, Select } from 'tdesign-react'
 import { useData } from '@packages/hooks'
 import { getList } from '@/api'
 import Search from '@/components/search'
@@ -26,7 +26,7 @@ export default function TablePage() {
               <Select
                 value={model.name5}
                 className="w-full"
-                allowClear
+                clearable
                 placeholder="请选择性别"
                 getPopupContainer={triggerNode => triggerNode.parentNode}
                 onChange={value => onChange('name5', value)}

@@ -1,5 +1,5 @@
-import { message } from 'antd'
 import { redirect } from 'react-router-dom'
+import { MessagePlugin } from 'tdesign-react'
 import { useRequests } from '@packages/lib'
 import type { Request } from '@packages/types'
 import { removeToken } from '@packages/utils'
@@ -10,8 +10,8 @@ const errorHandler = (msg: string) => {
   removeToken()
   dispatch(cleanupUser())
   dispatch(cleanupMenu())
-  message.destroy()
-  message.error(msg)
+  MessagePlugin.closeAll()
+  MessagePlugin.error(msg)
   setTimeout(() => {
     redirect('/login')
   }, 50)

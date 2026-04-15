@@ -1,16 +1,17 @@
-import { memo } from 'react'
-import type { MenuProps } from 'antd'
-import { Dropdown, message } from 'antd'
+import type { MenuProps } from 'tdesign-react'
 import {
   BellOutlined,
   UserOutlined,
   SettingOutlined,
   LoginOutlined
 } from '@ant-design/icons'
+import { memo } from 'react'
+import { Dropdown } from 'tdesign-react'
+import { MessagePlugin } from 'tdesign-react'
 import { logoutCleanup } from '@packages/utils'
 import { logout } from '@/api'
-import { useAppSelector } from '@/store'
 import avatar from '@/assets/avatar.png'
+import { useAppSelector } from '@/store'
 import './Nav.less'
 
 const items: MenuProps['items'] = [
@@ -49,7 +50,7 @@ function Nav() {
   const onLogout = async () => {
     const res = await logout()
     if (!res || res.code !== 0) return
-    message.success({
+    MessagePlugin.success({
       content: '退出登录成功',
       duration: 1,
       onClose: () => {
