@@ -20,7 +20,7 @@ export default function DemoPage() {
       createColumns([
         {
           label: '性别',
-          colKey: 'name5',
+          key: 'name5',
           props: {
             render: ({ model, onChange }: any) => {
               return (

@@ -1,5 +1,5 @@
 import type { RouteObject } from 'react-router-dom'
-import type { MenuProps } from 'tdesign-react'
+import type { MenuItemProps } from 'tdesign-react'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { useMount } from 'ahooks'
 import classNames from 'classnames'
@@ -12,23 +12,9 @@ import { useAppSelector, useAppDispatch, setTheme } from '@/store'
 import Logo from './Logo'
 import './Siderbar.less'
 
-type MenuItem = Required<MenuProps>['items'][number]
+const { SubMenu, MenuItem } = Menu
 
-function getItem(
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-  type?: 'group'
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type
-  } as MenuItem
-}
+type MenuItem = Required<MenuItemProps>
 
 function Siderbar() {
   const routes = useMenus() as any[]
@@ -37,88 +23,75 @@ function Siderbar() {
   const navigate = useNavigate()
   const theme = useAppSelector(state => state.theme)
   const dispatch = useAppDispatch()
-  const [selectedKeys, setSelectedKeys] = useState<any[]>([])
-  const [openKeys, setOpenKeys] = useState<any[]>([])
+  const [selectedValue, setSelectedValue] = useState<any>()
 
-  const onOpenChange = (keys: any[]) => {
-    setOpenKeys(keys)
-  }
-
-  const onClick = ({ item, key, keyPath }: Record<string, any>) => {
-    setOpenKeys(keyPath.slice(1))
-    setSelectedKeys([key])
-    navigate(key)
+  const onChange = (value: any) => {
+    setSelectedValue(value)
+    navigate(value)
   }
   const menuRoutes: RouteObject[] = useMemo(
     () => routes.filter(r => !r.handle?.hidden && r.path),
     [routes]
   )
 
-  const changeRoute = (force?: boolean) => {
+  const changeRoute = () => {
     const level = matchRoutes.length
     const route = matchRoutes.at(-1)
-    const routeKey = level > 3 ? matchRoutes[2]?.pathname : route?.pathname
-    if (!selectedKeys.includes(routeKey)) {
-      setSelectedKeys([routeKey])
-    }
-    if (!theme.collapsed || force) {
-      setOpenKeys([matchRoutes[1]?.pathname])
+    const routeValue = level > 3 ? matchRoutes[2]?.pathname : route?.pathname
+    if (selectedValue !== routeValue) {
+      setSelectedValue(routeValue)
     }
   }
 
   const onCollapse = (collapsed: boolean) => {
     dispatch(setTheme({ collapsed }))
-    if (collapsed) {
-      setOpenKeys([])
-    } else {
-      changeRoute(true)
-    }
   }
 
   useEffect(() => {
     changeRoute()
   }, [location])
 
-  const items: MenuItem[] = [
-    ...menuRoutes.map(menu => {
-      const childRoutes =
-        menu.children?.filter(r => !r.handle?.hidden && r.path) || []
-      const children = childRoutes.map(c =>
-        getItem(
-          <span className="ant-menu-title-content">
-            <span className="menu-item-title">{c.handle?.title}</span>
-          </span>,
-          c.path!
-          // <Icon type={c.handle?.icon} className="menu-item-icon" />
-        )
-      )
+  const renderMenuItems = (menuRoutes: RouteObject[]) => {
+    return menuRoutes.map(menu => {
+      const childRoutes = (menu.children?.filter(r => !r.handle?.hidden && r.path) ||
+        []) as RouteObject[]
       const link = menu.handle?.link
-      return getItem(
-        <span className="ant-menu-title-content">
-          <span className="menu-item-title">{menu.handle?.title}</span>
-        </span>,
-        menu.path!,
-        <Icon type={menu.handle?.icon || ''} className="menu-item-icon" />,
-        link ? undefined : children
-      )
-    })
-  ]
-
-  return (
-    <Layout.Sider
-      collapsible
-      collapsed={theme.collapsed}
-      trigger={
-        theme.collapsed ? (
-          <MenuUnfoldOutlined className="trigger" />
-        ) : (
-          <MenuFoldOutlined className="trigger" />
+      if (link || childRoutes.length === 0) {
+        return (
+          <MenuItem
+            key={menu.path!}
+            value={menu.path!}
+            icon={
+              menu.handle?.icon ? (
+                <Icon name={menu.handle?.icon} className="menu-item-icon" />
+              ) : undefined
+            }
+            onClick={() => navigate(menu.path!)}
+          >
+            {menu.handle?.title}
+          </MenuItem>
         )
       }
-      onCollapse={onCollapse}
-      theme={theme.theme}
+      return (
+        <SubMenu
+          key={menu.path!}
+          value={menu.path!}
+          title={menu.handle?.title}
+          icon={
+            menu.handle?.icon ? (
+              <Icon name={menu.handle?.icon} className="menu-item-icon" />
+            ) : undefined
+          }
+        >
+          {renderMenuItems(childRoutes)}
+        </SubMenu>
+      )
+    })
+  }
+
+  return (
+    <Layout.Aside
       width={theme.width}
-      collapsedWidth={theme.collapsedWidth}
       className={classNames([
         'layout-sider',
         {
@@ -129,20 +102,28 @@ function Siderbar() {
         paddingTop: theme.layout === 'mix' ? `calc(${theme.height} + 4px)` : ''
       }}
     >
-      {theme.layout !== 'mix' && <Logo />}
       <div className="layout-menu-wrap">
         <Menu
-          selectedKeys={selectedKeys}
-          openKeys={openKeys}
+          width={[theme.width, theme.collapsedWidth]}
+          collapsed={theme.collapsed}
           className="sider-menu"
           theme={theme.theme}
-          mode={theme.mode}
-          onOpenChange={onOpenChange}
-          onClick={onClick}
-          items={items}
-        />
+          expandType={theme.expandType}
+          value={selectedValue}
+          onChange={onChange}
+          logo={theme.layout !== 'mix' && <Logo />}
+          operations={
+            theme.collapsed ? (
+              <MenuUnfoldOutlined className="trigger" onClick={() => onCollapse(false)} />
+            ) : (
+              <MenuFoldOutlined className="trigger" onClick={() => onCollapse(true)} />
+            )
+          }
+        >
+          {renderMenuItems(menuRoutes)}
+        </Menu>
       </div>
-    </Layout.Sider>
+    </Layout.Aside>
   )
 }
 

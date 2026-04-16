@@ -5,52 +5,48 @@ export const columns: Record<string, any>[] = [
   {
     label: '姓名',
     searchType: 'input',
-    colKey: 'name1',
+    key: 'name1',
     props: {
       type: 'text',
-      clearable: true,
       placeholder: '请输入姓名'
     }
   },
   {
     label: '年龄',
     searchType: 'input-number',
-    colKey: 'name2',
+    key: 'name2',
     props: {
-      clearable: true,
       placeholder: '请输入年龄'
     }
   },
   {
     label: '爱好',
     searchType: 'select',
-    colKey: 'name3',
+    key: 'name3',
     props: {
       options: {
         1: '玩游戏',
         2: '听音乐'
       },
-      clearable: true,
       placeholder: '请选择爱好'
     }
   },
   {
     label: '城市',
     searchType: 'select',
-    colKey: 'name4',
+    key: 'name4',
     props: {
       options: [
         { label: '北京', value: 'beijing' },
         { label: '上海', value: 'shanghai' },
         { label: '成都', value: 'chengdu' }
       ],
-      clearable: true,
       placeholder: '请选择城市'
     }
   },
   {
     label: '性别',
-    colKey: 'name5'
+    key: 'name5'
   }
 ]
 
@@ -87,4 +83,4 @@ const tableColumns: Record<string, any>[] = [
   }
 ]
 
-export const createTableColumns = createColumnsFactory(tableColumns)
+export const createTableColumns = createColumnsFactory(tableColumns, 'colKey')

@@ -83,7 +83,6 @@
     "@types/sortablejs": "^1.15.9",
     "@unocss/postcss": "^66.6.8",
     "@unocss/preset-rem-to-px": "^66.6.8",
-    "@vitejs/plugin-react": "^6.0.1",
     "@vitejs/plugin-react-swc": "^4.3.0",
     "@yunquejs/release": "^0.1.9",
     "conventional-changelog-cli": "^5.0.0",

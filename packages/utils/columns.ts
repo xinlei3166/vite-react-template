@@ -33,12 +33,12 @@ const deepMerge = <T>(target: T, source: Partial<T>): T => {
   return result as T
 }
 
-export const createColumnsFactory = (sourceColumns: any[] = []) => {
+export const createColumnsFactory = (sourceColumns: any[] = [], keyKey: string = 'key') => {
   return (columns: any[] = []) => {
     const nextColumns = sourceColumns.map(item => deepMerge({}, item))
 
     for (const column of columns) {
-      const index = nextColumns.findIndex((c: any) => c.key === column.key)
+      const index = nextColumns.findIndex((c: any) => c[keyKey] === column[keyKey])
 
       if (index > -1) {
         nextColumns[index] = deepMerge(nextColumns[index], column)

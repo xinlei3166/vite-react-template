@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export interface ThemeState {
   theme: 'dark' | 'light'
   layout: 'side' | 'mix'
-  mode: 'vertical' | 'inline' | 'horizontal'
+  expandType: 'normal' | 'popup'
   width: string
   height: string
   collapsed: boolean
@@ -17,7 +17,7 @@ export interface ThemeState {
 const initialState: ThemeState = {
   theme: 'light', // light, dark
   layout: 'mix', // side, mix
-  mode: 'inline',
+  expandType: 'normal',
   width: '240px',
   height: '64px',
   collapsed: false,

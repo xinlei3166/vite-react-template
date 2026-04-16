@@ -13,7 +13,7 @@ function FilterLink(props: PropsWithChildren<{ filter: string }>) {
   }
 
   if (active) {
-    return <span className="text-primary">{props.children}</span>
+    return <span className="text-brand">{props.children}</span>
   }
 
   return (

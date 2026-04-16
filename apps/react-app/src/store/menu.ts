@@ -45,16 +45,10 @@ const menuSlice = createSlice({
     setMenus(state: MenuState, action: PayloadAction<MenuState['menus']>) {
       return { ...state, menus: action.payload }
     },
-    setLeftMenus(
-      state: MenuState,
-      action: PayloadAction<MenuState['leftMenus']>
-    ) {
+    setLeftMenus(state: MenuState, action: PayloadAction<MenuState['leftMenus']>) {
       return { ...state, leftMenus: action.payload }
     },
-    setRouteMenus(
-      state: MenuState,
-      action: PayloadAction<MenuState['routeMenus']>
-    ) {
+    setRouteMenus(state: MenuState, action: PayloadAction<MenuState['routeMenus']>) {
       return { ...state, routeMenus: action.payload }
     },
     cleanupMenu(state: MenuState) {
@@ -66,43 +60,35 @@ const menuSlice = createSlice({
   }
 })
 
-export const {
-  setMenus,
-  setLeftMenus,
-  setRouteMenus,
-  cleanupMenu,
-  setMenuState
-} = menuSlice.actions
+export const { setMenus, setLeftMenus, setRouteMenus, cleanupMenu, setMenuState } =
+  menuSlice.actions
 
 export default menuSlice.reducer
 
-export const fetchMenus = createAsyncThunk(
-  'menu/fetchMenus',
-  async (_, { dispatch }) => {
-    const res: any = await getUserMenu()
-    if (!res || res.code !== 0) {
-      dispatch(setMenuState({ hasSetRoutes: true }))
-      return
-    }
-    const menus: Record<string, any>[] = (res.data || []).filter(
-      (m: Record<string, any>) => m.menuType === 1
-    )
-    menus.sort(sorter)
-    dispatch(setMenus(menus))
-    let routesMenus: Record<string, any> = []
-    routesMenus = routesMenus.concat(generateRouteMenus(menus))
-    // routesMenus.push(errorRoute)
-    dispatch(setRouteMenus(routesMenus as MenuState['leftMenus']))
-    dispatch(
-      setLeftMenus(
-        routesMenus.filter(
-          (r: Record<string, any>) => r.path !== '/:pathMatch(.*)*'
-        ) as MenuState['leftMenus']
-      )
-    )
+export const fetchMenus = createAsyncThunk('menu/fetchMenus', async (_, { dispatch }) => {
+  const res: any = await getUserMenu()
+  if (!res || res.code !== 0) {
     dispatch(setMenuState({ hasSetRoutes: true }))
+    return
   }
-)
+  const menus: Record<string, any>[] = (res.data || []).filter(
+    (m: Record<string, any>) => m.menuType === 1
+  )
+  menus.sort(sorter)
+  dispatch(setMenus(menus))
+  let routesMenus: Record<string, any> = []
+  routesMenus = routesMenus.concat(generateRouteMenus(menus))
+  // routesMenus.push(errorRoute)
+  dispatch(setRouteMenus(routesMenus as MenuState['leftMenus']))
+  dispatch(
+    setLeftMenus(
+      routesMenus.filter(
+        (r: Record<string, any>) => r.path !== '/:pathMatch(.*)*'
+      ) as MenuState['leftMenus']
+    )
+  )
+  dispatch(setMenuState({ hasSetRoutes: true }))
+})
 
 // generateRouteMenus
 const layouts = {
@@ -117,11 +103,7 @@ function _import(path: string) {
 const sorter = (a: Record<string, any>, b: Record<string, any>) =>
   (a.priority || 0) - (b.priority || 0)
 
-const generateRouteMenus = (
-  menus: Record<string, any>[],
-  parentMenu?: string,
-  level = 1
-) => {
+const generateRouteMenus = (menus: Record<string, any>[], parentMenu?: string, level = 1) => {
   menus.sort(sorter)
   return menus.map(menu => {
     const {
@@ -153,9 +135,7 @@ const generateRouteMenus = (
       handle: { ...routeModel.handle },
       children: []
     }
-    const childMenuList = _childMenuList.filter(
-      (m: Record<string, any>) => m.menuType === 1
-    )
+    const childMenuList = _childMenuList.filter((m: Record<string, any>) => m.menuType === 1)
     const childrenLength = childMenuList?.length ? childMenuList.length : 0
     const needHandleConditions: any[] = [
       level === 1 && link && !hidden,
@@ -182,6 +162,9 @@ const generateRouteMenus = (
         ...generateRouteMenus(menu.childMenuList, parentMenu, level + 1)
       ]
       if (level === 1 && _component === 'layout') {
+        if (!route.handle) {
+          route.handle = {}
+        }
         route.handle.firstChildrenRoutePath = route.children[0].path
       }
     }

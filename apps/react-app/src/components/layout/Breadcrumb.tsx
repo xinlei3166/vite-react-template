@@ -1,9 +1,11 @@
+import type { BreadcrumbProps } from 'tdesign-react'
 import { memo } from 'react'
 import { Link, useNavigate, useLocation, useMatches } from 'react-router-dom'
 import { Breadcrumb } from 'tdesign-react'
 
 function cleanupBreadcrumbs(breadcrumbs: any[]) {
   breadcrumbs[breadcrumbs.length - 1].unlink = true
+  breadcrumbs[breadcrumbs.length - 1].to = undefined
   if (breadcrumbs.length > 1) {
     return breadcrumbs.slice(1)
   }
@@ -12,33 +14,24 @@ function cleanupBreadcrumbs(breadcrumbs: any[]) {
 
 function BaseBreadcrumb() {
   const matchRoutes = useMatches()
+  console.log('matchRoutes', matchRoutes)
   const breadcrumbs = cleanupBreadcrumbs(
     matchRoutes.map((r: Record<string, any>) => ({
-      name: r.name,
       pathname: r.pathname,
-      handle: r.handle
+      params: r.params,
+      handle: r.handle,
+      content: r.handle?.title,
+      to: r.handle?.firstChildrenRoutePath || r.pathname
     }))
-  )
-  // const paths = breadcrumbs.map(
-  //   (breadcrumb: BreadcrumbsRoute) => breadcrumb.match.path
-  // )
+  ) as BreadcrumbProps['options']
+  // const paths = breadcrumbs.map((breadcrumb: any) => breadcrumb.to)
   // const navigate = useNavigate()
   // const location = useLocation()
   // if (!paths.includes(location?.pathname)) {
   //   navigate('/404')
   // }
-  const items = breadcrumbs.map(breadcrumb => {
-    const title = breadcrumb.unlink ? (
-      breadcrumb.handle?.title
-    ) : (
-      <Link to={breadcrumb.handle.firstChildrenRoutePath || breadcrumb.path}>
-        {breadcrumb.handle?.title}
-      </Link>
-    )
-    return { title }
-  })
 
-  return <Breadcrumb items={items} />
+  return <Breadcrumb options={breadcrumbs} />
 }
 
 export default memo(BaseBreadcrumb)

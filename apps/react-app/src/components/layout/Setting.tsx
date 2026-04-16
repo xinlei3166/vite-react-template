@@ -28,10 +28,7 @@ function Setting() {
   }
 
   function onChangeTheme(t: Partial<ThemeState>) {
-    onChange({
-      ...t,
-      algorithm: t.theme === 'dark' ? 'darkAlgorithm' : 'defaultAlgorithm'
-    })
+    // onChange()
     const el = document.querySelector('html')
     el?.classList.toggle('dark', t.theme === 'dark')
     localStorage.theme = t.theme
@@ -39,18 +36,15 @@ function Setting() {
 
   return (
     <>
-      <div
-        className="setting-drawer-btn-wrap"
-        onClick={() => setVisible(!visible)}
-      >
+      <div className="setting-drawer-btn-wrap" onClick={() => setVisible(!visible)}>
         <SettingOutlined className="setting-drawer-btn" />
       </div>
       <Drawer
-        open={visible}
+        visible={visible}
         className="setting-drawer"
         placement="right"
-        width="280px"
-        closable={false}
+        style={{ width: '280px' }}
+        closeBtn={false}
       >
         {visible && (
           <div
@@ -68,7 +62,7 @@ function Setting() {
             <Select
               value={theme.layout}
               className="select"
-              onChange={value => onChangeTheme({ layout: value })}
+              onChange={(value: any) => onChangeTheme({ layout: value })}
             >
               <Select.Option key="side" value="side">
                 侧边
@@ -83,7 +77,7 @@ function Setting() {
             <Select
               value={theme.theme}
               className="select"
-              onChange={value => onChangeTheme({ theme: value })}
+              onChange={(value: any) => onChangeTheme({ theme: value })}
             >
               <Select.Option key="dark" value="dark">
                 暗黑
@@ -96,19 +90,17 @@ function Setting() {
           <div className="drawer-item">
             <span>主题色</span>
             <Select
-              value={theme.token.colorPrimary}
+              value={theme.brandTheme}
               className="select"
-              onChange={value =>
+              onChange={(value: any) =>
                 onChangeTheme({
-                  token: { ...theme.token, colorPrimary: value }
+                  brandTheme: value
                 })
               }
             >
               {colors.map((color, index) => (
                 <Select.Option key={color.value} value={color.value}>
-                  <span style={{ color: index !== 0 ? color.value : 'unset' }}>
-                    {color.label}
-                  </span>
+                  <span style={{ color: index !== 0 ? color.value : 'unset' }}>{color.label}</span>
                 </Select.Option>
               ))}
             </Select>
@@ -116,15 +108,15 @@ function Setting() {
           <div className="drawer-item">
             <span>菜单类型</span>
             <Select
-              value={theme.mode}
+              value={theme.expandType}
               className="select"
-              onChange={value => onChange({ mode: value })}
+              onChange={(value: any) => onChange({ expandType: value })}
             >
-              <Select.Option key="vertical" value="vertical">
-                垂直
+              <Select.Option key="normal" value="normal">
+                平铺
               </Select.Option>
-              <Select.Option key="inline" value="inline">
-                内嵌
+              <Select.Option key="popup" value="popup">
+                浮层
               </Select.Option>
             </Select>
           </div>
@@ -133,7 +125,7 @@ function Setting() {
             <Select
               value={theme.height}
               className="select"
-              onChange={value => onChange({ height: value })}
+              onChange={(value: any) => onChange({ height: value })}
             >
               <Select.Option key="48px" value="48px">
                 48px
@@ -148,28 +140,28 @@ function Setting() {
             <Input
               value={theme.width}
               className="select"
-              onChange={e => onChange({ width: e.target.value })}
+              onChange={(value: any) => onChange({ width: value })}
             />
           </div>
           <div className="drawer-item">
             <span>顶部随主题色(混合布局)</span>
             <Switch
-              checked={theme.headerTheme}
-              onChange={checked => onChange({ headerTheme: checked })}
+              value={theme.headerTheme}
+              onChange={(value: any) => onChange({ headerTheme: value })}
             />
           </div>
           <div className="drawer-item">
             <span>侧边栏折叠</span>
             <Switch
-              checked={theme.collapsed}
-              onChange={checked => onChange({ collapsed: checked })}
+              value={theme.collapsed}
+              onChange={(value: any) => onChange({ collapsed: value })}
             />
           </div>
           <div className="drawer-item">
             <span>显示面包屑</span>
             <Switch
-              checked={theme.showBreadcrumb}
-              onChange={checked => onChange({ showBreadcrumb: checked })}
+              value={theme.showBreadcrumb}
+              onChange={(value: any) => onChange({ showBreadcrumb: value })}
             />
           </div>
         </div>

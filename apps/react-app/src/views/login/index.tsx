@@ -15,8 +15,6 @@ import {
 } from '@/store'
 import './index.less'
 
-const { FormItem } = Form
-
 function Login() {
   // ====================== Hooks ======================
   const theme = useAppSelector(state => state.theme)
@@ -69,7 +67,7 @@ function Login() {
             <img className="login-title-img" src={logo} />
             <span className="login-title-text">{title}</span>
           </div>
-          <div className="text-text2 text-center mt-4 mb-12">
+          <div className="text-textPrimary2 text-center mt-4 mb-12">
             React 是一款非常流行的 JavaScript 前端框架
           </div>
           <Form
@@ -80,7 +78,7 @@ function Login() {
             labelAlign="right"
             onSubmit={onSubmit}
           >
-            <FormItem
+            <Form.FormItem
               className="login-form-item"
               name="account"
               rules={[
@@ -95,10 +93,10 @@ function Login() {
                 size="large"
                 clearable
                 placeholder="账号：admin"
-                prefixIcon={<UserOutlined className="text-primary text-3.5" type="user" />}
+                prefixIcon={<UserOutlined className="text-brand text-3.5" type="user" />}
               ></Input>
-            </FormItem>
-            <FormItem
+            </Form.FormItem>
+            <Form.FormItem
               className="login-form-item"
               name="password"
               rules={[
@@ -114,16 +112,16 @@ function Login() {
                 type="password"
                 clearable
                 placeholder="密码：123456"
-                prefixIcon={<LockOutlined className="text-primary text-3.5" type="user" />}
+                prefixIcon={<LockOutlined className="text-brand text-3.5" type="user" />}
               ></Input>
-            </FormItem>
-            <FormItem name="remember">
+            </Form.FormItem>
+            <Form.FormItem name="remember">
               <Checkbox>自动登录</Checkbox>
               <a className="float-right text-btn" href="#">
                 忘记密码
               </a>
-            </FormItem>
-            <FormItem className="login-form-btn-wrap">
+            </Form.FormItem>
+            <Form.FormItem className="login-form-btn-wrap">
               <Button
                 className="login-btn"
                 size="large"
@@ -133,7 +131,7 @@ function Login() {
               >
                 登 录
               </Button>
-            </FormItem>
+            </Form.FormItem>
           </Form>
         </div>
         <div className="footer">

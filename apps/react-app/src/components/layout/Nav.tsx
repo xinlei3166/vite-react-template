@@ -1,10 +1,5 @@
-import type { MenuProps } from 'tdesign-react'
-import {
-  BellOutlined,
-  UserOutlined,
-  SettingOutlined,
-  LoginOutlined
-} from '@ant-design/icons'
+import type { DropdownProps } from 'tdesign-react'
+import { BellOutlined, UserOutlined, SettingOutlined, LoginOutlined } from '@ant-design/icons'
 import { memo } from 'react'
 import { Dropdown } from 'tdesign-react'
 import { MessagePlugin } from 'tdesign-react'
@@ -14,10 +9,10 @@ import avatar from '@/assets/avatar.png'
 import { useAppSelector } from '@/store'
 import './Nav.less'
 
-const items: MenuProps['items'] = [
+const options: DropdownProps['options'] = [
   {
-    key: 'person',
-    label: (
+    value: 'person',
+    content: (
       <>
         <UserOutlined className="menu-item-icon" />
         个人中心
@@ -25,8 +20,8 @@ const items: MenuProps['items'] = [
     )
   },
   {
-    key: 'setting',
-    label: (
+    value: 'setting',
+    content: (
       <>
         <SettingOutlined className="menu-item-icon" />
         个人设置
@@ -34,8 +29,8 @@ const items: MenuProps['items'] = [
     )
   },
   {
-    key: 'logout',
-    label: (
+    value: 'logout',
+    content: (
       <>
         <LoginOutlined className="menu-item-icon" />
         退出登录
@@ -59,8 +54,8 @@ function Nav() {
     })
   }
 
-  const onClick: MenuProps['onClick'] = ({ key }) => {
-    if (key === 'logout') {
+  const onClick: DropdownProps['onClick'] = ({ value }) => {
+    if (value === 'logout') {
       onLogout()
     }
   }
@@ -68,14 +63,8 @@ function Nav() {
   return (
     <div className="layout-nav">
       <BellOutlined className="layout-header-icon" />
-      <Dropdown
-        overlayClassName="layout-nav-dropdown"
-        menu={{ items, onClick }}
-      >
-        <span
-          className="dropdown-link"
-          style={{ height: theme.height, lineHeight: theme.height }}
-        >
+      <Dropdown className="layout-nav-dropdown" options={options} onClick={onClick}>
+        <span className="dropdown-link" style={{ height: theme.height, lineHeight: theme.height }}>
           <span className="dropdown-img-wrap">
             <img className="dropdown-img" src={avatar} />
           </span>
