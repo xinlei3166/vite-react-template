@@ -15,6 +15,8 @@ import {
 } from '@/store'
 import './index.less'
 
+const { FormItem } = Form
+
 function Login() {
   // ====================== Hooks ======================
   const theme = useAppSelector(state => state.theme)
@@ -27,7 +29,9 @@ function Login() {
   const title = import.meta.env.VITE_APP_TITLE
   const [loading, setLoading] = useState(false)
 
-  const onFinish = async (values: any) => {
+  const onSubmit = async (context: any) => {
+    const { validateResult, values } = context
+    if (validateResult !== true) return
     setLoading(true)
     const res = await login({
       account: values.userAccount,
@@ -70,19 +74,20 @@ function Login() {
           </div>
           <Form
             className="login-form"
+            form={form}
             colon={false}
-            labelCol={{ flex: '50px' }}
+            labelWidth="50px"
             labelAlign="right"
-            onFinish={onFinish}
+            onSubmit={onSubmit}
           >
-            <Form.Item
+            <FormItem
               className="login-form-item"
               name="account"
               rules={[
                 {
                   required: true,
                   message: '请输入账号',
-                  validateTrigger: 'onBlur'
+                  trigger: 'blur'
                 }
               ]}
             >
@@ -90,49 +95,45 @@ function Login() {
                 size="large"
                 clearable
                 placeholder="账号：admin"
-                prefix={
-                  <UserOutlined className="text-primary text-3.5" type="user" />
-                }
+                prefixIcon={<UserOutlined className="text-primary text-3.5" type="user" />}
               ></Input>
-            </Form.Item>
-            <Form.Item
+            </FormItem>
+            <FormItem
               className="login-form-item"
               name="password"
               rules={[
                 {
                   required: true,
                   message: '请输入密码',
-                  validateTrigger: 'onBlur'
+                  trigger: 'blur'
                 }
               ]}
             >
-              <Input.Password
+              <Input
                 size="large"
                 type="password"
                 clearable
                 placeholder="密码：123456"
-                prefix={
-                  <LockOutlined className="text-primary text-3.5" type="user" />
-                }
-              ></Input.Password>
-            </Form.Item>
-            <Form.Item name="remember">
+                prefixIcon={<LockOutlined className="text-primary text-3.5" type="user" />}
+              ></Input>
+            </FormItem>
+            <FormItem name="remember">
               <Checkbox>自动登录</Checkbox>
               <a className="float-right text-btn" href="#">
                 忘记密码
               </a>
-            </Form.Item>
-            <Form.Item className="login-form-btn-wrap">
+            </FormItem>
+            <FormItem className="login-form-btn-wrap">
               <Button
                 className="login-btn"
                 size="large"
-                type="primary"
-                htmlType="submit"
+                theme="primary"
+                type="submit"
                 loading={loading}
               >
                 登 录
               </Button>
-            </Form.Item>
+            </FormItem>
           </Form>
         </div>
         <div className="footer">

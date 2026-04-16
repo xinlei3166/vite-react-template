@@ -1,6 +1,6 @@
 import { useMount } from 'ahooks'
 import { useMemo } from 'react'
-import { Card, Table } from 'tdesign-react'
+import { Card, Table, Link } from 'tdesign-react'
 import { useData } from '@packages/hooks'
 import { getList } from '@/api'
 import { createTableColumns } from './columns'
@@ -8,27 +8,24 @@ import { createTableColumns } from './columns'
 export default function FixedTablePage() {
   const tableColumns = createTableColumns([
     {
-      key: 'operation',
+      colKey: 'operation',
       render: () => (
         <>
-          <span className="text-btn" onClick={onEdit}>
+          <Link hover="color" theme="primary" className="t-text-btn" onClick={onEdit}>
             编辑
-          </span>
-          <span className="text-btn" onClick={onPreview}>
+          </Link>
+          <Link hover="color" theme="primary" className="t-text-btn" onClick={onPreview}>
             预览
-          </span>
+          </Link>
         </>
       )
     }
   ])
 
   const params = useMemo(() => ({}), [])
-  const { loading, data, pagination, init, onSearch, onTableChange } = useData(
-    getList,
-    {
-      params
-    }
-  )
+  const { loading, data, pagination, init, onSearch, onTableChange } = useData(getList, {
+    params
+  })
 
   useMount(init)
 

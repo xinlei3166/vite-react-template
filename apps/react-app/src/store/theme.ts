@@ -1,6 +1,5 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
-import type { GlobalToken } from 'antd/es/theme'
 
 export interface ThemeState {
   theme: 'dark' | 'light'
@@ -12,8 +11,7 @@ export interface ThemeState {
   collapsedWidth: string
   headerTheme: boolean
   showBreadcrumb: boolean
-  token: Partial<GlobalToken>
-  algorithm: string
+  brandTheme: string
 }
 
 const initialState: ThemeState = {
@@ -26,11 +24,7 @@ const initialState: ThemeState = {
   collapsedWidth: '80px',
   headerTheme: false,
   showBreadcrumb: true, // 是否显示面包屑
-  token: {
-    colorPrimary: '#0077fa',
-    colorInfo: '#0077fa'
-  },
-  algorithm: 'defaultAlgorithm'
+  brandTheme: '#0077fa'
 }
 
 const themeSlice = createSlice({

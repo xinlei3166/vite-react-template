@@ -2,19 +2,19 @@
   "name": "react-app",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
+  "keywords": [
+    "react",
+    "template",
+    "vite"
+  ],
+  "license": "MIT",
+  "author": "君惜",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xinlei3166/vite-react-template.git",
     "directory": "apps/react-app"
   },
-  "keywords": [
-    "react",
-    "vite",
-    "template"
-  ],
-  "author": "君惜",
-  "license": "MIT",
+  "type": "module",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "vite --host --port 7001",
@@ -31,7 +31,6 @@
     "@packages/hooks": "workspace:*",
     "@packages/lib": "workspace:*",
     "@packages/styles": "workspace:*",
-    "@packages/token": "workspace:*",
     "@packages/types": "workspace:*",
     "@packages/utils": "workspace:*"
   },

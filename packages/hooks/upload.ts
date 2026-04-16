@@ -1,6 +1,12 @@
 import type { UploadProps, UploadFile } from 'tdesign-react'
 import { useState } from 'react'
 import { MessagePlugin } from 'tdesign-react'
+import { ContentTypeEnum } from '@packages/types/enums'
+
+const uploadFile = async (...args: any[]) => {
+  console.log('args', args)
+  return { code: 0, msg: '', data: {} } as Record<string, any>
+}
 
 export interface UploadConfig {
   upload?: boolean
@@ -9,16 +15,11 @@ export interface UploadConfig {
   accept?: string // .zip,.jpg
 }
 
-export function useUpload({
-  maxCount,
-  maxSize,
-  accept,
-  upload = true
-}: UploadConfig) {
+export function useUpload({ maxCount, maxSize, accept, upload = true }: UploadConfig) {
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [uploading, setUploading] = useState<boolean>(false)
 
-  const beforeUpload: UploadProps['beforeUpload'] = file => {
+  const beforeUpload: UploadProps['beforeUpload'] = (file: any) => {
     if (maxCount && fileList.length === maxCount) {
       MessagePlugin.error(`最多只能上传${maxCount}个文件`)
       return false
@@ -36,12 +37,14 @@ export function useUpload({
       return false
     }
     if (upload) return true
-    setFileList([...fileList, file])
+    const newFileList = [...fileList, file]
+    setFileList(newFileList)
+    console.log('fileList', newFileList)
     return false
   }
 
-  const onRemove: UploadProps['onRemove'] = file => {
-    const index = fileList?.indexOf(file)
+  const onRemove: UploadProps['onRemove'] = (context: any) => {
+    const { index } = context
     const newFileList = fileList?.slice()
     newFileList?.splice(index, 1)
     setFileList(newFileList)
@@ -69,5 +72,73 @@ export function useUpload({
     //   })
   }
 
-  return { fileList, uploading, onRemove, beforeUpload, onUpload }
+  const createRequestMethod = (
+    getParams: () => Record<string, any> = () => ({})
+  ): UploadProps['requestMethod'] => {
+    return async fileOrFiles => {
+      const file = Array.isArray(fileOrFiles) ? fileOrFiles[0] : fileOrFiles
+
+      // 1. 构造上传参数
+      const formData = new FormData()
+      formData.append('file', (file.raw ?? file) as any)
+      const params = getParams()
+      const paramKeys = Object.keys(params)
+      if (paramKeys.length) {
+        paramKeys.forEach(key => {
+          formData.append(key, params[key])
+        })
+      }
+
+      // 2. 传入定义的缩略图配置
+      const thumbImageConfigs = [{ width: 600, quality: 85 }]
+      if (!paramKeys.includes('thumb_image_configs')) {
+        formData.append('thumb_image_configs', JSON.stringify(thumbImageConfigs))
+      }
+
+      // 3. 执行请求
+      try {
+        const res = await uploadFile(formData, {
+          headers: { 'Content-Type': ContentTypeEnum.FormData }
+          // onUploadProgress: (event: any) => {
+          //   const percent = event.total ? Math.floor((event.loaded / event.total) * 100) : 0
+          //   console.log('upload progress:', percent)
+          // }
+        })
+
+        if (!res || res.code !== 0) {
+          throw new Error(res.msg || '上传失败')
+        }
+
+        // MessagePlugin.success('上传成功')
+        // 关键：返回给 TDesign 的结果
+        return { status: 'success', response: { ...res.data, url: res.data?.url } }
+      } catch (err: any) {
+        MessagePlugin.error(`上传失败: ${err.message}`)
+        return { status: 'fail', error: err, response: err }
+      }
+    }
+  }
+  const requestMethod = createRequestMethod()
+
+  const onChange = ({ fileList: newFileList }: any) => {
+    const list = newFileList.map((f: any) => {
+      if (f.response) {
+        f.url = f.response.url
+      }
+      return f
+    })
+    setFileList(list)
+    console.log('fileList', list)
+  }
+
+  return {
+    fileList,
+    uploading,
+    onRemove,
+    beforeUpload,
+    onUpload,
+    requestMethod,
+    createRequestMethod,
+    onChange
+  }
 }

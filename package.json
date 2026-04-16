@@ -34,7 +34,6 @@
     "@packages/hooks": "workspace:*",
     "@packages/lib": "workspace:*",
     "@packages/styles": "workspace:*",
-    "@packages/token": "workspace:*",
     "@packages/types": "workspace:*",
     "@packages/utils": "workspace:*",
     "@reduxjs/toolkit": "^2.11.2",

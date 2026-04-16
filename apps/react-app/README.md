@@ -4,7 +4,7 @@ react app
 
 ## Framework packages
 
-Vite4 + React18 + Redux4 + React Router6 + Unocss + Typescript + Ant Design
+Vite + React + Redux + React Router + Unocss + Typescript + TDesign React
 
 ## Package Manager
 

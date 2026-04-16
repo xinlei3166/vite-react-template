@@ -1,6 +1,6 @@
 import { useMount } from 'ahooks'
 import { useState, useMemo } from 'react'
-import { Card, Table, Select } from 'tdesign-react'
+import { Card, Table, Select, Link } from 'tdesign-react'
 import { useData } from '@packages/hooks'
 import { getList } from '@/api'
 import Search from '@/components/search'
@@ -20,7 +20,7 @@ export default function TablePage() {
       createColumns([
         {
           label: '性别',
-          key: 'name5',
+          colKey: 'name5',
           render: ({ model, onChange }: any) => {
             return (
               <Select
@@ -28,7 +28,6 @@ export default function TablePage() {
                 className="w-full"
                 clearable
                 placeholder="请选择性别"
-                getPopupContainer={triggerNode => triggerNode.parentNode}
                 onChange={value => onChange('name5', value)}
               >
                 <Select.Option value="male">男</Select.Option>
@@ -44,15 +43,15 @@ export default function TablePage() {
     () =>
       createTableColumns([
         {
-          key: 'operation',
+          colKey: 'operation',
           render: () => (
             <>
-              <span className="text-btn" onClick={onEdit}>
+              <Link hover="color" theme="primary" className="t-text-btn" onClick={onEdit}>
                 编辑
-              </span>
-              <span className="text-btn" onClick={onPreview}>
+              </Link>
+              <Link hover="color" theme="primary" className="t-text-btn" onClick={onPreview}>
                 预览
-              </span>
+              </Link>
             </>
           )
         }
@@ -66,12 +65,9 @@ export default function TablePage() {
     }),
     [search]
   )
-  const { loading, data, pagination, init, onSearch, onTableChange } = useData(
-    getList,
-    {
-      params
-    }
-  )
+  const { loading, data, pagination, init, onSearch, onTableChange } = useData(getList, {
+    params
+  })
 
   useMount(init)
 

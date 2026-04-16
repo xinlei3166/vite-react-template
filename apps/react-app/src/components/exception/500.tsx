@@ -1,16 +1,16 @@
-import { Result } from 'tdesign-react'
-import Buttons from './buttons'
+// import { Icon } from 'tdesign-icons-react'
 import './index.less'
+import Buttons from './buttons'
 
 export default function Exception500() {
   return (
-    <div className="exception-wrap">
-      <Result
-        status="500"
-        title="500"
-        subTitle="抱歉，服务器出错了"
-        extra={<Buttons />}
-      ></Result>
+    <div className="result-container result">
+      {/* <Icon name="error" className="result-icon" /> */}
+      <div className="result-title">500 Internal Server Error</div>
+      <div className="result-desc">抱歉，服务器出错了</div>
+      <div>
+        <Buttons />
+      </div>
     </div>
   )
 }

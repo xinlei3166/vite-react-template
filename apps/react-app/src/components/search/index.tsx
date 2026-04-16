@@ -12,7 +12,8 @@ import {
   TreeSelect,
   Cascader,
   DatePicker,
-  Button
+  Button,
+  DateRangePicker
 } from 'tdesign-react'
 import { typeOf } from '@packages/utils'
 
@@ -47,20 +48,9 @@ interface SearchProps {
   onReset?: (...args: any) => {}
 }
 
-type SearchType =
-  | 'input'
-  | 'input-number'
-  | 'select'
-  | 'tree-select'
-  | 'cascader'
-  | 'date-picker'
-  | 'range-picker'
-
-function _Search(
-  props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivElement>
-) {
+function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivElement>) {
   const {
-    span = 6,
+    span = 3,
     searchClass = '',
     searchStyle = {},
     columns = [],
@@ -97,9 +87,9 @@ function _Search(
     return number ? parseInt(value) : value
   }
 
-  const onChange = (key: string, value: any) => {
+  const onChange = (key: string, value: any, context: any) => {
     setModel((state: Record<string, any>) => ({ ...state, [key]: value }))
-    _onChange?.(key, value, { ...model, [key]: value })
+    _onChange?.(key, value, { ...model, [key]: value }, context)
   }
 
   const onSearch = () => {
@@ -110,30 +100,26 @@ function _Search(
     _onReset?.(model)
   }
 
-  const onPressEnter = (e: any, key: string) => {
-    _onEnter?.(key, e.target.value, model)
+  const onEnter = (key: string, value: any, context: any) => {
+    _onEnter?.(key, value, context)
   }
 
   const getSelectOptions = (column: Record<string, any>) => {
     if (typeOf(column.options) === 'array') {
-      return column.options.map(
-        (option: Record<string, any>, optionIndex: number) => (
-          <Select.Option
-            key={optionIndex}
-            value={option[column.valueKey || 'value']}
-          >
-            {option[column.labelKey || 'label']}
-          </Select.Option>
-        )
-      )
+      return column.options.map((option: Record<string, any>, optionIndex: number) => (
+        <Select.Option
+          key={optionIndex}
+          value={option[column.valueKey || 'value']}
+          label={option[column.labelKey || 'label']}
+        >
+          {option[column.labelKey || 'label']}
+        </Select.Option>
+      ))
     }
 
     if (typeOf(column.options) === 'object') {
       return Object.entries(column.options).map(([value, label]: any) => (
-        <Select.Option
-          key={value}
-          value={parseValue(value, column.int || true)}
-        >
+        <Select.Option key={value} value={parseValue(value, column.int || true)} label={label}>
           {label}
         </Select.Option>
       ))
@@ -146,12 +132,11 @@ function _Search(
         value={model[column.key]}
         className="search-item-input search-item-component w-full"
         style={mergeColumnStyle(column.style)}
-        clearable={column.clearable}
-        type={column.type}
-        maxLength={column.maxLength}
-        placeholder={column.placeholder}
-        onChange={e => onChange(column.key, e.target.value)}
-        onPressEnter={(e: any) => onPressEnter(e, column.key)}
+        showLimitNumber={column.props?.showLimitNumber !== false}
+        clearable={column.props?.clearable !== false}
+        {...column.props}
+        onChange={(value: any, context: any) => onChange(column.key, value, context)}
+        onEnter={(value: any, context: any) => onEnter(column.key, value, context)}
       />
     ),
     'input-number': (column: Record<string, any>) => (
@@ -159,14 +144,10 @@ function _Search(
         value={model[column.key]}
         className="search-item-input-number search-item-component w-full"
         style={mergeColumnStyle(column.style)}
-        min={column.min}
-        max={column.max}
-        precision={column.precision}
-        decimalSeparator={column.decimalSeparator}
-        step={column.step}
-        placeholder={column.placeholder}
-        onChange={value => onChange(column.key, value)}
-        onPressEnter={(e: any) => onPressEnter(e, column.key)}
+        clearable={column.props?.clearable !== false}
+        {...column.props}
+        onChange={(value: any, context: any) => onChange(column.key, value, context)}
+        onEnter={(value: any, context: any) => onEnter(column.key, value, context)}
       />
     ),
     select: (column: Record<string, any>) => (
@@ -174,13 +155,10 @@ function _Search(
         value={model[column.key]}
         className="search-item-select search-item-component w-full"
         style={mergeColumnStyle(column.style)}
-        clearable={column.clearable}
-        mode={column.mode}
-        showSearch={column.showSearch}
-        labelInValue={column.labelInValue || false}
-        placeholder={column.placeholder}
-        getPopupContainer={triggerNode => triggerNode.parentNode}
-        onChange={value => onChange(column.key, value)}
+        clearable={column.props?.clearable !== false}
+        {...column.props}
+        onChange={(value: any, context: any) => onChange(column.key, value, context)}
+        onEnter={(context: any) => onEnter(column.key, null, context)}
       >
         {getSelectOptions(column)}
       </Select>
@@ -190,23 +168,10 @@ function _Search(
         value={model[column.key]}
         className="search-item-tree-select search-item-component w-full"
         style={mergeColumnStyle(column.style)}
-        placeholder={column.placeholder}
-        fieldNames={
-          column.fieldNames || {
-            children: 'children',
-            key: 'key',
-            value: 'value'
-          }
-        }
-        treeData={column.treeData}
-        treeCheckable={column.treeCheckable}
-        multiple={column.multiple}
-        clearable={column.clearable}
-        showSearch={column.showSearch}
-        showCheckedStrategy={column.showCheckedStrategy}
-        treeDefaultExpandAll={column.treeDefaultExpandAll}
-        getPopupContainer={triggerNode => triggerNode.parentNode}
-        onChange={value => onChange(column.key, value)}
+        clearable={column.props?.clearable !== false}
+        {...column.props}
+        onChange={(value: any, context: any) => onChange(column.key, value, context)}
+        onEnter={(context: any) => onEnter(column.key, null, context)}
       />
     ),
     cascader: (column: Record<string, any>) => (
@@ -214,63 +179,40 @@ function _Search(
         value={model[column.key]}
         className="search-item-cascader search-item-component w-full"
         style={mergeColumnStyle(column.style)}
-        clearable={column.clearable}
-        fieldNames={
-          column.fieldNames || {
-            label: 'label',
-            value: 'value',
-            children: 'children'
-          }
-        }
-        options={column.options}
-        placeholder={column.placeholder}
-        getPopupContainer={triggerNode => triggerNode.parentNode}
-        onChange={(value: any) => onChange(column.key, value)}
+        clearable={column.props?.clearable !== false}
+        {...column.props}
+        onChange={(value: any, context: any) => onChange(column.key, value, context)}
       />
     ),
     'date-picker': (column: Record<string, any>) => (
-      // YYYY-MM-DD HH:mm:ss
       <DatePicker
         value={model[column.key]}
         className="search-item-date-picker search-item-component w-full"
         style={mergeColumnStyle(column.style)}
-        clearable={column.clearable}
-        format={column.format || 'YYYY-MM-DD'}
-        showTime={column.showTime}
-        placeholder={column.placeholder}
-        onChange={value => onChange(column.key, value)}
+        clearable={column.props?.clearable !== false}
+        {...column.props}
+        onChange={(value: any, context: any) => onChange(column.key, value, context)}
       />
     ),
     'range-picker': (column: Record<string, any>) => (
-      <DatePicker.RangePicker
+      <DateRangePicker
         value={model[column.key]}
         className="search-item-range-picker search-item-component w-full"
         style={mergeColumnStyle(column.style)}
-        clearable={column.clearable}
-        format={column.format || 'YYYY-MM-DD'}
-        showTime={column.showTime}
-        placeholder={column.placeholder}
-        onChange={value => onChange(column.key, value)}
+        clearable={column.props?.clearable !== false}
+        {...column.props}
+        onChange={(value: any, context: any) => onChange(column.key, value, context)}
       />
     )
   }
 
   return (
-    <Row
-      className={classNames(['search', searchClass])}
-      style={searchStyle}
-      gutter={[16, 16]}
-    >
+    <Row className={classNames(['search', searchClass])} style={searchStyle} gutter={[16, 16]}>
       {columns.map((column, index) => (
         <Col
           span={column.span || span}
           key={`column${column.index || index}`}
-          className={classNames([
-            'search-item',
-            'flex',
-            'items-center',
-            column.class
-          ])}
+          className={classNames(['search-item', 'flex', 'items-center', column.class])}
         >
           {showLabel && column.label ? (
             <span
@@ -295,17 +237,13 @@ function _Search(
       ))}
       {showBtn && (
         <Col
-          flex="1"
+          {...(btnSpan ? { span: btnSpan } : { flex: '1' })}
           className={classNames(['search-btn', btnClass])}
           style={btnStyle}
         >
           {showLabel && showBtnPlaceholder && (
             <span
-              className={classNames([
-                'search-item-label',
-                'flex-shrink-0',
-                'mr-2'
-              ])}
+              className={classNames(['search-item-label', 'flex-shrink-0', 'mr-2'])}
               style={{ width: btnPlaceholderWidth || labelWidth }}
             ></span>
           )}
@@ -320,17 +258,13 @@ function _Search(
             style={btnInnerStyle}
           >
             {showSearchBtn && (
-              <Button
-                className="search-btn-btn"
-                type="primary"
-                onClick={onSearch}
-              >
-                查询
+              <Button className="search-btn-btn" theme="primary" onClick={onSearch}>
+                {searchBtnLabel}
               </Button>
             )}
             {showResetBtn && (
               <Button className="search-btn-btn" onClick={onReset}>
-                重置
+                {resetBtnLabel}
               </Button>
             )}
             {extraBtn}
@@ -341,15 +275,13 @@ function _Search(
   )
 }
 
-function Search(
-  props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivElement>
-) {
+function Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivElement>) {
   const { className, card = true } = props
 
   return card ? (
     <Card
       className={classNames(['search-card', 'search-wrap', className])}
-      styles={{ body: { padding: '20px' } }}
+      bodyStyle={{ padding: '16px' }}
     >
       <_Search {...props} />
     </Card>

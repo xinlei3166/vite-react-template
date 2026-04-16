@@ -16,7 +16,7 @@ export default function A() {
     <>
       <div className="title">A组件</div>
       <div className="title">当前结果：{number}</div>
-      <Button className="ml-64px" type="primary" size="small" onClick={onAdd}>
+      <Button className="ml-64px" theme="primary" size="small" onClick={onAdd}>
         增加
       </Button>
     </>

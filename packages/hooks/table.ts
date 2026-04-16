@@ -9,7 +9,7 @@ const defaultPagination: Pagination = {
   totalContent: true,
   size: 'medium',
   theme: 'default',
-  pageSizeOptions: ['10', '20', '30', '50', '100'],
+  pageSizeOptions: [10, 20, 30, 50, 100],
   showFirstAndLastPageBtn: false,
   showJumper: true,
   showPageNumber: true,
@@ -46,23 +46,12 @@ export function useRowSelection() {
     setSelectedRows([])
   }
 
-  const onChange = (
-    _selectedRowKeys: (string | number)[],
-    _selectedRows: any[]
-  ) => {
+  const onSelectChange = (_selectedRowKeys: any[], options: any) => {
     setSelectedRowKeys(_selectedRowKeys)
-    setSelectedRows(_selectedRows)
+    setSelectedRows(options?.selectedRowData || options?.currentRowData || [])
   }
 
-  const onSelect = (record: any, selected: boolean, selectedRows: any[]) => {}
-
-  const onSelectAll = (
-    selected: boolean,
-    selectedRows: any[],
-    changeRows: any[]
-  ) => {}
-
-  return { selectedRowKeys, selectedRows, cleanup, onChange }
+  return { selectedRowKeys, selectedRows, cleanup, onSelectChange }
 }
 
 export function useCustomRow({ rowKey = 'id' }: { rowKey: string }) {
@@ -70,11 +59,14 @@ export function useCustomRow({ rowKey = 'id' }: { rowKey: string }) {
   const [lastRowKey, setLastRowKey] = useState(-1)
   const [rowKeys, setRowKeys] = useState<any>([])
 
-  const customRow = (record: Record<string, any>) => ({
-    onClick() {
-      setLastRowKey(currentRowKey)
-      setCurrentRowKey(record[rowKey])
-      setRowKeys([...rowKeys, record[rowKey]])
+  const rowAttributes = (record: Record<string, any>) => ({
+    onClick: () => {
+      const key = record[rowKey]
+      setCurrentRowKey(prev => {
+        setLastRowKey(prev)
+        return key
+      })
+      setRowKeys((prev: any) => (prev.includes(key) ? prev : [...prev, key]))
     }
   })
 
@@ -82,5 +74,5 @@ export function useCustomRow({ rowKey = 'id' }: { rowKey: string }) {
     return rowKeys.includes(record[rowKey]) ? 'clicked' : ''
   }
 
-  return { currentRowKey, lastRowKey, rowKeys, customRow, rowClassName }
+  return { currentRowKey, lastRowKey, rowKeys, rowAttributes, rowClassName }
 }

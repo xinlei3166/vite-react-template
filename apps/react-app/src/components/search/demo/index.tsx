@@ -3,7 +3,6 @@ import { useState, useMemo } from 'react'
 import { Card, Table, Select, Button } from 'tdesign-react'
 import { useData } from '@packages/hooks'
 import { getList } from '@/api'
-import Buttons from '@/components/exception/buttons'
 import Search from '@/components/search'
 import { createColumns, createTableColumns } from './columns'
 
@@ -21,21 +20,22 @@ export default function DemoPage() {
       createColumns([
         {
           label: '性别',
-          key: 'name5',
-          render: ({ model, onChange }: any) => {
-            return (
-              <Select
-                value={model.name5}
-                className="w-full"
-                clearable
-                placeholder="请选择性别"
-                getPopupContainer={triggerNode => triggerNode.parentNode}
-                onChange={value => onChange('name5', value)}
-              >
-                <Select.Option value="male">男</Select.Option>
-                <Select.Option value="female">女</Select.Option>
-              </Select>
-            )
+          colKey: 'name5',
+          props: {
+            render: ({ model, onChange }: any) => {
+              return (
+                <Select
+                  value={model.name5}
+                  className="w-full"
+                  clearable
+                  placeholder="请选择性别"
+                  onChange={value => onChange('name5', value)}
+                >
+                  <Select.Option value="male">男</Select.Option>
+                  <Select.Option value="female">女</Select.Option>
+                </Select>
+              )
+            }
           }
         }
       ]),
@@ -45,7 +45,7 @@ export default function DemoPage() {
     () =>
       createTableColumns([
         {
-          key: 'operation',
+          colKey: 'operation',
           render: () => (
             <>
               <span className="text-btn" onClick={onEdit}>
@@ -67,16 +67,13 @@ export default function DemoPage() {
     }),
     [search]
   )
-  const { loading, data, pagination, init, onSearch, onTableChange } = useData(
-    getList,
-    {
-      params
-    }
-  )
+  const { loading, data, pagination, init, onSearch, onTableChange } = useData(getList, {
+    params
+  })
 
   useMount(init)
 
-  async function onReset() {
+  const onReset = async () => {
     const _state = { ...search }
     Object.keys(_state).forEach(key => {
       _state[key] = undefined
@@ -102,7 +99,7 @@ export default function DemoPage() {
         setModel={setSearch}
         onSearch={onSearch}
         onReset={onReset}
-        extraBtn={<Button type="primary">导出</Button>}
+        extraBtn={<Button theme="primary">导出</Button>}
       />
       <Card>
         <Table
@@ -110,7 +107,7 @@ export default function DemoPage() {
           loading={loading}
           pagination={pagination}
           columns={tableColumns}
-          dataSource={data}
+          data={data}
           onChange={onTableChange}
         />
       </Card>

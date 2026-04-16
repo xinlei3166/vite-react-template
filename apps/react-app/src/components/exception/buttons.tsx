@@ -9,7 +9,7 @@ export default function Buttons() {
   }
 
   return (
-    <Button type="primary" onClick={onGoHome}>
+    <Button theme="primary" onClick={onGoHome}>
       返回首页
     </Button>
   )

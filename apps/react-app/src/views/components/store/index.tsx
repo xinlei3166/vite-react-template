@@ -21,14 +21,12 @@ function StorePage() {
         className="!ml-64px !mr-16px !w-240px"
         value={name}
         placeholder="请输入用户名"
-        onChange={e => setName(e.target.value)}
+        onChange={(value: any) => setName(value)}
       />
-      <Button type="primary" onClick={onSubmit}>
+      <Button theme="primary" onClick={onSubmit}>
         提交
       </Button>
-      <div className="title dark:text-color-green">
-        当前用户：{user.userinfo.name}
-      </div>
+      <div className="title dark:text-color-green">当前用户：{user.userinfo.name}</div>
     </Card>
   )
 }
