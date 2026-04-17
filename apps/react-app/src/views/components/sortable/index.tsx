@@ -42,7 +42,7 @@ export default function RouterPage() {
   }
 
   return (
-    <Card className="h-full">
+    <Card bordered={false} className="h-full">
       <div className="title">Draggable</div>
       <div className="sortable-wrap ml-16">
         <ReactSortable
@@ -54,10 +54,7 @@ export default function RouterPage() {
           onEnd={onEnd}
         >
           {state.map(item => (
-            <div
-              className="row sortable-draggable sortable-handle"
-              key={item.id}
-            >
+            <div className="row sortable-draggable sortable-handle" key={item.id}>
               {item.name}
             </div>
           ))}

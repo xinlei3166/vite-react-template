@@ -2,9 +2,10 @@ import { useMount } from 'ahooks'
 import { useState, useMemo } from 'react'
 import { Card, Table, Select, Button } from 'tdesign-react'
 import { useData } from '@packages/hooks'
+// @ts-ignore
 import { getList } from '@/api'
-import Search from '@/components/search'
-import { createColumns, createTableColumns } from './columns'
+import Search from '../index'
+import { createSearchColumns, createTableColumns } from './columns'
 
 export default function DemoPage() {
   const [search, setSearch] = useState<Record<string, any>>({
@@ -15,27 +16,25 @@ export default function DemoPage() {
     name5: undefined
   })
 
-  const columns = useMemo(
+  const searchColumns = useMemo(
     () =>
-      createColumns([
+      createSearchColumns([
         {
           label: '性别',
           key: 'name5',
-          props: {
-            render: ({ model, onChange }: any) => {
-              return (
-                <Select
-                  value={model.name5}
-                  className="w-full"
-                  clearable
-                  placeholder="请选择性别"
-                  onChange={value => onChange('name5', value)}
-                >
-                  <Select.Option value="male">男</Select.Option>
-                  <Select.Option value="female">女</Select.Option>
-                </Select>
-              )
-            }
+          render: ({ model, onChange }: any) => {
+            return (
+              <Select
+                value={model.name5}
+                className="w-full"
+                clearable
+                placeholder="请选择性别"
+                onChange={value => onChange('name5', value)}
+              >
+                <Select.Option value="male">男</Select.Option>
+                <Select.Option value="female">女</Select.Option>
+              </Select>
+            )
           }
         }
       ]),
@@ -46,7 +45,7 @@ export default function DemoPage() {
       createTableColumns([
         {
           colKey: 'operation',
-          render: () => (
+          cell: () => (
             <>
               <span className="text-btn" onClick={onEdit}>
                 编辑
@@ -91,17 +90,17 @@ export default function DemoPage() {
   }
 
   return (
-    <>
+    <div className="pb-4">
       <Search
         className="mb-4"
-        columns={columns}
+        columns={searchColumns}
         model={search}
         setModel={setSearch}
         onSearch={onSearch}
         onReset={onReset}
         extraBtn={<Button theme="primary">导出</Button>}
       />
-      <Card>
+      <Card bordered={false} className="table-card-with-pagination">
         <Table
           rowKey="id"
           loading={loading}
@@ -111,6 +110,6 @@ export default function DemoPage() {
           onChange={onTableChange}
         />
       </Card>
-    </>
+    </div>
   )
 }

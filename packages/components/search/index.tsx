@@ -17,14 +17,16 @@ import {
 } from 'tdesign-react'
 import { typeOf } from '@packages/utils'
 
-interface SearchProps {
+export interface SearchProps {
   card?: boolean
+  cardBordered?: boolean
+  cardBodyStyle?: React.CSSProperties
   span?: number
   searchClass?: string
   searchStyle?: React.CSSProperties
   columns: Record<string, any>[]
   model: Record<string, any>
-  setModel: Function
+  setModel: (...args: any[]) => void
   labelAlign?: Property.TextAlign // left | right
   labelWidth?: string // auto | px
   showLabel?: boolean
@@ -42,10 +44,11 @@ interface SearchProps {
   btnStyle?: React.CSSProperties
   btnInnerStyle?: React.CSSProperties
   extraBtn?: ReactNode
-  onEnter?: (...args: any) => {}
-  onChange?: (...args: any) => {}
-  onSearch?: (...args: any) => {}
-  onReset?: (...args: any) => {}
+  onEnter?: (...args: any) => unknown
+  onChange?: (...args: any) => unknown
+  onSearch?: (...args: any) => unknown
+  onReset?: (...args: any) => unknown
+  [key: string]: any
 }
 
 function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivElement>) {
@@ -145,6 +148,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
         className="search-item-input-number search-item-component w-full"
         style={mergeColumnStyle(column.style)}
         clearable={column.props?.clearable !== false}
+        theme={column.props?.theme || 'normal'}
         {...column.props}
         onChange={(value: any, context: any) => onChange(column.key, value, context)}
         onEnter={(value: any, context: any) => onEnter(column.key, value, context)}
@@ -160,7 +164,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
         onChange={(value: any, context: any) => onChange(column.key, value, context)}
         onEnter={(context: any) => onEnter(column.key, null, context)}
       >
-        {getSelectOptions(column)}
+        {getSelectOptions(column.props || {})}
       </Select>
     ),
     'tree-select': (column: Record<string, any>) => (
@@ -276,17 +280,19 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
 }
 
 function Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivElement>) {
-  const { className, card = true } = props
+  const { className, style, card = true, cardBordered = false, cardBodyStyle = {} } = props
 
   return card ? (
     <Card
+      bordered={cardBordered}
       className={classNames(['search-card', 'search-wrap', className])}
-      bodyStyle={{ padding: '16px' }}
+      bodyStyle={{ padding: '16px', ...cardBodyStyle }}
+      style={style}
     >
       <_Search {...props} />
     </Card>
   ) : (
-    <div className={classNames(['search-wrap', className])}>
+    <div className={classNames(['search-wrap', className])} style={style}>
       <_Search {...props} />
     </div>
   )

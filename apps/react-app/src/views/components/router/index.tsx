@@ -9,7 +9,7 @@ export default function RouterPage() {
   }
 
   return (
-    <Card className="h-full">
+    <Card bordered={false} className="h-full">
       <div className="title">Router</div>
       <div className="title cursor-pointer" onClick={onRedirect}>
         点击跳转到首页

@@ -6,7 +6,7 @@ import classNames from 'classnames'
 import { useState, useMemo, useEffect } from 'react'
 import { useNavigate, useLocation, useMatches } from 'react-router-dom'
 import { Layout, Menu } from 'tdesign-react'
-import Icon from '@/components/icon'
+import Iconfont from '@/components/icon'
 import { useMenus } from '@/router'
 import { useAppSelector, useAppDispatch, setTheme } from '@/store'
 import Logo from './Logo'
@@ -63,7 +63,7 @@ function Siderbar() {
             value={menu.path!}
             icon={
               menu.handle?.icon ? (
-                <Icon name={menu.handle?.icon} className="menu-item-icon" />
+                <Iconfont name={menu.handle?.icon} className="menu-item-icon" />
               ) : undefined
             }
             onClick={() => navigate(menu.path!)}
@@ -79,7 +79,7 @@ function Siderbar() {
           title={menu.handle?.title}
           icon={
             menu.handle?.icon ? (
-              <Icon name={menu.handle?.icon} className="menu-item-icon" />
+              <Iconfont name={menu.handle?.icon} className="menu-item-icon" />
             ) : undefined
           }
         >
@@ -95,18 +95,20 @@ function Siderbar() {
       className={classNames([
         'layout-sider',
         {
-          'layout-sider-mix': theme.layout === 'mix'
+          'layout-sider-mix': theme.layout === 'mix',
+          'layout-sider-side': theme.layout === 'side',
+          'layout-sider-light': theme.theme === 'light'
         }
       ])}
       style={{
-        paddingTop: theme.layout === 'mix' ? `calc(${theme.height} + 4px)` : ''
+        paddingTop: theme.layout === 'mix' ? `calc(${theme.height} - 0px)` : ''
       }}
     >
       <div className="layout-menu-wrap">
         <Menu
           width={[theme.width, theme.collapsedWidth]}
           collapsed={theme.collapsed}
-          className="sider-menu"
+          className={classNames('sider-menu')}
           theme={theme.theme}
           expandType={theme.expandType}
           value={selectedValue}

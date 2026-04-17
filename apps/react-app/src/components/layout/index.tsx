@@ -1,12 +1,7 @@
 import { useMount } from 'ahooks'
 import classNames from 'classnames'
 import { Helmet } from 'react-helmet'
-import {
-  Outlet,
-  useLocation,
-  useMatches,
-  useOutletContext
-} from 'react-router-dom'
+import { Outlet, useLocation, useMatches, useOutletContext } from 'react-router-dom'
 import { Layout } from 'tdesign-react'
 import { noUseLayoutPaths } from '@/router/home'
 import { useAppSelector, useAppDispatch } from '@/store'
@@ -31,7 +26,7 @@ function BaseLayout() {
 
   const route = matchRoutes.at(-1)
   // @ts-ignore
-  const routeTitle = route?.route?.title ? `${route?.route?.title} - ` : ''
+  const routeTitle = route?.handle?.title ? `${route?.handle?.title} - ` : ''
   const title = `${routeTitle}vite-react-template`
 
   return (
@@ -39,7 +34,17 @@ function BaseLayout() {
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <Layout id="layout" style={{ overflow: 'auto', height: '100vh' }}>
+      <Layout
+        id="layout"
+        style={
+          {
+            flexDirection: theme.layout === 'mix' ? 'row' : 'column',
+            overflow: 'auto',
+            height: '100vh',
+            '--theme-height': theme.height
+          } as any
+        }
+      >
         <div
           className="layout-fixed-stuff"
           style={{
@@ -50,15 +55,12 @@ function BaseLayout() {
         <Layout>
           {theme.layout === 'mix' ? (
             <header
-              className={classNames([
-                'layout-header-mix',
-                { dark: !theme.headerTheme }
-              ])}
+              className={classNames(['layout-header-mix', { dark: !theme.headerTheme }])}
               style={{ height: theme.height, lineHeight: theme.height }}
             >
               <Logo />
               <Layout.Header
-                className="layout-header"
+                className={classNames(['layout-header'])}
                 style={{ height: theme.height, lineHeight: theme.height }}
               >
                 <Nav />
@@ -66,7 +68,10 @@ function BaseLayout() {
             </header>
           ) : (
             <Layout.Header
-              className="layout-header"
+              className={classNames([
+                'layout-header',
+                { light: theme.theme === 'light', dark: theme.theme === 'dark' }
+              ])}
               style={{ height: theme.height, lineHeight: theme.height }}
             >
               <Nav />

@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react'
 import { Select, Button } from 'tdesign-react'
-import SearchTable, { useSearchTable } from '@packages/components/table'
 // @ts-ignore
 import { getList } from '@/api'
+import SearchTable, { useSearchTable } from '../index'
 import { createSearchColumns, createTableColumns } from './columns'
 
 export default function DemoPage() {
@@ -77,6 +77,7 @@ export default function DemoPage() {
     <>
       <SearchTable
         className="table-card-with-pagination"
+        card={false}
         table={table}
         searchColumns={searchColumns}
         searchModel={search}

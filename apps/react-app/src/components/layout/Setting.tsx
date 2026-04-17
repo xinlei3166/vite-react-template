@@ -28,7 +28,7 @@ function Setting() {
   }
 
   function onChangeTheme(t: Partial<ThemeState>) {
-    // onChange()
+    onChange({ ...t })
     const el = document.querySelector('html')
     el?.classList.toggle('dark', t.theme === 'dark')
     localStorage.theme = t.theme
@@ -43,18 +43,21 @@ function Setting() {
         visible={visible}
         className="setting-drawer"
         placement="right"
-        style={{ width: '280px' }}
+        size="300px"
+        header={null}
+        footer={null}
         closeBtn={false}
+        onClose={() => setVisible(false)}
       >
-        {visible && (
+        {/* {visible && (
           <div
             className="setting-drawer-btn-wrap"
             onClick={() => setVisible(!visible)}
-            style={{ right: '280px', zIndex: 2000 }}
+            style={{ right: '300px', zIndex: 2000 }}
           >
             <CloseOutlined className="setting-drawer-btn" />
           </div>
-        )}
+        )} */}
         <div className="setting-drawer-content">
           <h3 className="drawer-title">系统布局配置</h3>
           <div className="drawer-item">
@@ -129,6 +132,9 @@ function Setting() {
             >
               <Select.Option key="48px" value="48px">
                 48px
+              </Select.Option>{' '}
+              <Select.Option key="56px" value="56px">
+                56px
               </Select.Option>
               <Select.Option key="64px" value="64px">
                 64px

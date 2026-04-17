@@ -3,7 +3,7 @@ const routes = [
     id: 'home',
     index: true,
     path: '/',
-    handle: { title: '首页', icon: 'iconhome', link: true },
+    handle: { title: '首页', icon: 'icon-home', link: true },
     element: () => import('@/views/home')
   },
   {

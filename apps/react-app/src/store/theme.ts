@@ -19,11 +19,11 @@ const initialState: ThemeState = {
   layout: 'mix', // side, mix
   expandType: 'normal',
   width: '240px',
-  height: '64px',
+  height: '56px',
   collapsed: false,
   collapsedWidth: '80px',
   headerTheme: false,
-  showBreadcrumb: true, // 是否显示面包屑
+  showBreadcrumb: false, // 是否显示面包屑
   brandTheme: '#0077fa'
 }
 

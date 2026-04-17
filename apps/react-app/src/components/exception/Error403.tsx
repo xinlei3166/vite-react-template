@@ -3,7 +3,7 @@ import './error-403.less'
 
 export default function Error403() {
   return (
-    <Card className="exception-wrap">
+    <Card borderless className="exception-wrap">
       <div className="exception-img-wrap">
         <img className="exception-img" src="@/assets/exception/web-exception.svg" />
         <span className="exception-desc">

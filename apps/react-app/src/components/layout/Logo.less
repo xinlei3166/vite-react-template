@@ -28,8 +28,8 @@
   .logo-text {
     margin: 0 0 0 12px;
     overflow: hidden;
-    color: #fff;
-    font-weight: 600;
+    color: theme('colors.textPrimary');
+    font-weight: 400;
     font-size: 18px;
     line-height: 32px;
     animation: fade-in;
@@ -40,7 +40,10 @@
 .ant-layout-sider-light,
 .layout-header-mix {
   .logo-text {
-    color: theme('colors.brand');
+    color: theme('colors.textPrimary');
+    &:hover {
+      color: theme('colors.brand');
+    }
   }
 }
 

@@ -15,7 +15,7 @@ interface PrometheusOptions {
   proxy?: boolean
   withToken?: boolean
   authorizationKey?: string
-  errorHandler?: Function
+  errorHandler?: (...args: any[]) => void
   timeout?: number
 }
 
@@ -25,7 +25,7 @@ interface PrometheusGetMonitorConfig {
   queryConfig?: PrometheusQueryConfig
   field?: string
   format?: string
-  valueFormat?: Function
+  valueFormat?: (...args: any[]) => void
   title?: string
   name?: string | string[]
   yAxisName?: string
@@ -73,8 +73,7 @@ export const valueFormat = (value: number) => value.toFixed(2)
 export const intValueFormat = (value: number) => value.toFixed(0)
 export const percentValueFormat = (value: number) => (value * 100).toFixed(2)
 export const memoryDiscount = 1000 * 1000 * 1000
-export const memoryValueFormat = (value: number) =>
-  (value / memoryDiscount).toFixed(2)
+export const memoryValueFormat = (value: number) => (value / memoryDiscount).toFixed(2)
 export const memoryYAxisLabelFormatter = (value: any) => {
   const unit = value !== 0 ? 'G' : ''
   return value.toFixed(2) + unit
@@ -149,9 +148,7 @@ export const usePrometheus = (options?: PrometheusOptions) => {
       const names: string[] = [].concat((config.name || []) as any)
       const result = res.data.result
       for (const [i, r] of result.entries()) {
-        const nameKey = ![null, '', undefined].includes(config.field)
-          ? config.field
-          : '__name__'
+        const nameKey = ![null, '', undefined].includes(config.field) ? config.field : '__name__'
         const name = names[i] || r.metric[nameKey as string]
         data.legendData.push(name)
         data.option.legend.data.push(name)
@@ -159,17 +156,13 @@ export const usePrometheus = (options?: PrometheusOptions) => {
           smooth: true,
           name,
           data: r.values.map((v: any) =>
-            config.valueFormat
-              ? config.valueFormat(parseFloat(v[1]))
-              : parseFloat(v[1])
+            config.valueFormat ? config.valueFormat(parseFloat(v[1])) : parseFloat(v[1])
           ),
           type: 'line'
         })
         const format = config.format || 'H:mm:ss'
         // 由于返回的时间到秒，需要使用unix处理
-        data.option.xAxis.data = r.values.map((v: any) =>
-          dayjs.unix(v[0]).format(format)
-        )
+        data.option.xAxis.data = r.values.map((v: any) => dayjs.unix(v[0]).format(format))
       }
       data.option.yAxis.name = config.yAxisName
       data.option.title.text = config.title || names[0]

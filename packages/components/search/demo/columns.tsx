@@ -50,7 +50,7 @@ export const columns: Record<string, any>[] = [
   }
 ]
 
-export const createColumns = createColumnsFactory(columns)
+export const createSearchColumns = createColumnsFactory(columns)
 
 // table columns
 const tableColumns: Record<string, any>[] = [
@@ -65,7 +65,6 @@ const tableColumns: Record<string, any>[] = [
   {
     title: '年龄',
     colKey: 'age',
-    defaultSortOrder: null,
     sorter: (a: Record<string, any>, b: Record<string, any>) => a.age - b.age
   },
   {

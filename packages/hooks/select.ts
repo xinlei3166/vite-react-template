@@ -16,11 +16,7 @@ interface Config {
  * @param config.params url参数。
  * @param config.data 请求数据主体。
  */
-export function useSelectSearch<T>(
-  api: Function,
-  dataKey?: any,
-  config?: Config
-) {
+export function useSelectSearch<T>(api: (...args: any[]) => void, dataKey?: any, config?: Config) {
   const [options, setOptions] = useState<T[]>([])
 
   /**
@@ -48,10 +44,7 @@ export function useSelectSearch<T>(
 
   // cascader本地搜索
   const cascaderFilter = (inputValue: string, path: Record<string, any>[]) => {
-    return path.some(
-      option =>
-        option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
-    )
+    return path.some(option => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1)
   }
 
   return { options, onTrigger, filter, cascaderFilter }

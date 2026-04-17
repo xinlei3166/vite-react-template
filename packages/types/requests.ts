@@ -7,7 +7,7 @@ export interface RequestsConfig {
   codeKey?: string
   messageKey?: string
   successCode?: string | number
-  errorHandler?: Function
+  errorHandler?: (...args: any[]) => void
   noRefreshToken?: boolean
   refreshTokenApi?: (...args: any[]) => Promise<any>
 }
@@ -18,7 +18,7 @@ export interface RequestOptions {
   withRequestId?: boolean
   responseType?: 'json' | 'blob' | 'base64' | 'raw'
   stringify?: boolean
-  cb?: Function
+  cb?: (...args: any[]) => void
   fileKey?: string
   fileName?: string
   blobOptions?: Record<string, any>

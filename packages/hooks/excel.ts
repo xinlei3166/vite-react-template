@@ -4,7 +4,7 @@ import { exportExcel as _exportExcel } from '@packages/utils'
 
 interface Options {
   excelFields: ExcelColumn[]
-  getExcelData: Function
+  getExcelData: (...args: any[]) => void
 }
 
 export function useExcel({ excelFields, getExcelData }: Options) {

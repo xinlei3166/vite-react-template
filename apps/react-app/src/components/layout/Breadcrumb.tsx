@@ -14,7 +14,6 @@ function cleanupBreadcrumbs(breadcrumbs: any[]) {
 
 function BaseBreadcrumb() {
   const matchRoutes = useMatches()
-  console.log('matchRoutes', matchRoutes)
   const breadcrumbs = cleanupBreadcrumbs(
     matchRoutes.map((r: Record<string, any>) => ({
       pathname: r.pathname,

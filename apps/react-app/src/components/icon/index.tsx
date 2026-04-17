@@ -1,7 +1,15 @@
-import { Icon as IconFont } from 'tdesign-icons-react'
+import classNames from 'classnames'
+import { Icon } from 'tdesign-icons-react'
 
-const Icon = ({ url = '//at.alicdn.com/t/c/font_2430965_bvv26kwz5ke.js', ...rest }) => {
-  return <IconFont {...rest} url={url} loadDefaultIcons={false} />
+const IconFont = ({ url = '//at.alicdn.com/t/c/font_5154439_dm7zch8l5sn.js', ...rest }) => {
+  return (
+    <Icon
+      {...rest}
+      url={url}
+      loadDefaultIcons={false}
+      className={classNames('iconfont-icon', rest.className)}
+    />
+  )
 }
 
-export default Icon
+export default IconFont

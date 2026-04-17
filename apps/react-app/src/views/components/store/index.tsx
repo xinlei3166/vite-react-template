@@ -15,7 +15,7 @@ function StorePage() {
   useMount(onSubmit)
 
   return (
-    <Card className="h-full">
+    <Card bordered={false} className="h-full">
       <div className="title">Store</div>
       <Input
         className="!ml-64px !mr-16px !w-240px"

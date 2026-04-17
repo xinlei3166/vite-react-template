@@ -12,7 +12,7 @@ export default function ProvidePage() {
   }
 
   return (
-    <Card className="h-full">
+    <Card bordered={false} className="h-full">
       <div className="title">Provide</div>
       <div className="title">可以通过点击父组件中的增加按钮，观察B组件的结果显示</div>
       <div className="title">父组件</div>

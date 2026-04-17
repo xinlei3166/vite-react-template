@@ -29,7 +29,7 @@ function toFahrenheit(celsius: number) {
   return (celsius * 9) / 5 + 32
 }
 
-function tryConvert(temperature: string, convert: Function) {
+function tryConvert(temperature: string, convert: (...args: any[]) => void) {
   const input = parseFloat(temperature)
   if (Number.isNaN(input)) {
     return ''
@@ -47,9 +47,7 @@ function TemperatureInput(props: PropsWithChildren<any>) {
   }
 
   return (
-    <fieldset
-      style={scaleNames[scale] === 'Celsius' ? primaryColor : lightPrimaryColor}
-    >
+    <fieldset style={scaleNames[scale] === 'Celsius' ? primaryColor : lightPrimaryColor}>
       <legend>Enter temperature in {scaleNames[scale]}:</legend>
       <input value={temperature} onChange={handleChange} />
     </fieldset>
@@ -60,15 +58,11 @@ export default function StateUpPage() {
   const [state, setState] = useState({ temperature: '', scale: 'c' })
 
   const celsius = () => {
-    return state.scale === 'f'
-      ? tryConvert(state.temperature, toCelsius)
-      : state.temperature
+    return state.scale === 'f' ? tryConvert(state.temperature, toCelsius) : state.temperature
   }
 
   const fahrenheit = () => {
-    return state.scale === 'c'
-      ? tryConvert(state.temperature, toFahrenheit)
-      : state.temperature
+    return state.scale === 'c' ? tryConvert(state.temperature, toFahrenheit) : state.temperature
   }
 
   const handleCelsiusChange = (temperature: string) => {

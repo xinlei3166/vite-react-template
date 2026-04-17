@@ -9,7 +9,7 @@ interface DataOptions {
   params?: Record<string, any>
   pagination?: Pagination | false
   cb?: ({ sourceData, data }: { sourceData: any; data: any }) => void
-  onTableChange?: Function
+  onTableChange?: (...args: any[]) => void
   dataKey?: any
   method?: string
   codeKey?: string
@@ -29,7 +29,7 @@ interface DataOptions {
  * @param successCode 请求响应成功 code
  */
 export function useData(
-  api: Function,
+  api: (...args: any[]) => any,
   {
     params,
     pagination = {},
@@ -87,16 +87,31 @@ export function useData(
     await init({ ..._params, page: 1 })
   }
 
-  async function onTableChange(data: any, context: any) {
-    setPagination((state: any) => ({
-      ...state,
-      current: data.pagination.current,
-      pageSize: data.pagination.pageSize
-    }))
-    await init({
-      page: data.pagination.current,
-      page_size: data.pagination.pageSize
-    })
+  const onReset = async () => {
+    await onSearch()
+  }
+
+  const onTableChange = async (
+    data: any,
+    context: any,
+    overrideParams: Record<string, any> = {}
+  ) => {
+    console.log('data', data, 'context', context, 'overrideParams', overrideParams)
+    const { pagination } = data
+    if (pagination) {
+      setPagination((state: any) => ({
+        ...state,
+        current: pagination.current,
+        pageSize: pagination.pageSize
+      }))
+      await init({
+        page: pagination.current,
+        page_size: pagination.pageSize,
+        ...overrideParams
+      })
+    } else {
+      await init({ ...overrideParams })
+    }
     _onTableChange?.(data, context)
   }
 
@@ -107,6 +122,7 @@ export function useData(
     pagination: pag,
     init,
     onSearch,
+    onReset,
     onTableChange
   }
 }
@@ -133,7 +149,7 @@ interface ExportOptions {
  * @param successCode 请求响应成功 code
  */
 export function useExport(
-  api: Function,
+  api: (...args: any[]) => any,
   {
     params,
     excelFields,
@@ -144,7 +160,7 @@ export function useExport(
     successCode = 0
   }: ExportOptions
 ) {
-  const getExcelData = async (setDownloadLoading: Function) => {
+  const getExcelData = async (setDownloadLoading: (...args: any[]) => void) => {
     setDownloadLoading(true)
     const res = await api({ params: params })
     setDownloadLoading(false)
