@@ -1,0 +1,1 @@
+import{o as e}from"./chunk-zsgVPwQN.js";import{n as t}from"./jsx-runtime-C_z8YJsg.js";var n=e(t()),r=function(e){return typeof e==`function`},i=function(e){(0,n.useEffect)(function(){var t=e?.();if(!(t&&typeof t==`object`&&typeof t.then==`function`))return t},[])};export{r as n,i as t};

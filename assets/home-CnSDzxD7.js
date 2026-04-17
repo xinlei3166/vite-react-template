@@ -1,0 +1,1 @@
+import"./chunk-zsgVPwQN.js";import{t as e}from"./jsx-runtime-C_z8YJsg.js";import{t}from"./card-BZBJGHVp.js";var n=e();function r(){return(0,n.jsxs)(t,{bordered:!1,className:`h-full`,children:[(0,n.jsx)(`div`,{className:`title`,children:`Home`}),(0,n.jsx)(`div`,{className:`title`,children:`各组件展示了React的基本用法`})]})}export{r as default};

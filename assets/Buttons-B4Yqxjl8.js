@@ -1,0 +1,1 @@
+import"./chunk-zsgVPwQN.js";import{t as e}from"./jsx-runtime-C_z8YJsg.js";import{u as t}from"./chunk-OE4NN4TA-C-0jfAKo.js";import{t as n}from"./button-CElK_6ex.js";var r=e();function i(){let e=t();return(0,r.jsx)(n,{theme:`primary`,onClick:()=>{e(`/`)},children:`回到首页`})}export{i as t};
