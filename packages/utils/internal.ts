@@ -15,8 +15,7 @@ export const removeToken = () => {
 }
 
 export const RefreshTokenKey = `${storageKeyPrefix}RefreshToken`
-export const setRefreshToken = (token: string) =>
-  Cookies.set(RefreshTokenKey, token) // { expires: 1 }
+export const setRefreshToken = (token: string) => Cookies.set(RefreshTokenKey, token) // { expires: 1 }
 export const getRefreshToken = () => Cookies.get(RefreshTokenKey)
 
 export const setLocalValue = (key: string, value: any, stringify = false) => {

@@ -59,7 +59,7 @@ export default function DemoPage() {
   )
 
   const table = useSearchTable()
-  const extraParams = useMemo(() => ({ name: 'test' }), [])
+  const extraParams = useMemo(() => ({ extraParams1: 'test' }), [])
 
   const onReset = async () => {
     console.log('onReset')
@@ -77,7 +77,6 @@ export default function DemoPage() {
     <>
       <SearchTable
         className="table-card-with-pagination"
-        card={false}
         table={table}
         searchColumns={searchColumns}
         searchModel={search}

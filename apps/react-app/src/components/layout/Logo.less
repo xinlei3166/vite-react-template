@@ -3,7 +3,8 @@
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  margin-left: var(--td-comp-margin-l) !important;
+  margin-right: var(--td-comp-margin-l);
   //height: v-bind('theme.height');
 
   .logo-link {
@@ -26,7 +27,7 @@
   }
 
   .logo-text {
-    margin: 0 0 0 12px;
+    margin: 0 0 0 8px;
     overflow: hidden;
     color: theme('colors.textPrimary');
     font-weight: 400;
@@ -37,7 +38,6 @@
   }
 }
 
-.ant-layout-sider-light,
 .layout-header-mix {
   .logo-text {
     color: theme('colors.textPrimary');
@@ -52,11 +52,5 @@ html.dark,
 .layout-header.dark {
   .logo-text {
     color: #fff;
-  }
-}
-
-.layout-sider.ant-layout-sider-collapsed {
-  .layout-logo {
-    //padding: 16px 24px;
   }
 }

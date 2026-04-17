@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { MessagePlugin } from 'tdesign-react'
 import type { Pagination } from '@packages/types'
 import type { ExcelColumn } from '@packages/utils'
@@ -8,8 +8,7 @@ import { usePagination } from './table'
 interface DataOptions {
   params?: Record<string, any>
   pagination?: Pagination | false
-  cb?: ({ sourceData, data }: { sourceData: any; data: any }) => void
-  onTableChange?: (...args: any[]) => void
+  callback?: ({ sourceData, data }: { sourceData: any; data: any }) => void
   dataKey?: any
   method?: string
   codeKey?: string
@@ -23,8 +22,7 @@ interface DataOptions {
  * @param method 请求方法 get post
  * @param pagination table pagination 分页器参数, false 表示不分页
  * @param dataKey 数据key
- * @param cb callback
- * @param onTableChange table change
+ * @param callback
  * @param codeKey 请求响应 codeKey
  * @param successCode 请求响应成功 code
  */
@@ -34,13 +32,17 @@ export function useData(
     params,
     pagination = {},
     dataKey = 'records',
-    cb,
-    onTableChange: _onTableChange,
+    callback,
     method = 'get',
     codeKey = 'code',
     successCode = 0
   }: DataOptions
 ) {
+  const paramsRef = useRef(params)
+  useEffect(() => {
+    paramsRef.current = params
+  }, [params])
+
   const mergedPagination = pagination || {}
   const {
     loading,
@@ -59,27 +61,29 @@ export function useData(
     let mergedParams: Record<string, any> = {
       page,
       page_size: pageSize,
-      ...params,
+      ...paramsRef.current,
       ..._params
     }
     if (method === 'get') {
       mergedParams = { params: mergedParams }
     }
-    // console.log('mergedParams', mergedParams.params || mergedParams)
+    console.log('mergedParams', mergedParams)
     const res = await api(mergedParams)
     setLoading(false)
     if (!res || res[codeKey] !== successCode) return
     setSourceData(res.data)
+    let d
     if (dataKey) {
-      setData(res.data[dataKey] || [])
+      d = res.data[dataKey] || []
     } else {
-      setData(res.data)
+      d = res.data
     }
+    setData(d)
     setPagination((state: any) => ({
       ...state,
       total: res.data?.total || 0
     }))
-    cb?.({ sourceData, data })
+    callback?.({ sourceData: res.data, data: d })
   }
 
   const onSearch = async (_params: Record<string, any> = {}) => {
@@ -87,7 +91,8 @@ export function useData(
     await init({ ..._params, page: 1 })
   }
 
-  const onReset = async () => {
+  const onReset = async (_params: Record<string, any> = {}) => {
+    paramsRef.current = { ...paramsRef.current, ..._params }
     await onSearch()
   }
 
@@ -112,7 +117,6 @@ export function useData(
     } else {
       await init({ ...overrideParams })
     }
-    _onTableChange?.(data, context)
   }
 
   return {

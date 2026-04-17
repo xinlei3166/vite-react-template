@@ -17,15 +17,17 @@ function StorePage() {
   return (
     <Card bordered={false} className="h-full">
       <div className="title">Store</div>
-      <Input
-        className="!ml-64px !mr-16px !w-240px"
-        value={name}
-        placeholder="请输入用户名"
-        onChange={(value: any) => setName(value)}
-      />
-      <Button theme="primary" onClick={onSubmit}>
-        提交
-      </Button>
+      <div className="flex items-center">
+        <Input
+          className="!ml-64px !mr-16px !w-240px"
+          value={name}
+          placeholder="请输入用户名"
+          onChange={(value: any) => setName(value)}
+        />
+        <Button theme="primary" onClick={onSubmit}>
+          提交
+        </Button>
+      </div>
       <div className="title dark:text-color-green">当前用户：{user.userinfo.name}</div>
     </Card>
   )

@@ -59,6 +59,12 @@ const routes = [
     path: '/fail',
     handle: { title: '失败', hidden: true, noUseLayout: true },
     element: () => import('@/components/exception/Fail')
+  },
+  {
+    id: 'error403',
+    path: '/error-403',
+    handle: { title: 'Error403', hidden: true, noUseLayout: true },
+    element: () => import('@/components/exception/Error403')
   }
 ]
 

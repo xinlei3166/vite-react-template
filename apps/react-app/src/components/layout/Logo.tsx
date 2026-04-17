@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { useAppSelector } from '@/store'
 import logo from '@/assets/logo.svg'
+import { useAppSelector } from '@/store'
 import './Logo.less'
 
 function Logo() {
@@ -11,12 +11,10 @@ function Logo() {
   const mix = theme.layout === 'mix'
 
   return (
-    <div className="layout-logo" style={{ minWidth: width, height: height }}>
+    <div className="layout-logo">
       <Link to="/" className="logo-link">
         <img className="logo-img" src={logo} alt="logo" />
-        {!theme.collapsed || mix ? (
-          <h1 className="logo-text">{title}</h1>
-        ) : null}
+        {!theme.collapsed || mix ? <h1 className="logo-text">{title}</h1> : null}
       </Link>
     </div>
   )

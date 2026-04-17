@@ -1,9 +1,9 @@
 import { Card } from 'tdesign-react'
-import './error-403.less'
+import './Error403.less'
 
 export default function Error403() {
   return (
-    <Card borderless className="exception-wrap">
+    <Card bordered={false} className="exception-wrap">
       <div className="exception-img-wrap">
         <img className="exception-img" src="@/assets/exception/web-exception.svg" />
         <span className="exception-desc">

@@ -1,6 +1,6 @@
 import type { DropdownProps } from 'tdesign-react'
-import { BellOutlined, UserOutlined, SettingOutlined, LoginOutlined } from '@ant-design/icons'
 import { memo } from 'react'
+import { Icon } from 'tdesign-icons-react'
 import { Dropdown } from 'tdesign-react'
 import { MessagePlugin } from 'tdesign-react'
 import { logoutCleanup } from '@packages/utils'
@@ -14,7 +14,7 @@ const options: DropdownProps['options'] = [
     value: 'person',
     content: (
       <>
-        <UserOutlined className="menu-item-icon" />
+        <Icon name="user" className="menu-item-icon" />
         个人中心
       </>
     )
@@ -23,7 +23,7 @@ const options: DropdownProps['options'] = [
     value: 'setting',
     content: (
       <>
-        <SettingOutlined className="menu-item-icon" />
+        <Icon name="setting-1" className="menu-item-icon" />
         个人设置
       </>
     )
@@ -32,7 +32,7 @@ const options: DropdownProps['options'] = [
     value: 'logout',
     content: (
       <>
-        <LoginOutlined className="menu-item-icon" />
+        <Icon name="logout" className="menu-item-icon" />
         退出登录
       </>
     )
@@ -47,7 +47,7 @@ function Nav() {
     if (!res || res.code !== 0) return
     MessagePlugin.success({
       content: '退出登录成功',
-      duration: 1,
+      duration: 1000,
       onClose: () => {
         logoutCleanup()
       }
@@ -62,7 +62,7 @@ function Nav() {
 
   return (
     <div className="layout-nav">
-      <BellOutlined className="layout-header-icon" />
+      <Icon name="notification" className="layout-header-icon" />
       <Dropdown className="layout-nav-dropdown" options={options} onClick={onClick}>
         <span className="dropdown-link" style={{ height: theme.height, lineHeight: theme.height }}>
           <span className="dropdown-img-wrap">

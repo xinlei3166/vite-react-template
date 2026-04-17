@@ -96,11 +96,11 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
   }
 
   const onSearch = () => {
-    _onSearch?.(model)
+    _onSearch?.()
   }
 
   const onReset = () => {
-    _onReset?.(model)
+    _onReset?.()
   }
 
   const onEnter = (key: string, value: any, context: any) => {

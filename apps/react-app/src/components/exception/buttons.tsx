@@ -10,7 +10,7 @@ export default function Buttons() {
 
   return (
     <Button theme="primary" onClick={onGoHome}>
-      返回首页
+      回到首页
     </Button>
   )
 }

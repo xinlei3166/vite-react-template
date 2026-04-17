@@ -7,6 +7,7 @@ import { Table, Card, Pagination } from 'tdesign-react'
 import type { SearchProps } from '@packages/components/search'
 import Search from '@packages/components/search'
 import { useData } from '@packages/hooks'
+import { deepClone } from '@packages/utils'
 import type { SearchTableInstance } from './hooks/useSearchTable'
 
 export interface SearchTableProps extends Partial<TableProps> {
@@ -28,8 +29,10 @@ export interface SearchTableProps extends Partial<TableProps> {
   extraParams?: Record<string, any>
   transformTableParams?: (data: any) => Record<string, any>
   useDataParams?: Record<string, any>
+  callback?: (...args: any[]) => void
   requestApi: (...args: any[]) => Promise<any>
   autoRequest?: boolean
+  _onTableChange?: (...args: any[]) => void
   init?: (...args: any[]) => void
   onSearch?: (...args: any[]) => void
   onReset?: (...args: any[]) => void
@@ -62,7 +65,9 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     extraParams,
     transformTableParams: _transformTableParams,
     useDataParams: _useDataParams,
+    callback,
     requestApi,
+    _onTableChange,
     init: _init,
     onSearch: _onSearch,
     onReset: _onReset,
@@ -76,11 +81,11 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
   const [filter, setFilter] = useState<any>(undefined)
   const transformTableParams = useCallback(
     (data: any) => {
-      console.log('transformTableParams', data)
+      // console.log('transformTableParams', data)
       if (_transformTableParams) {
         return _transformTableParams(data)
       }
-      return { sorterParams: {}, filterParams: {} }
+      return {}
     },
     [_transformTableParams]
   )
@@ -90,15 +95,15 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     const overrideParams = transformTableParams ? transformTableParams({ sorter, filter }) : {}
     return { ...searchModel, ...extraParams, ...overrideParams }
   }, [searchModel, extraParams, sorter, filter, transformTableParams])
+
   const useDataParams = useMemo(() => {
-    const mergedParams = _useDataParams || {}
+    const mergedParams = deepClone(_useDataParams || {})
     if (_pagination !== undefined) {
       mergedParams.pagination = _pagination
     }
-    return { ...mergedParams, params }
-  }, [_useDataParams, params, _pagination])
+    return { callback, ...mergedParams, params }
+  }, [_useDataParams, params, _pagination, callback])
 
-  // 请求数据后处理，例如清空selectedRowKeys可以传cb
   const {
     loading,
     data,
@@ -106,7 +111,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     init,
     onSearch: onSearchMethod,
     onReset: onResetMethod,
-    onTableChange: _onTableChange
+    onTableChange: onTableChangeMethod
   } = useData(requestApi, useDataParams)
 
   const onTableChange = useCallback(
@@ -114,15 +119,19 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
       setSorter(data.sorter)
       setFilter(data.filter)
       const overrideParams = transformTableParams ? transformTableParams(data) : {}
-      _onTableChange(data, context, overrideParams)
+      onTableChangeMethod(data, context, overrideParams)
+      _onTableChange?.(data, context)
     },
-    [_onTableChange, setSorter, setFilter, transformTableParams]
+    [onTableChangeMethod, _onTableChange, setSorter, setFilter, transformTableParams]
   )
   const onPaginationChange = useCallback(
     (pageInfo: any) => {
-      return _onTableChange({ pagination: pageInfo }, { trigger: 'pagination', currentData: [] })
+      return onTableChangeMethod(
+        { pagination: pageInfo },
+        { trigger: 'pagination', currentData: [] }
+      )
     },
-    [_onTableChange]
+    [onTableChangeMethod]
   )
 
   // 方法回调
@@ -132,9 +141,15 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
   }, [onSearchMethod, _onSearch])
 
   const onReset = useCallback(async () => {
-    await onResetMethod()
+    const _state = { ...searchModel }
+    Object.keys(_state).forEach(key => {
+      _state[key] = undefined
+    })
+    setSearchModel?.(_state)
+    await onResetMethod(_state)
     _onReset?.()
-  }, [onResetMethod, _onReset])
+  }, [onResetMethod, _onReset, searchModel, setSearchModel])
+
   const onEnter = useCallback(
     (...args: any[]) => {
       _onEnter?.(...args)
@@ -210,7 +225,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
         resizable={tableProps.resizable ?? true}
         loading={loading}
         columns={tableColumns}
-        pagination={fixedPagination ? undefined : tableProps.pagination}
+        pagination={fixedPagination ? undefined : pagination}
         data={data}
         onChange={onTableChange}
       />
@@ -244,7 +259,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
         resizable={tableProps.resizable ?? true}
         loading={loading}
         columns={tableColumns}
-        pagination={fixedPagination ? undefined : tableProps.pagination}
+        pagination={fixedPagination ? undefined : pagination}
         data={data}
         onChange={onTableChange}
       />

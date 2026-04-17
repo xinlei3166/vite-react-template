@@ -1,6 +1,7 @@
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import type { FormInstanceFunctions } from 'tdesign-react'
 import { useState, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Icon } from 'tdesign-icons-react'
 import { Form, Button, Input, Checkbox } from 'tdesign-react'
 import { MessagePlugin } from 'tdesign-react'
 import { setToken } from '@packages/utils'
@@ -21,16 +22,17 @@ function Login() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const dispatch = useAppDispatch()
-  const [form] = Form.useForm() // form.resetFields()
 
   // ====================== Components ======================
   const title = import.meta.env.VITE_APP_TITLE
   const [loading, setLoading] = useState(false)
+  const formRef = useRef<FormInstanceFunctions>(undefined)
 
-  const onSubmit = async (context: any) => {
-    const { validateResult, values } = context
+  const onSubmit = async () => {
+    const validateResult = await formRef.current?.validate()
     if (validateResult !== true) return
     setLoading(true)
+    const values: any = formRef.current?.getFieldsValue(true)
     const res = await login({
       account: values.userAccount,
       password: values.password
@@ -52,7 +54,7 @@ function Login() {
     await dispatch(fetchPermissions())
     MessagePlugin.success({
       content: '登录成功',
-      duration: 1,
+      duration: 1000,
       onClose: () => {
         navigate(path)
       }
@@ -72,11 +74,10 @@ function Login() {
           </div>
           <Form
             className="login-form"
-            form={form}
+            ref={formRef}
             colon={false}
             labelWidth="50px"
             labelAlign="right"
-            onSubmit={onSubmit}
           >
             <Form.FormItem
               className="login-form-item"
@@ -93,7 +94,7 @@ function Login() {
                 size="large"
                 clearable
                 placeholder="账号：admin"
-                prefixIcon={<UserOutlined className="text-brand text-3.5" type="user" />}
+                prefixIcon={<Icon name="user" />}
               ></Input>
             </Form.FormItem>
             <Form.FormItem
@@ -112,12 +113,12 @@ function Login() {
                 type="password"
                 clearable
                 placeholder="密码：123456"
-                prefixIcon={<LockOutlined className="text-brand text-3.5" type="user" />}
+                prefixIcon={<Icon name="lock-on" />}
               ></Input>
             </Form.FormItem>
             <Form.FormItem name="remember">
               <Checkbox>自动登录</Checkbox>
-              <a className="float-right text-btn" href="#">
+              <a className="text-btn ml-auto" href="#">
                 忘记密码
               </a>
             </Form.FormItem>
@@ -126,8 +127,8 @@ function Login() {
                 className="login-btn"
                 size="large"
                 theme="primary"
-                type="submit"
                 loading={loading}
+                onClick={onSubmit}
               >
                 登 录
               </Button>

@@ -1,12 +1,10 @@
 import type { RouteObject } from 'react-router-dom'
 import type { MenuItemProps } from 'tdesign-react'
-import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
-import { useMount } from 'ahooks'
 import classNames from 'classnames'
 import { useState, useMemo, useEffect } from 'react'
 import { useNavigate, useLocation, useMatches } from 'react-router-dom'
 import { Layout, Menu } from 'tdesign-react'
-import Iconfont from '@/components/icon'
+import Iconfont from '@packages/components/icon'
 import { useMenus } from '@/router'
 import { useAppSelector, useAppDispatch, setTheme } from '@/store'
 import Logo from './Logo'
@@ -91,7 +89,7 @@ function Siderbar() {
 
   return (
     <Layout.Aside
-      width={theme.width}
+      width="auto"
       className={classNames([
         'layout-sider',
         {
@@ -101,7 +99,8 @@ function Siderbar() {
         }
       ])}
       style={{
-        paddingTop: theme.layout === 'mix' ? `calc(${theme.height} - 0px)` : ''
+        paddingTop: theme.layout === 'mix' ? `calc(${theme.height} - 0px)` : '',
+        width: 'fit-content'
       }}
     >
       <div className="layout-menu-wrap">
@@ -115,11 +114,13 @@ function Siderbar() {
           onChange={onChange}
           logo={theme.layout !== 'mix' && <Logo />}
           operations={
-            theme.collapsed ? (
-              <MenuUnfoldOutlined className="trigger" onClick={() => onCollapse(false)} />
-            ) : (
-              <MenuFoldOutlined className="trigger" onClick={() => onCollapse(true)} />
-            )
+            <div className="trigger-wrap" onClick={() => onCollapse(!theme.collapsed)}>
+              {theme.collapsed ? (
+                <Iconfont name="icon-indent" className="trigger text-4.5" />
+              ) : (
+                <Iconfont name="icon-outdent" className="trigger text-4.5" />
+              )}
+            </div>
           }
         >
           {renderMenuItems(menuRoutes)}

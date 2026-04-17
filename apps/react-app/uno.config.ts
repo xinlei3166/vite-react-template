@@ -74,15 +74,13 @@ export default defineConfig({
       bgContainerSelect: 'var(--td-bg-color-container-select)', // 色彩 - 容器 - select
       bgSecondaryContainer: 'var(--td-bg-color-secondarycontainer)', // 色彩 - 次级容器
       bgSecondaryContainerHover: 'var(--td-bg-color-secondarycontainer-hover)', // 色彩 - 次级容器 - hover
-      bgSecondaryContainerActive:
-        'var(--td-bg-color-secondarycontainer-active)', // 色彩 - 次级容器 - active
+      bgSecondaryContainerActive: 'var(--td-bg-color-secondarycontainer-active)', // 色彩 - 次级容器 - active
       bgComponent: 'var(--td-bg-color-component)', // 色彩 - 组件
       bgComponentHover: 'var(--td-bg-color-component-hover)', // 色彩 - 组件 - hover
       bgComponentActive: 'var(--td-bg-color-component-active)', // 色彩 - 组件 - active
       bgSecondaryComponent: 'var(--td-bg-color-secondarycomponent)', // 色彩 - 次级组件
       bgSecondaryComponentHover: 'var(--td-bg-color-secondarycomponent-hover)', // 色彩 - 次级组件 - hover
-      bgSecondaryComponentActive:
-        'var(--td-bg-color-secondarycomponent-active)', // 色彩 - 次级组件 - active
+      bgSecondaryComponentActive: 'var(--td-bg-color-secondarycomponent-active)', // 色彩 - 次级组件 - active
       bgComponentDisabled: 'var(--td-bg-color-component-disabled)', // 色彩 - 组件 - disabled
 
       // 特殊组件背景色，目前只用于 button、input 组件多主题场景，浅色主题下固定为白色，深色主题下为 transparent 适配背景颜色

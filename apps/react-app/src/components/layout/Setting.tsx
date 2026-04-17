@@ -1,5 +1,5 @@
-import { SettingOutlined, CloseOutlined } from '@ant-design/icons'
 import { useState } from 'react'
+import { Icon } from 'tdesign-icons-react'
 import { Drawer, Select, Switch, Input } from 'tdesign-react'
 import type { ThemeState } from '@/store'
 import { useAppSelector, useAppDispatch, setTheme } from '@/store'
@@ -37,7 +37,7 @@ function Setting() {
   return (
     <>
       <div className="setting-drawer-btn-wrap" onClick={() => setVisible(!visible)}>
-        <SettingOutlined className="setting-drawer-btn" />
+        <Icon name="setting-1" className="setting-drawer-btn" />
       </div>
       <Drawer
         visible={visible}
@@ -55,7 +55,7 @@ function Setting() {
             onClick={() => setVisible(!visible)}
             style={{ right: '300px', zIndex: 2000 }}
           >
-            <CloseOutlined className="setting-drawer-btn" />
+            <Icon name="close" className="setting-drawer-btn" />
           </div>
         )} */}
         <div className="setting-drawer-content">

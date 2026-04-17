@@ -23,7 +23,7 @@ const initialState: ThemeState = {
   collapsed: false,
   collapsedWidth: '80px',
   headerTheme: false,
-  showBreadcrumb: false, // 是否显示面包屑
+  showBreadcrumb: true, // 是否显示面包屑
   brandTheme: '#0077fa'
 }
 
