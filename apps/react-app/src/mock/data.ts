@@ -8,8 +8,7 @@ const Random = Mock.Random
 export const getList = function (options: Record<string, any> = {}) {
   const body: Record<string, any> = qs.parse(options.body)
   const arr = []
-  // for (let i = 0; i < (body.page_size || 10); i++) {
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < (body.page_size || 20); i++) {
     const obj = {
       id: i + 1,
       name: Random.cname(), // Random.cname() 随机生成一个常见的中文姓名
