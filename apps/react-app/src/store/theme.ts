@@ -23,7 +23,7 @@ const initialState: ThemeState = {
   collapsed: false,
   collapsedWidth: '80px',
   headerTheme: false,
-  showBreadcrumb: true, // 是否显示面包屑
+  showBreadcrumb: false, // 是否显示面包屑
   themeColor: '#0077fa'
 }
 
