@@ -133,7 +133,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
     input: (column: Record<string, any>) => (
       <Input
         value={model[column.key]}
-        className="search-item-input search-item-component w-full"
+        className="search-item-input search-item-component !w-full"
         style={mergeColumnStyle(column.style)}
         showLimitNumber={column.props?.showLimitNumber !== false}
         clearable={column.props?.clearable !== false}
@@ -145,7 +145,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
     'input-number': (column: Record<string, any>) => (
       <InputNumber
         value={model[column.key]}
-        className="search-item-input-number search-item-component w-full"
+        className="search-item-input-number search-item-component !w-full"
         style={mergeColumnStyle(column.style)}
         clearable={column.props?.clearable !== false}
         theme={column.props?.theme || 'normal'}
@@ -157,7 +157,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
     select: (column: Record<string, any>) => (
       <Select
         value={model[column.key]}
-        className="search-item-select search-item-component w-full"
+        className="search-item-select search-item-component !w-full"
         style={mergeColumnStyle(column.style)}
         clearable={column.props?.clearable !== false}
         {...column.props}
@@ -170,7 +170,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
     'tree-select': (column: Record<string, any>) => (
       <TreeSelect
         value={model[column.key]}
-        className="search-item-tree-select search-item-component w-full"
+        className="search-item-tree-select search-item-component !w-full"
         style={mergeColumnStyle(column.style)}
         clearable={column.props?.clearable !== false}
         {...column.props}
@@ -181,7 +181,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
     cascader: (column: Record<string, any>) => (
       <Cascader
         value={model[column.key]}
-        className="search-item-cascader search-item-component w-full"
+        className="search-item-cascader search-item-component !w-full"
         style={mergeColumnStyle(column.style)}
         clearable={column.props?.clearable !== false}
         {...column.props}
@@ -191,7 +191,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
     'date-picker': (column: Record<string, any>) => (
       <DatePicker
         value={model[column.key]}
-        className="search-item-date-picker search-item-component w-full"
+        className="search-item-date-picker search-item-component !w-full"
         style={mergeColumnStyle(column.style)}
         clearable={column.props?.clearable !== false}
         {...column.props}
@@ -201,7 +201,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
     'range-picker': (column: Record<string, any>) => (
       <DateRangePicker
         value={model[column.key]}
-        className="search-item-range-picker search-item-component w-full"
+        className="search-item-range-picker search-item-component !w-full"
         style={mergeColumnStyle(column.style)}
         clearable={column.props?.clearable !== false}
         {...column.props}
@@ -216,7 +216,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
         <Col
           span={column.span || span}
           key={`column${column.index || index}`}
-          className={classNames(['search-item', 'flex', 'items-center', column.class])}
+          className={classNames(['search-item', '!flex', '!items-center', column.class])}
         >
           {showLabel && column.label ? (
             <span
