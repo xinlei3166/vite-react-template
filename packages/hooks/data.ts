@@ -67,7 +67,7 @@ export function useData(
     if (method === 'get') {
       mergedParams = { params: mergedParams }
     }
-    console.log('mergedParams', mergedParams)
+    // console.log('mergedParams', mergedParams)
     const res = await api(mergedParams)
     setLoading(false)
     if (!res || res[codeKey] !== successCode) return
@@ -101,7 +101,7 @@ export function useData(
     context: any,
     overrideParams: Record<string, any> = {}
   ) => {
-    console.log('data', data, 'context', context, 'overrideParams', overrideParams)
+    // console.log('onTableChange', { data, context, overrideParams })
     const { pagination } = data
     if (pagination) {
       setPagination((state: any) => ({

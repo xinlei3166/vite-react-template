@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Icon } from 'tdesign-icons-react'
 import { Drawer, Select, Switch, Input } from 'tdesign-react'
+import { Color } from 'tvision-color'
+import { generateColorMap, insertThemeStylesheet } from '@packages/utils'
+import './Setting.less'
 import type { ThemeState } from '@/store'
 import { useAppSelector, useAppDispatch, setTheme } from '@/store'
-import './Setting.less'
 
 const colors = [
   { label: '默认', value: '#0077fa' },
@@ -31,7 +33,24 @@ function Setting() {
     onChange({ ...t })
     const el = document.querySelector('html')
     el?.classList.toggle('dark', t.theme === 'dark')
+    el?.setAttribute('theme-mode', t.theme!)
     localStorage.theme = t.theme
+  }
+
+  function onChangeThemeColor(t: Partial<ThemeState>) {
+    onChange({ ...t })
+
+    const mode = theme.theme
+    const hex = t.themeColor
+    const { colors: newPalette, primary: brandColorIndex } = Color.getColorGradations({
+      colors: [hex],
+      step: 10,
+      remainInput: false // 是否保留输入 不保留会矫正不合适的主题色
+    })[0]
+    const newColorMap = generateColorMap(hex!, newPalette, mode, brandColorIndex)
+    insertThemeStylesheet(hex!, newColorMap, mode)
+
+    document.documentElement.setAttribute('theme-color', hex || '')
   }
 
   return (
@@ -65,7 +84,7 @@ function Setting() {
             <Select
               value={theme.layout}
               className="select"
-              onChange={(value: any) => onChangeTheme({ layout: value })}
+              onChange={(value: any) => onChange({ layout: value })}
             >
               <Select.Option key="side" value="side">
                 侧边
@@ -93,11 +112,21 @@ function Setting() {
           <div className="drawer-item">
             <span>主题色</span>
             <Select
-              value={theme.brandTheme}
+              value={theme.themeColor}
               className="select"
+              prefixIcon={
+                <span
+                  className="inline-block"
+                  style={{
+                    backgroundColor: theme.themeColor,
+                    width: '20px',
+                    height: '20px'
+                  }}
+                ></span>
+              }
               onChange={(value: any) =>
-                onChangeTheme({
-                  brandTheme: value
+                onChangeThemeColor({
+                  themeColor: value
                 })
               }
             >

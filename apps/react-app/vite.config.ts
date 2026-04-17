@@ -72,18 +72,7 @@ export default ({ mode, command }) => {
         '@': path.resolve(__dirname, 'src'),
         features: path.resolve(__dirname, '../../features')
       },
-      extensions: [
-        '.js',
-        '.jsx',
-        '.ts',
-        '.tsx',
-        '.mjs',
-        '.vue',
-        '.json',
-        '.less',
-        '.scss',
-        '.css'
-      ]
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.mjs', '.vue', '.json', '.less', '.scss', '.css']
     },
     server: {
       // proxy: {

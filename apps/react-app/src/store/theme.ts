@@ -11,7 +11,7 @@ export interface ThemeState {
   collapsedWidth: string
   headerTheme: boolean
   showBreadcrumb: boolean
-  brandTheme: string
+  themeColor: string
 }
 
 const initialState: ThemeState = {
@@ -24,7 +24,7 @@ const initialState: ThemeState = {
   collapsedWidth: '80px',
   headerTheme: false,
   showBreadcrumb: true, // 是否显示面包屑
-  brandTheme: '#0077fa'
+  themeColor: '#0077fa'
 }
 
 const themeSlice = createSlice({
