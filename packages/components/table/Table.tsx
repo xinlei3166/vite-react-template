@@ -230,7 +230,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
         onChange={onTableChange}
       />
       {fixedPagination && pagination && (
-        <Pagination className="my-4" {...pagination} onChange={onPaginationChange} />
+        <Pagination className="!my-4" {...pagination} onChange={onPaginationChange} />
       )}
     </Card>
   ) : (
@@ -264,7 +264,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
         onChange={onTableChange}
       />
       {fixedPagination && pagination && (
-        <Pagination className="my-4" {...pagination} onChange={onPaginationChange} />
+        <Pagination className="!my-4" {...pagination} onChange={onPaginationChange} />
       )}
     </div>
   )
