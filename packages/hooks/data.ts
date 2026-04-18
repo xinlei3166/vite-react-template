@@ -90,12 +90,8 @@ export function useData(api: (...args: any[]) => any, dataOptions: DataOptions =
     await init({ ..._params, page: initialPage })
   }
 
-  const onTableChange = async (
-    data: any,
-    context: any,
-    overrideParams: Record<string, any> = {}
-  ) => {
-    console.log('onTableChange', { data, context, overrideParams })
+  const onTableChange = async (data: any, context: any, _params: Record<string, any> = {}) => {
+    console.log('onTableChange', { data, context, _params })
     const { pagination } = data
     if (pagination) {
       setPagination((state: any) => ({
@@ -106,10 +102,10 @@ export function useData(api: (...args: any[]) => any, dataOptions: DataOptions =
       await init({
         page: pagination.current,
         page_size: pagination.pageSize,
-        ...overrideParams
+        ..._params
       })
     } else {
-      await init({ ...overrideParams })
+      await init({ ..._params })
     }
   }
 
@@ -118,6 +114,7 @@ export function useData(api: (...args: any[]) => any, dataOptions: DataOptions =
     sourceData,
     data,
     pagination: pagination === false ? undefined : pag,
+    setPagination,
     init,
     onSearch,
     onTableChange

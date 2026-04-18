@@ -250,7 +250,7 @@ function _Search(
                 model,
                 column,
                 onChange,
-                className: classNames(['search-item-component', 'w-full']),
+                className: classNames(['search-item-component', '!w-full']),
                 style: mergeColumnStyle(column.style)
               })
             : contents[column.searchType]?.(column)}
@@ -272,9 +272,9 @@ function _Search(
             className={classNames([
               'search-btn-inner',
               'flex',
-              'items-center',
+              '!items-center',
               'gap-4',
-              `justify-${btnAlign}`
+              `!justify-${btnAlign}`
             ])}
             style={btnInnerStyle}
           >
@@ -308,18 +308,19 @@ function Search(
     ...searchProps
   } = props
 
-  return card ? (
-    <Card
-      bordered={cardBordered}
-      className={classNames(['search-card', 'search-wrap', className])}
-      bodyStyle={{ padding: '16px', ...cardBodyStyle }}
-      style={style}
-    >
-      <_Search {...searchProps} />
-    </Card>
-  ) : (
+  return (
     <div className={classNames(['search-wrap', className])} style={style}>
-      <_Search {...searchProps} />
+      {card ? (
+        <Card
+          bordered={cardBordered}
+          className="search-card"
+          bodyStyle={{ padding: '16px', ...cardBodyStyle }}
+        >
+          <_Search {...searchProps} />
+        </Card>
+      ) : (
+        <_Search {...searchProps} />
+      )}
     </div>
   )
 }

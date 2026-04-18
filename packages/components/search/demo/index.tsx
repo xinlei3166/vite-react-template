@@ -100,8 +100,9 @@ export default function DemoPage() {
         onReset={onReset}
         extraBtn={<Button theme="primary">导出</Button>}
       />
-      <Card bordered={false}>
+      <Card bordered={false} bodyStyle={{ padding: '16px 16px 0' }}>
         <Table
+          maxHeight="none"
           rowKey="id"
           loading={loading}
           pagination={pagination}

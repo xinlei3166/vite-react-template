@@ -31,10 +31,16 @@ export default [
         element: () => import('@/views/components/bus')
       },
       {
+        id: 'componentsSearch',
+        path: '/components/search',
+        handle: { title: 'search' },
+        element: () => import('@packages/components/search/demo')
+      },
+      {
         id: 'componentsTable',
         path: '/components/table',
         handle: { title: 'table' },
-        element: () => import('@/views/components/table')
+        element: () => import('@packages/components/table/demo')
       },
       {
         id: 'componentsSortable',
@@ -50,18 +56,6 @@ export default [
     handle: { title: '其他组件', icon: 'icon-appstore' },
     element: () => import('@/components/layout/Router'),
     children: [
-      {
-        id: 'othersSearch',
-        path: '/others/search',
-        handle: { title: 'search' },
-        element: () => import('@packages/components/search/demo')
-      },
-      {
-        id: 'othersTable',
-        path: '/others/table',
-        handle: { title: 'table' },
-        element: () => import('@packages/components/table/demo')
-      },
       {
         id: 'othersReact',
         path: '/others/react',

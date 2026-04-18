@@ -94,12 +94,14 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     },
     [_transformTableParams]
   )
+  const tableParams = useMemo(() => {
+    return transformTableParams({ sorter, filter })
+  }, [sorter, filter, transformTableParams])
 
   // useData
   const params = useMemo(() => {
-    const overrideParams = transformTableParams ? transformTableParams({ sorter, filter }) : {}
-    return { ...searchModel, ...extraParams, ...overrideParams }
-  }, [searchModel, extraParams, sorter, filter, transformTableParams])
+    return { ...searchModel, ...extraParams, ...tableParams }
+  }, [searchModel, extraParams, tableParams])
 
   const useDataParams = useMemo(() => {
     const mergedParams = deepClone(_useDataParams || {})
@@ -113,6 +115,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     loading,
     data,
     pagination,
+    setPagination,
     init: initMethod,
     onSearch: onSearchMethod,
     onTableChange: onTableChangeMethod
@@ -122,18 +125,15 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     (data: any, context: any) => {
       setSorter(data.sorter)
       setFilter(data.filter)
-      const overrideParams = transformTableParams ? transformTableParams(data) : {}
-      onTableChangeMethod(data, context, overrideParams)
+      const tableParams = transformTableParams ? transformTableParams(data) : {}
+      onTableChangeMethod(data, context, tableParams)
       _onTableChange?.(data, context)
     },
     [onTableChangeMethod, _onTableChange, setSorter, setFilter, transformTableParams]
   )
   const onPaginationChange = useCallback(
     (pageInfo: any) => {
-      return onTableChangeMethod(
-        { pagination: pageInfo },
-        { trigger: 'pagination', currentData: [] }
-      )
+      onTableChangeMethod({ pagination: pageInfo }, { trigger: 'pagination', currentData: [] })
     },
     [onTableChangeMethod]
   )
@@ -145,11 +145,11 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
   }, [initMethod, _init])
 
   const noop = useCallback(async () => {}, [])
-  const onChangeMethod = async (key: string, value: any) => {
+  const onSearchChangeMethod = async (key: string, value: any) => {
     await initMethod({ [key]: value })
   }
   // eslint-disable-next-line
-  const onChange = useCallback(requestOnChange ? onChangeMethod : noop, [
+  const onSearchChange = useCallback(requestOnChange ? onSearchChangeMethod : noop, [
     initMethod,
     requestOnChange,
     noop
@@ -192,20 +192,24 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     table.onSearch = onSearch
     table.onReset = onReset
     table.onEnter = onEnter
-    table.setSearchModel = setSearchModel!
     table.getSearchModel = () => searchModel!
-    table.setSorter = setSorter!
+    table.setSearchModel = setSearchModel!
+    table.getPagination = () => pagination!
+    table.setPagination = setPagination!
     table.getSorter = () => sorter!
-    table.setFilter = setFilter!
+    table.setSorter = setSorter!
     table.getFilter = () => filter!
+    table.setFilter = setFilter!
   }, [
     table,
     init,
     onSearch,
     onReset,
+    onEnter,
     searchModel,
     setSearchModel,
-    onEnter,
+    pagination,
+    setPagination,
     sorter,
     setSorter,
     filter,
@@ -223,7 +227,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
           columns={searchColumns}
           model={searchModel!}
           setModel={setSearchModel!}
-          onChange={onChange}
+          onChange={onSearchChange}
           onSearch={onSearch}
           onReset={onReset}
           onEnter={onEnter}
@@ -270,8 +274,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
               flexDirection: 'column',
               ...cardBodyStyle
             }}
-            className={classNames(['search-table-card', '!h-full', className])}
-            style={style}
+            className={classNames('search-table-card', '!h-full')}
           >
             {children}
           </Card>

@@ -7,6 +7,8 @@ export interface SearchTableInstance {
   onEnter?: (...args: any[]) => unknown
   getSearchModel?: () => Record<string, any> | undefined
   setSearchModel?: (...args: any[]) => void
+  getPagination?: () => Record<string, any> | undefined
+  setPagination?: (...args: any[]) => void
   getSorter?: () => Record<string, any> | undefined
   setSorter?: (...args: any[]) => void
   getFilter?: () => Record<string, any> | undefined
