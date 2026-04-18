@@ -27,7 +27,7 @@ export interface SearchTableProps extends Partial<TableProps> {
 
   // method
   extraParams?: Record<string, any>
-  transformTableParams?: (data: any) => Record<string, any>
+  transformTableParams?: (params: any) => Record<string, any>
   useDataParams?: Record<string, any>
   callback?: (...args: any[]) => void
   requestApi: (...args: any[]) => Promise<any>
