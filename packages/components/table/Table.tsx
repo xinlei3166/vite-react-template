@@ -159,10 +159,10 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
 
   const onEnter = useCallback(
     async (...args: any[]) => {
-      await init()
+      await initMethod()
       _onEnter?.(...args)
     },
-    [_onEnter, init]
+    [_onEnter, initMethod]
   )
 
   // 初始化
