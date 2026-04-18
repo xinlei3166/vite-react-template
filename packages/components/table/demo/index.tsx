@@ -62,7 +62,7 @@ export default function DemoPage() {
   const extraParams = useMemo(() => ({ extraParams1: 'test' }), [])
 
   const onReset = async () => {
-    console.log('onReset')
+    // console.log('onReset')
   }
 
   const onEdit = () => {
