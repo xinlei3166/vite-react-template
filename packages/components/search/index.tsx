@@ -18,6 +18,7 @@ import {
 import { typeOf } from '@packages/utils'
 
 export interface SearchProps {
+  // search
   card?: boolean
   cardBordered?: boolean
   cardBodyStyle?: React.CSSProperties
@@ -27,10 +28,16 @@ export interface SearchProps {
   columns: Record<string, any>[]
   model: Record<string, any>
   setModel: (...args: any[]) => void
+
+  // label
   labelAlign?: Property.TextAlign // left | right
   labelWidth?: string // auto | px
   showLabel?: boolean
-  componetStyle?: React.CSSProperties
+
+  // component
+  componentStyle?: React.CSSProperties
+
+  // btn
   showSearchBtn?: boolean
   showResetBtn?: boolean
   showBtn?: boolean
@@ -44,6 +51,8 @@ export interface SearchProps {
   btnStyle?: React.CSSProperties
   btnInnerStyle?: React.CSSProperties
   extraBtn?: ReactNode
+
+  // method
   onEnter?: (...args: any) => unknown
   onChange?: (...args: any) => unknown
   onSearch?: (...args: any) => unknown
@@ -62,7 +71,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
     labelAlign = 'right',
     labelWidth = 'auto',
     showLabel = true,
-    componetStyle = {},
+    componentStyle = {},
     showSearchBtn = true,
     showResetBtn = true,
     showBtn = true,
@@ -83,7 +92,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
   } = props
 
   const mergeColumnStyle = (...styles: any[]) => {
-    return Object.assign({}, componetStyle, ...styles.filter(Boolean))
+    return Object.assign({}, componentStyle, ...styles.filter(Boolean))
   }
 
   const parseValue = (value: string, number: true) => {
