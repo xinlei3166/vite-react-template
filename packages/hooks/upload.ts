@@ -13,6 +13,7 @@ export interface UploadConfig {
   maxCount?: number
   maxSize?: number // MB
   accept?: string // .zip,.jpg
+  [key: string]: any
 }
 
 export function useUpload({ maxCount, maxSize, accept, upload = true }: UploadConfig) {

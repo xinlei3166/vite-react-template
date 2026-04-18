@@ -20,11 +20,11 @@ export default function DemoPage() {
         {
           label: '性别',
           key: 'name5',
-          render: ({ model, onChange }: any) => {
+          render: ({ model, onChange, className }: any) => {
             return (
               <Select
                 value={model.name5}
-                className="w-full"
+                className={className}
                 clearable
                 placeholder="请选择性别"
                 onChange={value => onChange('name5', value)}

@@ -4,11 +4,11 @@ import { useMount } from 'ahooks'
 import classNames from 'classnames'
 import { useEffect, useCallback, memo, useMemo, useState } from 'react'
 import { Table, Card, Pagination } from 'tdesign-react'
-import type { SearchProps } from '@packages/components/search'
-import Search from '@packages/components/search'
 import { useData } from '@packages/hooks'
 import { deepClone } from '@packages/utils'
+import type { SearchProps } from '../search'
 import type { SearchTableInstance } from './hooks/useSearchTable'
+import Search from '../search'
 
 export interface SearchTableProps extends Partial<TableProps> {
   // table
@@ -191,19 +191,9 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     setFilter
   ])
 
-  return card ? (
-    <Card
-      bordered={cardBordered}
-      className={classNames(['search-table-card', 'search-table-wrap', 'h-full', className])}
-      bodyStyle={{
-        padding: '16px',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        ...cardBodyStyle
-      }}
-      style={style}
-    >
+  // content
+  const content = (
+    <>
       {showSearch && searchColumns.length > 0 && (
         <Search
           {...searchProps}
@@ -232,42 +222,40 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
       {fixedPagination && pagination && (
         <Pagination className="!my-4" {...pagination} onChange={onPaginationChange} />
       )}
-    </Card>
-  ) : (
-    <div
-      className={classNames(['search-table-wrap', 'h-full', 'flex', 'flex-col', className])}
-      style={style}
-    >
-      {showSearch && searchColumns.length > 0 && (
-        <Search
-          {...searchProps}
-          card={false}
-          style={{ marginBottom: '16px', ...searchProps?.style }}
-          columns={searchColumns}
-          model={searchModel!}
-          setModel={setSearchModel!}
-          onSearch={onSearch}
-          onReset={onReset}
-          onEnter={onEnter}
-        />
-      )}
-      <Table
-        {...tableProps}
-        className={classNames('search-table', 'flex-1', 'min-h-0', tableProps.tableClass)}
-        maxHeight={tableProps.maxHeight ?? (fixedPagination ? '100%' : undefined)}
-        rowKey={rowKey}
-        resizable={tableProps.resizable ?? true}
-        loading={loading}
-        columns={tableColumns}
-        pagination={fixedPagination ? undefined : pagination}
-        data={data}
-        onChange={onTableChange}
-      />
-      {fixedPagination && pagination && (
-        <Pagination className="!my-4" {...pagination} onChange={onPaginationChange} />
-      )}
-    </div>
+    </>
   )
+
+  // wrapper
+  const renderWrapper = (children: React.ReactNode) => {
+    if (card) {
+      return (
+        <Card
+          bordered={cardBordered}
+          className={classNames(['search-table-card', 'search-table-wrap', 'h-full', className])}
+          bodyStyle={{
+            padding: '16px',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            ...cardBodyStyle
+          }}
+          style={style}
+        >
+          {children}
+        </Card>
+      )
+    }
+    return (
+      <div
+        className={classNames(['search-table-wrap', 'h-full', 'flex', 'flex-col', className])}
+        style={style}
+      >
+        {children}
+      </div>
+    )
+  }
+
+  return renderWrapper(content)
 }
 
 export default memo(SearchTable)

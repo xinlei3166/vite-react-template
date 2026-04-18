@@ -48,7 +48,7 @@ export function useRowSelection() {
 
   const onSelectChange = (_selectedRowKeys: any[], options: any) => {
     setSelectedRowKeys(_selectedRowKeys)
-    setSelectedRows(options?.selectedRowData || options?.currentRowData || [])
+    setSelectedRows(options?.selectedRowData || [])
   }
 
   return { selectedRowKeys, selectedRows, cleanup, onSelectChange }

@@ -104,7 +104,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
   }
 
   const onEnter = (key: string, value: any, context: any) => {
-    _onEnter?.(key, value, context)
+    _onEnter?.(key, value, { ...model, [key]: value }, context)
   }
 
   const getSelectOptions = (column: Record<string, any>) => {
@@ -215,7 +215,7 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
       {columns.map((column, index) => (
         <Col
           span={column.span || span}
-          key={`column${column.index || index}`}
+          key={`column_${index}_${column.key}`}
           className={classNames(['search-item', '!flex', '!items-center', column.class])}
         >
           {showLabel && column.label ? (
@@ -235,7 +235,13 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
             </span>
           ) : null}
           {column.render
-            ? column.render({ model, column, onChange })
+            ? column.render({
+                model,
+                column,
+                onChange,
+                className: classNames(['search-item-component', 'w-full']),
+                style: mergeColumnStyle(column.style)
+              })
             : contents[column.searchType]?.(column)}
         </Col>
       ))}

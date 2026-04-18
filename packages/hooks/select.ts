@@ -16,7 +16,7 @@ interface Config {
  * @param config.params url参数。
  * @param config.data 请求数据主体。
  */
-export function useSelectSearch<T>(api: (...args: any[]) => void, dataKey?: any, config?: Config) {
+export function useSelectSearch<T>(api: (...args: any[]) => any, dataKey?: any, config?: Config) {
   const [options, setOptions] = useState<T[]>([])
 
   /**
