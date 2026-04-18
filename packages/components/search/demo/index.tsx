@@ -100,7 +100,7 @@ export default function DemoPage() {
         onReset={onReset}
         extraBtn={<Button theme="primary">导出</Button>}
       />
-      <Card bordered={false} className="table-card-with-pagination">
+      <Card bordered={false}>
         <Table
           rowKey="id"
           loading={loading}

@@ -1,5 +1,5 @@
 import type { PropsWithChildren, HTMLAttributes } from 'react'
-import type { TableProps } from 'tdesign-react'
+import type { TableProps, TableChangeData } from 'tdesign-react'
 import { useMount } from 'ahooks'
 import classNames from 'classnames'
 import { useEffect, useCallback, memo, useMemo, useState } from 'react'
@@ -10,13 +10,16 @@ import type { SearchProps } from '../search'
 import type { SearchTableInstance } from './hooks/useSearchTable'
 import Search from '../search'
 
-export interface SearchTableProps extends Partial<TableProps> {
+export interface SearchTableProps extends Partial<Omit<TableProps, 'pagination'>> {
   // table
   table?: SearchTableInstance
   card?: boolean
   cardBordered?: boolean
   cardBodyStyle?: React.CSSProperties
   fixedPagination?: boolean
+  rowKey?: TableProps['rowKey']
+  tableColumns?: TableProps['columns']
+  pagination?: TableProps['pagination'] | false
 
   // search
   showSearch?: boolean
@@ -27,12 +30,11 @@ export interface SearchTableProps extends Partial<TableProps> {
 
   // method
   extraParams?: Record<string, any>
-  transformTableParams?: (params: any) => Record<string, any>
+  transformTableParams?: (...args: any[]) => Record<string, any>
   useDataParams?: Record<string, any>
-  callback?: (...args: any[]) => void
   requestApi: (...args: any[]) => Promise<any>
   autoRequest?: boolean
-  _onTableChange?: (...args: any[]) => void
+  onTableChange?: (...args: any[]) => void
   init?: (...args: any[]) => void
   onSearch?: (...args: any[]) => void
   onReset?: (...args: any[]) => void
@@ -42,14 +44,16 @@ export interface SearchTableProps extends Partial<TableProps> {
 
 function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes<HTMLDivElement>) {
   const {
+    // element
+    className,
+    style,
+
     // table
     table,
     card = true,
     cardBordered = false,
     cardBodyStyle = {},
     fixedPagination = true,
-    className,
-    style,
     rowKey = 'id',
     tableColumns = [],
     pagination: _pagination,
@@ -65,14 +69,13 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     extraParams,
     transformTableParams: _transformTableParams,
     useDataParams: _useDataParams,
-    callback,
     requestApi,
-    _onTableChange,
+    autoRequest = true,
+    onTableChange: _onTableChange,
     init: _init,
     onSearch: _onSearch,
     onReset: _onReset,
     onEnter: _onEnter,
-    autoRequest = true,
     ...tableProps
   } = props
 
@@ -80,7 +83,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
   const [sorter, setSorter] = useState<any>(undefined)
   const [filter, setFilter] = useState<any>(undefined)
   const transformTableParams = useCallback(
-    (data: any) => {
+    (data: TableChangeData) => {
       // console.log('transformTableParams', data)
       if (_transformTableParams) {
         return _transformTableParams(data)
@@ -101,16 +104,15 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     if (_pagination !== undefined) {
       mergedParams.pagination = _pagination
     }
-    return { callback, ...mergedParams, params }
-  }, [_useDataParams, params, _pagination, callback])
+    return { ...mergedParams, params }
+  }, [_useDataParams, params, _pagination])
 
   const {
     loading,
     data,
     pagination,
-    init,
+    init: initMethod,
     onSearch: onSearchMethod,
-    onReset: onResetMethod,
     onTableChange: onTableChangeMethod
   } = useData(requestApi, useDataParams)
 
@@ -135,6 +137,11 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
   )
 
   // 方法回调
+  const init = useCallback(async () => {
+    await initMethod()
+    _init?.()
+  }, [initMethod, _init])
+
   const onSearch = useCallback(async () => {
     await onSearchMethod()
     _onSearch?.()
@@ -146,15 +153,16 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
       _state[key] = undefined
     })
     setSearchModel?.(_state)
-    await onResetMethod(_state)
+    await onSearchMethod(_state)
     _onReset?.()
-  }, [onResetMethod, _onReset, searchModel, setSearchModel])
+  }, [onSearchMethod, _onReset, searchModel, setSearchModel])
 
   const onEnter = useCallback(
-    (...args: any[]) => {
+    async (...args: any[]) => {
+      await init()
       _onEnter?.(...args)
     },
-    [_onEnter]
+    [_onEnter, init]
   )
 
   // 初始化
@@ -209,8 +217,8 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
       )}
       <Table
         {...tableProps}
-        className={classNames('search-table', 'flex-1', 'min-h-0', tableProps.tableClass)}
-        maxHeight={tableProps.maxHeight ?? (fixedPagination ? '100%' : undefined)}
+        className={classNames('search-table', '!min-h-0', 'flex-1', tableProps.tableClass)}
+        maxHeight={tableProps.maxHeight ?? (fixedPagination ? '100%' : 'undefined')}
         rowKey={rowKey}
         resizable={tableProps.resizable ?? true}
         loading={loading}
@@ -227,30 +235,35 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
 
   // wrapper
   const renderWrapper = (children: React.ReactNode) => {
-    if (card) {
-      return (
-        <Card
-          bordered={cardBordered}
-          className={classNames(['search-table-card', 'search-table-wrap', 'h-full', className])}
-          bodyStyle={{
-            padding: '16px',
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            ...cardBodyStyle
-          }}
-          style={style}
-        >
-          {children}
-        </Card>
-      )
-    }
     return (
       <div
-        className={classNames(['search-table-wrap', 'h-full', 'flex', 'flex-col', className])}
+        className={classNames([
+          'search-table-wrap',
+          { '!h-full': fixedPagination, '!h-auto': !fixedPagination, 'pb-4': !fixedPagination },
+          'flex',
+          '!flex-col',
+          className
+        ])}
         style={style}
       >
-        {children}
+        {card ? (
+          <Card
+            bordered={cardBordered}
+            bodyStyle={{
+              padding: pagination ? '16px 16px 0' : '16px',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              ...cardBodyStyle
+            }}
+            className={classNames(['search-table-card', '!h-full', className])}
+            style={style}
+          >
+            {children}
+          </Card>
+        ) : (
+          children
+        )}
       </div>
     )
   }

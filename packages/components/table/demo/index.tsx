@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react'
+import type { TableChangeData, SortInfo } from 'tdesign-react'
+import { useState, useMemo, useCallback } from 'react'
 import { Select, Button } from 'tdesign-react'
 // @ts-ignore
 import { getList } from '@/api'
@@ -6,6 +7,15 @@ import SearchTable, { useSearchTable } from '../index'
 import { createSearchColumns, createTableColumns } from './columns'
 
 export default function DemoPage() {
+  const transformTableParams = useCallback((data: TableChangeData) => {
+    const sorter = data.sorter as SortInfo
+    const sortBy = sorter?.sortBy
+      ? sorter.descending
+        ? `-${sorter.sortBy}`
+        : sorter.sortBy
+      : undefined
+    return { sortBy }
+  }, [])
   const [search, setSearch] = useState<Record<string, any>>({
     name1: undefined,
     name2: undefined,
@@ -77,7 +87,7 @@ export default function DemoPage() {
   return (
     <>
       <SearchTable
-        className="table-card-with-pagination"
+        transformTableParams={transformTableParams}
         table={table}
         searchColumns={searchColumns}
         searchModel={search}

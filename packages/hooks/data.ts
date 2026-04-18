@@ -26,9 +26,8 @@ interface DataOptions {
  * @param codeKey 请求响应 codeKey
  * @param successCode 请求响应成功 code
  */
-export function useData(
-  api: (...args: any[]) => any,
-  {
+export function useData(api: (...args: any[]) => any, dataOptions: DataOptions = {}) {
+  const {
     params,
     pagination = {},
     dataKey = 'records',
@@ -36,11 +35,10 @@ export function useData(
     method = 'get',
     codeKey = 'code',
     successCode = 0
-  }: DataOptions
-) {
-  const paramsRef = useRef(params)
+  } = dataOptions
+  const paramsRef = useRef<Record<string, any>>(params || {})
   useEffect(() => {
-    paramsRef.current = params
+    paramsRef.current = params || {}
   }, [params])
 
   const mergedPagination = pagination || {}
@@ -52,6 +50,7 @@ export function useData(
     pagination: pag,
     setPagination
   } = usePagination({ ...mergedPagination })
+  const initialPage = pagination ? 1 : undefined
   const [sourceData, setSourceData] = useState<any>()
 
   const init = async (_params: Record<string, any> = {}) => {
@@ -67,7 +66,7 @@ export function useData(
     if (method === 'get') {
       mergedParams = { params: mergedParams }
     }
-    // console.log('mergedParams', mergedParams)
+    console.log('mergedParams', mergedParams)
     const res = await api(mergedParams)
     setLoading(false)
     if (!res || res[codeKey] !== successCode) return
@@ -88,12 +87,7 @@ export function useData(
 
   const onSearch = async (_params: Record<string, any> = {}) => {
     setPagination((state: any) => ({ ...state, current: 1 }))
-    await init({ ..._params, page: 1 })
-  }
-
-  const onReset = async (_params: Record<string, any> = {}) => {
-    paramsRef.current = { ...paramsRef.current, ..._params }
-    await onSearch()
+    await init({ ..._params, page: initialPage })
   }
 
   const onTableChange = async (
@@ -101,7 +95,7 @@ export function useData(
     context: any,
     overrideParams: Record<string, any> = {}
   ) => {
-    // console.log('onTableChange', { data, context, overrideParams })
+    console.log('onTableChange', { data, context, overrideParams })
     const { pagination } = data
     if (pagination) {
       setPagination((state: any) => ({
@@ -123,10 +117,9 @@ export function useData(
     loading,
     sourceData,
     data,
-    pagination: pag,
+    pagination: pagination === false ? undefined : pag,
     init,
     onSearch,
-    onReset,
     onTableChange
   }
 }

@@ -76,7 +76,6 @@ export default function DemoPage() {
   return (
     <>
       <SearchTable
-        className="table-card-with-pagination"
         table={table}
         searchColumns={searchColumns}
         searchModel={search}
