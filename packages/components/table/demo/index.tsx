@@ -87,6 +87,7 @@ export default function DemoPage() {
   return (
     <>
       <SearchTable
+        requestOnChange
         transformTableParams={transformTableParams}
         table={table}
         searchColumns={searchColumns}

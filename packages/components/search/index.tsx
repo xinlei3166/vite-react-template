@@ -60,7 +60,9 @@ export interface SearchProps {
   [key: string]: any
 }
 
-function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivElement>) {
+function _Search(
+  props: PropsWithChildren<SearchProps> & Omit<HTMLAttributes<HTMLDivElement>, 'onChange'>
+) {
   const {
     span = 3,
     searchClass = '',
@@ -294,8 +296,17 @@ function _Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivE
   )
 }
 
-function Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivElement>) {
-  const { className, style, card = true, cardBordered = false, cardBodyStyle = {} } = props
+function Search(
+  props: PropsWithChildren<SearchProps> & Omit<HTMLAttributes<HTMLDivElement>, 'onChange'>
+) {
+  const {
+    className,
+    style,
+    card = true,
+    cardBordered = false,
+    cardBodyStyle = {},
+    ...searchProps
+  } = props
 
   return card ? (
     <Card
@@ -304,11 +315,11 @@ function Search(props: PropsWithChildren<SearchProps> & HTMLAttributes<HTMLDivEl
       bodyStyle={{ padding: '16px', ...cardBodyStyle }}
       style={style}
     >
-      <_Search {...props} />
+      <_Search {...searchProps} />
     </Card>
   ) : (
     <div className={classNames(['search-wrap', className])} style={style}>
-      <_Search {...props} />
+      <_Search {...searchProps} />
     </div>
   )
 }

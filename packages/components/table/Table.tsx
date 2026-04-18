@@ -33,7 +33,8 @@ export interface SearchTableProps extends Partial<Omit<TableProps, 'pagination'>
   transformTableParams?: (...args: any[]) => Record<string, any>
   useDataParams?: Record<string, any>
   requestApi: (...args: any[]) => Promise<any>
-  autoRequest?: boolean
+  requestOnMount?: boolean // 是否在组件挂载后自动请求数据，默认为 true
+  requestOnChange?: boolean // 是否在搜索条件改变时自动请求数据，默认为 false
   onTableChange?: (...args: any[]) => void
   init?: (...args: any[]) => void
   onSearch?: (...args: any[]) => void
@@ -70,7 +71,8 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     transformTableParams: _transformTableParams,
     useDataParams: _useDataParams,
     requestApi,
-    autoRequest = true,
+    requestOnMount = true,
+    requestOnChange = false,
     onTableChange: _onTableChange,
     init: _init,
     onSearch: _onSearch,
@@ -142,6 +144,17 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     _init?.()
   }, [initMethod, _init])
 
+  const noop = useCallback(async () => {}, [])
+  const onChangeMethod = async (key: string, value: any) => {
+    await initMethod({ [key]: value })
+  }
+  // eslint-disable-next-line
+  const onChange = useCallback(requestOnChange ? onChangeMethod : noop, [
+    initMethod,
+    requestOnChange,
+    noop
+  ])
+
   const onSearch = useCallback(async () => {
     await onSearchMethod()
     _onSearch?.()
@@ -167,7 +180,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
 
   // 初始化
   useMount(() => {
-    if (autoRequest) {
+    if (requestOnMount) {
       init()
     }
   })
@@ -210,6 +223,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
           columns={searchColumns}
           model={searchModel!}
           setModel={setSearchModel!}
+          onChange={onChange}
           onSearch={onSearch}
           onReset={onReset}
           onEnter={onEnter}
