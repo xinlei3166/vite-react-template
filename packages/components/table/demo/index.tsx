@@ -66,6 +66,7 @@ export default function DemoPage() {
   }
 
   const onEdit = () => {
+    console.log('table', table)
     window.open('https://baidu.com')
   }
 
