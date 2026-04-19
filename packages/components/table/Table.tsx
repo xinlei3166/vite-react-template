@@ -1,5 +1,5 @@
 import type { PropsWithChildren, HTMLAttributes } from 'react'
-import type { TableProps, TableChangeData } from 'tdesign-react'
+import type { TableProps, TableChangeData, SortInfo } from 'tdesign-react'
 import { useMount } from 'ahooks'
 import classNames from 'classnames'
 import { useEffect, useCallback, memo, useMemo, useState } from 'react'
@@ -23,14 +23,16 @@ export interface SearchTableProps extends Partial<Omit<TableProps, 'pagination'>
 
   // search
   showSearch?: boolean
-  searchProps?: Partial<SearchProps>
+  searchProps?: Partial<SearchProps & { class?: string; style?: React.CSSProperties }>
   searchColumns?: Record<string, any>[]
   searchModel?: Record<string, any>
   setSearchModel?: (...args: any[]) => void
+  searchLabelWidth?: SearchProps['labelWidth']
+  searchShowResetBtn?: SearchProps['showResetBtn']
 
   // method
   extraParams?: Record<string, any>
-  transformTableParams?: (...args: any[]) => Record<string, any>
+  transformTableParams?: ((...args: any[]) => Record<string, any>) | true
   useDataParams?: Record<string, any>
   requestApi: (...args: any[]) => Promise<any>
   requestOnMount?: boolean // 是否在组件挂载后自动请求数据，默认为 true
@@ -61,10 +63,12 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
 
     // search
     showSearch = true,
-    searchProps,
+    searchProps: _searchProps,
     searchColumns = [],
     searchModel,
     setSearchModel,
+    searchLabelWidth,
+    searchShowResetBtn,
 
     // method
     extraParams,
@@ -81,16 +85,37 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     ...tableProps
   } = props
 
+  const searchProps = useMemo(
+    () => ({
+      labelWidth: searchLabelWidth,
+      showResetBtn: searchShowResetBtn,
+      ..._searchProps
+    }),
+    [_searchProps, searchLabelWidth, searchShowResetBtn]
+  )
+
   // sorter, filter
   const [sorter, setSorter] = useState<any>(undefined)
   const [filter, setFilter] = useState<any>(undefined)
+  const defaultTransformTableParams = (data: TableChangeData) => {
+    const sorter = data.sorter as SortInfo
+    const sortBy = sorter?.sortBy
+      ? sorter.descending
+        ? `-${sorter.sortBy}`
+        : sorter.sortBy
+      : undefined
+    return { sortBy }
+  }
   const transformTableParams = useCallback(
     (data: TableChangeData) => {
-      // console.log('transformTableParams', data)
-      if (_transformTableParams) {
+      // console.log('transformTableParams', typeof _transformTableParams.value, data)
+      if (_transformTableParams === true) {
+        return defaultTransformTableParams(data)
+      } else if (typeof _transformTableParams === 'function') {
         return _transformTableParams(data)
+      } else {
+        return {}
       }
-      return {}
     },
     [_transformTableParams]
   )
@@ -163,7 +188,11 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
   const onReset = useCallback(async () => {
     const _state = { ...searchModel }
     Object.keys(_state).forEach(key => {
-      _state[key] = undefined
+      if (Array.isArray(_state[key])) {
+        _state[key] = []
+      } else {
+        _state[key] = undefined
+      }
     })
     setSearchModel?.(_state)
     await onSearchMethod(_state)
@@ -223,7 +252,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
         <Search
           {...searchProps}
           card={false}
-          style={{ marginBottom: '16px', ...searchProps?.style }}
+          style={{ marginBottom: '16px', ...searchProps.style }}
           columns={searchColumns}
           model={searchModel!}
           setModel={setSearchModel!}

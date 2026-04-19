@@ -15,7 +15,6 @@ import {
   Button,
   DateRangePicker
 } from 'tdesign-react'
-import { typeOf } from '@packages/utils'
 
 export interface SearchProps {
   // search
@@ -256,7 +255,7 @@ function _Search(
               </Button>
             )}
             {showResetBtn && (
-              <Button className="search-btn-btn" onClick={onReset}>
+              <Button className="search-btn-btn" theme="default" onClick={onReset}>
                 {resetBtnLabel}
               </Button>
             )}

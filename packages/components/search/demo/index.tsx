@@ -1,3 +1,4 @@
+import type { TableChangeData, SortInfo } from 'tdesign-react'
 import { useMount } from 'ahooks'
 import { useState, useMemo } from 'react'
 import { Card, Table, Select, Button } from 'tdesign-react'
@@ -13,7 +14,12 @@ export default function DemoPage() {
     name2: undefined,
     name3: undefined,
     name4: undefined,
-    name5: undefined
+    name5: undefined,
+    name6: undefined,
+    name7: undefined,
+    name8: undefined,
+    name9: undefined,
+    name10: []
   })
 
   const searchColumns = useMemo(
@@ -21,15 +27,15 @@ export default function DemoPage() {
       createSearchColumns([
         {
           label: '性别',
-          key: 'name5',
+          key: 'name6',
           render: ({ model, onChange, className }: any) => {
             return (
               <Select
-                value={model.name5}
+                value={model.name6}
                 className={className}
                 clearable
                 placeholder="请选择性别"
-                onChange={value => onChange('name5', value)}
+                onChange={value => onChange('name6', value)}
               >
                 <Select.Option value="male">男</Select.Option>
                 <Select.Option value="female">女</Select.Option>
@@ -60,15 +66,40 @@ export default function DemoPage() {
     []
   )
 
+  const [sorter, setSorter] = useState<any>({})
+  const transformTableParams = (data: TableChangeData) => {
+    const sorter = data.sorter as SortInfo
+    const sortBy = sorter?.sortBy
+      ? sorter.descending
+        ? `-${sorter.sortBy}`
+        : sorter.sortBy
+      : undefined
+    return { sortBy }
+  }
+
   const params = useMemo(
     () => ({
-      ...search
+      ...search,
+      ...transformTableParams({ sorter })
     }),
-    [search]
+    [search, sorter]
   )
-  const { loading, data, pagination, init, onSearch, onTableChange } = useData(getList, {
+  const {
+    loading,
+    data,
+    pagination,
+    init,
+    onSearch,
+    onTableChange: _onTableChange
+  } = useData(getList, {
     params
   })
+
+  const onTableChange = (data: any, context: any) => {
+    setSorter(data.sorter)
+    const tableParams = transformTableParams(data)
+    _onTableChange(data, context, tableParams)
+  }
 
   useMount(init)
 
@@ -77,6 +108,7 @@ export default function DemoPage() {
     Object.keys(_state).forEach(key => {
       _state[key] = undefined
     })
+    _state['name10'] = []
     setSearch(_state)
     await onSearch(_state)
   }
@@ -95,6 +127,7 @@ export default function DemoPage() {
         className="mb-4"
         columns={searchColumns}
         model={search}
+        labelWidth="42px"
         setModel={setSearch}
         onSearch={onSearch}
         onReset={onReset}

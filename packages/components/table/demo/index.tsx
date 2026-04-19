@@ -12,7 +12,12 @@ export default function DemoPage() {
     name2: undefined,
     name3: undefined,
     name4: undefined,
-    name5: undefined
+    name5: undefined,
+    name6: undefined,
+    name7: undefined,
+    name8: undefined,
+    name9: undefined,
+    name10: []
   })
 
   const searchColumns = useMemo(
@@ -20,15 +25,15 @@ export default function DemoPage() {
       createSearchColumns([
         {
           label: '性别',
-          key: 'name5',
+          key: 'name6',
           render: ({ model, onChange, className }: any) => {
             return (
               <Select
-                value={model.name5}
+                value={model.name6}
                 className={className}
                 clearable
                 placeholder="请选择性别"
-                onChange={value => onChange('name5', value)}
+                onChange={value => onChange('name6', value)}
               >
                 <Select.Option value="male">男</Select.Option>
                 <Select.Option value="female">女</Select.Option>
@@ -94,6 +99,8 @@ export default function DemoPage() {
         searchColumns={searchColumns}
         searchModel={search}
         setSearchModel={setSearch}
+        searchLabelWidth="42px"
+        searchShowResetBtn={true}
         searchProps={{ extraBtn: <Button theme="primary">导出</Button> }}
         tableColumns={tableColumns}
         requestApi={getList}
