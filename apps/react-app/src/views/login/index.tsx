@@ -78,6 +78,7 @@ function Login() {
             colon={false}
             labelWidth="50px"
             labelAlign="right"
+            initialData={{ remember: false }}
           >
             <Form.FormItem
               className="login-form-item"
