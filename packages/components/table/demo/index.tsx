@@ -7,15 +7,6 @@ import SearchTable, { useSearchTable } from '../index'
 import { createSearchColumns, createTableColumns } from './columns'
 
 export default function DemoPage() {
-  const transformTableParams = useCallback((data: TableChangeData) => {
-    const sorter = data.sorter as SortInfo
-    const sortBy = sorter?.sortBy
-      ? sorter.descending
-        ? `-${sorter.sortBy}`
-        : sorter.sortBy
-      : undefined
-    return { sortBy }
-  }, [])
   const [search, setSearch] = useState<Record<string, any>>({
     name1: undefined,
     name2: undefined,
@@ -68,8 +59,18 @@ export default function DemoPage() {
     []
   )
 
-  const table = useSearchTable()
+  const transformTableParams = useCallback((data: TableChangeData) => {
+    const sorter = data.sorter as SortInfo
+    const sortBy = sorter?.sortBy
+      ? sorter.descending
+        ? `-${sorter.sortBy}`
+        : sorter.sortBy
+      : undefined
+    return { sortBy }
+  }, [])
   const extraParams = useMemo(() => ({ extraParams1: 'test' }), [])
+
+  const table = useSearchTable()
 
   const onReset = async () => {
     // console.log('onReset')
