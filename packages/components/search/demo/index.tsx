@@ -102,6 +102,7 @@ export default function DemoPage() {
       />
       <Card bordered={false} bodyStyle={{ padding: '16px 16px 0' }}>
         <Table
+          resizable
           maxHeight="none"
           rowKey="id"
           loading={loading}

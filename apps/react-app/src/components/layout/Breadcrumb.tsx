@@ -20,7 +20,7 @@ function BaseBreadcrumb() {
   const onClick = (to: any) => {
     navigate(to)
   }
-  const breadcrumbs = cleanupBreadcrumbs(
+  const breadcrumbs: any[] = cleanupBreadcrumbs(
     matchRoutes.map((r: Record<string, any>) => ({
       pathname: r.pathname,
       params: r.params,
@@ -28,7 +28,7 @@ function BaseBreadcrumb() {
       content: r.handle?.title,
       to: r.handle?.firstChildrenRoutePath ?? r.pathname
     }))
-  ) as BreadcrumbProps['options']
+  )
   // console.log('breadcrumbs', breadcrumbs)
   // const paths = breadcrumbs.map((breadcrumb: any) => breadcrumb.to)
   // const navigate = useNavigate()
@@ -39,7 +39,7 @@ function BaseBreadcrumb() {
 
   return (
     <Breadcrumb>
-      {breadcrumbs.map((item, index) => {
+      {breadcrumbs.map((item: any, index) => {
         return (
           <BreadcrumbItem
             key={item.to + index}

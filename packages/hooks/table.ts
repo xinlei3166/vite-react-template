@@ -3,7 +3,6 @@ import type { Pagination } from '@packages/types'
 
 const defaultPagination: Pagination = {
   current: 1,
-  defaultCurrent: 1,
   pageSize: 20,
   total: 0,
   totalContent: true,

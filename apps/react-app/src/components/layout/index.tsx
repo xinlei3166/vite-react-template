@@ -38,7 +38,6 @@ function BaseLayout() {
         id="layout"
         style={
           {
-            // flexDirection: theme.layout === 'mix' ? 'row' : 'column',
             flexDirection: 'row',
             overflow: 'auto',
             height: '100vh',

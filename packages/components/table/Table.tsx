@@ -266,6 +266,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
       >
         {card ? (
           <Card
+            className={classNames('search-table-card', '!h-full')}
             bordered={cardBordered}
             bodyStyle={{
               padding: pagination ? '16px 16px 0' : '16px',
@@ -274,7 +275,6 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
               flexDirection: 'column',
               ...cardBodyStyle
             }}
-            className={classNames('search-table-card', '!h-full')}
           >
             {children}
           </Card>

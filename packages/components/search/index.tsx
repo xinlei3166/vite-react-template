@@ -97,10 +97,6 @@ function _Search(
     return Object.assign({}, componentStyle, ...styles.filter(Boolean))
   }
 
-  const parseValue = (value: string, number: true) => {
-    return number ? parseInt(value) : value
-  }
-
   const onChange = (key: string, value: any, context: any) => {
     setModel((state: Record<string, any>) => ({ ...state, [key]: value }))
     _onChange?.(key, value, { ...model, [key]: value }, context)
@@ -116,28 +112,6 @@ function _Search(
 
   const onEnter = (key: string, value: any, context: any) => {
     _onEnter?.(key, value, { ...model, [key]: value }, context)
-  }
-
-  const getSelectOptions = (column: Record<string, any>) => {
-    if (typeOf(column.options) === 'array') {
-      return column.options.map((option: Record<string, any>, optionIndex: number) => (
-        <Select.Option
-          key={optionIndex}
-          value={option[column.valueKey || 'value']}
-          label={option[column.labelKey || 'label']}
-        >
-          {option[column.labelKey || 'label']}
-        </Select.Option>
-      ))
-    }
-
-    if (typeOf(column.options) === 'object') {
-      return Object.entries(column.options).map(([value, label]: any) => (
-        <Select.Option key={value} value={parseValue(value, column.int || true)} label={label}>
-          {label}
-        </Select.Option>
-      ))
-    }
   }
 
   const contents: Record<string, Function> = {
@@ -174,9 +148,7 @@ function _Search(
         {...column.props}
         onChange={(value: any, context: any) => onChange(column.key, value, context)}
         onEnter={(context: any) => onEnter(column.key, null, context)}
-      >
-        {getSelectOptions(column.props || {})}
-      </Select>
+      />
     ),
     'tree-select': (column: Record<string, any>) => (
       <TreeSelect
@@ -312,8 +284,8 @@ function Search(
     <div className={classNames(['search-wrap', className])} style={style}>
       {card ? (
         <Card
-          bordered={cardBordered}
           className="search-card"
+          bordered={cardBordered}
           bodyStyle={{ padding: '16px', ...cardBodyStyle }}
         >
           <_Search {...searchProps} />

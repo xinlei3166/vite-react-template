@@ -22,6 +22,7 @@ function Siderbar() {
   const theme = useAppSelector(state => state.theme)
   const dispatch = useAppDispatch()
   const [selectedValue, setSelectedValue] = useState<any>()
+  const [expanded, setExpanded] = useState<any[]>([])
 
   const onChange = (value: any) => {
     setSelectedValue(value)
@@ -39,8 +40,32 @@ function Siderbar() {
     if (selectedValue !== routeValue) {
       setSelectedValue(routeValue)
     }
+
+    // 展开父级菜单
+    // const parentPaths = matchRoutes
+    //   .slice(1, -1)
+    //   .filter(item => !item.handle?.link)
+    //   .map(item => item.pathname)
+    // if (parentPaths.length) {
+    //   setTimeout(() => {
+    //     setExpanded(prev => [...new Set([...prev, ...parentPaths])])
+    //   }, 100)
+    // }
+    // 展开单个父级菜单
+    const parentRoute = matchRoutes[1]
+    if (parentRoute && !parentRoute.handle?.link) {
+      setTimeout(() => {
+        setExpanded([parentRoute.pathname])
+      }, 100)
+    }
   }
 
+  const onExpand = (value: any[]) => {
+    const currentOperationMenu = expanded.filter((item: any) => !value.includes(item))
+    const allExpanded = [...new Set([...value, ...expanded])]
+    const newExpanded = allExpanded.filter(item => !currentOperationMenu.includes(item))
+    setExpanded(newExpanded)
+  }
   const onCollapse = (collapsed: boolean) => {
     dispatch(setTheme({ collapsed }))
   }
@@ -110,15 +135,17 @@ function Siderbar() {
           className={classNames('sider-menu')}
           theme={theme.theme}
           expandType={theme.expandType}
+          expanded={expanded}
+          onExpand={onExpand}
           value={selectedValue}
           onChange={onChange}
           logo={theme.layout !== 'mix' && <Logo />}
           operations={
-            <div className="trigger-wrap" onClick={() => onCollapse(!theme.collapsed)}>
+            <div className="sider-trigger-wrap" onClick={() => onCollapse(!theme.collapsed)}>
               {theme.collapsed ? (
-                <Iconfont name="icon-indent" className="trigger text-4.5" />
+                <Iconfont name="icon-indent" className="sider-trigger" />
               ) : (
-                <Iconfont name="icon-outdent" className="trigger text-4.5" />
+                <Iconfont name="icon-outdent" className="sider-trigger" />
               )}
             </div>
           }

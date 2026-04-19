@@ -1,5 +1,10 @@
-.trigger {
-  font-size: 16px;
+html.dark {
+  .sider-trigger:hover {
+    color: #fff;
+  }
+}
+.sider-trigger {
+  font-size: 18px;
   margin: 0 16px;
   cursor: pointer;
   transition: color 0.3s;
@@ -7,11 +12,6 @@
   &:hover {
     color: theme('colors.brand');
   }
-}
-
-.menu-item-title {
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .menu-item-icon {
@@ -33,7 +33,7 @@
 }
 
 // scroll bar
-.layout-sider .t-is-collapsed .menu-item-icon {
+.layout-sider .sider-menu.t-is-collapsed .menu-item-icon {
   // font-size: 18px !important;
   width: 18px !important;
   height: 18px !important;
@@ -60,7 +60,7 @@
   .t-menu__operations {
     height: 48px;
   }
-  .trigger-wrap {
+  .sider-trigger-wrap {
     position: absolute;
     top: 0;
     right: 0;
@@ -70,20 +70,5 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-  }
-}
-
-// about theme
-.layout-sider-mix {
-  //padding-top: calc(v-bind('theme.height') + 4px);
-}
-
-html.dark {
-  .trigger {
-    color: rgb(255 255 255 / 65%);
-
-    &:hover {
-      color: #fff !important;
-    }
   }
 }

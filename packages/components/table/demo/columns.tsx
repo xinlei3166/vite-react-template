@@ -24,10 +24,11 @@ export const columns: Record<string, any>[] = [
     searchType: 'select',
     key: 'name3',
     props: {
-      options: {
-        1: '玩游戏',
-        2: '听音乐'
-      },
+      options: [
+        { name: '玩游戏', codename: 1 },
+        { name: '听音乐', codename: 2 }
+      ],
+      keys: { label: 'name', value: 'codename' },
       placeholder: '请选择爱好'
     }
   },
