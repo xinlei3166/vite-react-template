@@ -271,6 +271,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
         maxHeight={tableProps.maxHeight ?? (fixedPagination ? '100%' : 'undefined')}
         rowKey={rowKey}
         resizable={tableProps.resizable ?? true}
+        hover={tableProps.hover ?? true}
         loading={loading}
         columns={tableColumns}
         pagination={fixedPagination ? undefined : pagination}
