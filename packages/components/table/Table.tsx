@@ -1,6 +1,6 @@
 import type { PropsWithChildren, HTMLAttributes } from 'react'
 import type { TableProps, TableChangeData, SortInfo } from 'tdesign-react'
-import { useMount } from 'ahooks'
+import { useMount, useDebounceFn } from 'ahooks'
 import classNames from 'classnames'
 import { useEffect, useCallback, memo, useMemo, useState } from 'react'
 import { Table, Card, Pagination } from 'tdesign-react'
@@ -170,9 +170,12 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
   }, [initMethod, _init])
 
   const noop = useCallback(async () => {}, [])
-  const onSearchChangeMethod = async (key: string, value: any) => {
-    await initMethod({ [key]: value })
-  }
+  const { run: onSearchChangeMethod } = useDebounceFn(
+    async (key: string, value: any) => {
+      await initMethod({ [key]: value })
+    },
+    { wait: 300 }
+  )
   // eslint-disable-next-line
   const onSearchChange = useCallback(requestOnChange ? onSearchChangeMethod : noop, [
     initMethod,
