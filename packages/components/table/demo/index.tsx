@@ -103,6 +103,7 @@ export default function DemoPage() {
         searchShowResetBtn={true}
         searchProps={{ extraBtn: <Button theme="primary">导出</Button> }}
         tableColumns={tableColumns}
+        tableEllipsis={true}
         requestApi={getList}
         extraParams={extraParams}
         onReset={onReset}

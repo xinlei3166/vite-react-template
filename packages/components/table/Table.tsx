@@ -19,6 +19,7 @@ export interface SearchTableProps extends Partial<Omit<TableProps, 'pagination'>
   fixedPagination?: boolean
   rowKey?: TableProps['rowKey']
   tableColumns?: TableProps['columns']
+  tableEllipsis?: boolean
   pagination?: TableProps['pagination'] | false
 
   // search
@@ -58,7 +59,8 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     cardBodyStyle = {},
     fixedPagination = true,
     rowKey = 'id',
-    tableColumns = [],
+    tableColumns: _tableColumns = [],
+    tableEllipsis = false,
     pagination: _pagination,
 
     // search
@@ -93,6 +95,15 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     }),
     [_searchProps, searchLabelWidth, searchShowResetBtn]
   )
+
+  const tableColumns = useMemo(() => {
+    return _tableColumns.map((col: any) => {
+      if (tableEllipsis && col.ellipsis === undefined) {
+        return { ...col, ellipsis: true }
+      }
+      return col
+    })
+  }, [_tableColumns, tableEllipsis])
 
   // sorter, filter
   const [sorter, setSorter] = useState<any>(undefined)
