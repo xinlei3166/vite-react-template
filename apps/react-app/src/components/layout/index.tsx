@@ -52,7 +52,7 @@ function BaseLayout() {
           }}
         />
         <Siderbar />
-        <Layout>
+        <Layout style={{ minWidth: 0 }}>
           {theme.layout === 'mix' ? (
             <header
               className={classNames(['layout-header-mix', { dark: !theme.headerTheme }])}

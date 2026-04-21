@@ -147,11 +147,13 @@ export const createSearchColumns = createColumnsFactory(columns)
 const tableColumns: Record<string, any>[] = [
   {
     title: 'ID',
-    colKey: 'id'
+    colKey: 'id',
+    fixed: 'left'
   },
   {
     title: '姓名',
-    colKey: 'name'
+    colKey: 'name',
+    fixed: 'left'
   },
   {
     title: '年龄',
