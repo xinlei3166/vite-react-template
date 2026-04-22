@@ -51,26 +51,21 @@ export function useUpload({ maxCount, maxSize, accept, upload = true }: UploadCo
     setFileList(newFileList)
   }
 
-  const onUpload = () => {
-    const formData = new FormData()
-    fileList?.forEach((file: UploadFile) => {
-      formData.append('files[]', file as any)
+  const fakeRequestMethod: any = async (file: any) => {
+    return new Promise(resolve => {
+      let percent = 0
+      const timer = setInterval(() => {
+        percent += 30
+        file.percent = percent // 更新进度条
+        if (percent >= 100) {
+          clearInterval(timer)
+          resolve({
+            status: 'success',
+            response: { url: '' } // response 必须有，不然报错
+          })
+        }
+      }, 200)
     })
-    setUploading(true)
-
-    // request('https://www.mocky.io/v2/5cc8019d300000980a055e76', {
-    //   method: 'post',
-    //   data: formData
-    // })
-    //   .then(() => {
-    //     setFileList([])
-    //     setUploading(false)
-    //     MessagePlugin.success('upload successfully.')
-    //   })
-    //   .catch(() => {
-    //     setUploading(false)
-    //     MessagePlugin.error('upload failed.')
-    //   })
   }
 
   const createRequestMethod = (
@@ -99,6 +94,7 @@ export function useUpload({ maxCount, maxSize, accept, upload = true }: UploadCo
 
       // 3. 执行请求
       try {
+        setUploading(true)
         const res = await uploadFile(formData, {
           headers: { 'Content-Type': ContentTypeEnum.FormData }
           // onUploadProgress: (event: any) => {
@@ -129,30 +125,21 @@ export function useUpload({ maxCount, maxSize, accept, upload = true }: UploadCo
         }
         console.error('requestMethod error', err, failResponse)
         return failResponse
+      } finally {
+        setUploading(false)
       }
     }
   }
   const requestMethod = createRequestMethod()
-
-  const onChange = ({ fileList: newFileList }: any) => {
-    const list = newFileList.map((f: any) => {
-      if (f.response) {
-        f.url = f.response.url
-      }
-      return f
-    })
-    setFileList(list)
-    console.log('fileList', list)
-  }
 
   return {
     fileList,
     uploading,
     onRemove,
     beforeUpload,
-    onUpload,
+    fakeRequestMethod,
+    onUpload: requestMethod,
     requestMethod,
-    createRequestMethod,
-    onChange
+    createRequestMethod
   }
 }

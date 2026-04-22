@@ -90,6 +90,7 @@ export default function DemoPage() {
     pagination,
     init,
     onSearch,
+    onTriggerSearch,
     onTableChange: _onTableChange
   } = useData(getList, {
     params
@@ -131,6 +132,7 @@ export default function DemoPage() {
         setModel={setSearch}
         onSearch={onSearch}
         onReset={onReset}
+        onTriggerSearch={onTriggerSearch}
         extraBtn={<Button theme="primary">导出</Button>}
       />
       <Card bordered={false} bodyStyle={{ padding: '16px 16px 0' }}>

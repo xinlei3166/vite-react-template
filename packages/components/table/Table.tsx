@@ -1,6 +1,6 @@
 import type { PropsWithChildren, HTMLAttributes } from 'react'
 import type { TableProps, TableChangeData, SortInfo } from 'tdesign-react'
-import { useMount, useDebounceFn } from 'ahooks'
+import { useMount } from 'ahooks'
 import classNames from 'classnames'
 import { useEffect, useCallback, memo, useMemo, useState } from 'react'
 import { Table, Card, Pagination } from 'tdesign-react'
@@ -37,12 +37,14 @@ export interface SearchTableProps extends Partial<Omit<TableProps, 'pagination'>
   useDataParams?: Record<string, any>
   requestApi: (...args: any[]) => Promise<any>
   requestOnMount?: boolean // 是否在组件挂载后自动请求数据，默认为 true
-  requestOnChange?: boolean // 是否在搜索条件改变时自动请求数据，默认为 false
+  requestOnChange?: boolean // 是否在搜索条件改变时自动请求数据，默认为 true
   onTableChange?: (...args: any[]) => void
   init?: (...args: any[]) => void
   onSearch?: (...args: any[]) => void
   onReset?: (...args: any[]) => void
-  onEnter?: (...args: any[]) => void
+  onSearchEnter?: (...args: any[]) => void
+  onSearchChange?: (...args: any[]) => void
+  onTriggerSearch?: (...args: any[]) => void
   [key: string]: any
 }
 
@@ -78,12 +80,14 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     useDataParams: _useDataParams,
     requestApi,
     requestOnMount = true,
-    requestOnChange = false,
+    requestOnChange = true,
     onTableChange: _onTableChange,
     init: _init,
     onSearch: _onSearch,
     onReset: _onReset,
-    onEnter: _onEnter,
+    onSearchEnter: _onSearchEnter,
+    onSearchChange: _onSearchChange,
+    onTriggerSearch: _onTriggerSearch,
     ...tableProps
   } = props
 
@@ -96,14 +100,15 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     [_searchProps, searchLabelWidth, searchShowResetBtn]
   )
 
+  const actionColKeys = useMemo(() => ['row-select'], [])
   const tableColumns = useMemo(() => {
     return _tableColumns.map((col: any) => {
-      if (tableEllipsis && col.ellipsis === undefined) {
+      if (tableEllipsis && col.ellipsis === undefined && !actionColKeys.includes(col.colKey)) {
         return { ...col, ellipsis: true }
       }
       return col
     })
-  }, [_tableColumns, tableEllipsis])
+  }, [_tableColumns, tableEllipsis, actionColKeys])
 
   // sorter, filter
   const [sorter, setSorter] = useState<any>(undefined)
@@ -154,6 +159,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     setPagination,
     init: initMethod,
     onSearch: onSearchMethod,
+    onTriggerSearch: onTriggerSearchMethod,
     onTableChange: onTableChangeMethod
   } = useData(requestApi, useDataParams)
 
@@ -180,20 +186,6 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     _init?.()
   }, [initMethod, _init])
 
-  const noop = useCallback(async () => {}, [])
-  const { run: onSearchChangeMethod } = useDebounceFn(
-    async (key: string, value: any) => {
-      await initMethod({ [key]: value })
-    },
-    { wait: 300 }
-  )
-  // eslint-disable-next-line
-  const onSearchChange = useCallback(requestOnChange ? onSearchChangeMethod : noop, [
-    initMethod,
-    requestOnChange,
-    noop
-  ])
-
   const onSearch = useCallback(async () => {
     await onSearchMethod()
     _onSearch?.()
@@ -202,7 +194,10 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
   const onReset = useCallback(async () => {
     const _state = { ...searchModel }
     Object.keys(_state).forEach(key => {
-      if (Array.isArray(_state[key])) {
+      const col = searchColumns.find((item: any) => item.key === key)
+      if (col && col.defaultValue !== undefined) {
+        _state[key] = col.defaultValue
+      } else if (Array.isArray(_state[key])) {
         _state[key] = []
       } else {
         _state[key] = undefined
@@ -211,14 +206,30 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     setSearchModel?.(_state)
     await onSearchMethod(_state)
     _onReset?.()
-  }, [onSearchMethod, _onReset, searchModel, setSearchModel])
+  }, [onSearchMethod, _onReset, searchModel, setSearchModel, searchColumns])
 
-  const onEnter = useCallback(
-    async (...args: any[]) => {
-      await initMethod()
-      _onEnter?.(...args)
+  const onSearchEnter = useCallback(
+    (...args: []) => {
+      _onSearchEnter?.(...args)
     },
-    [_onEnter, initMethod]
+    [_onSearchEnter]
+  )
+
+  const onSearchChange = useCallback(
+    (...args: []) => {
+      _onSearchChange?.(...args)
+    },
+    [_onSearchChange]
+  )
+
+  const onTriggerSearch = useCallback(
+    async (...args: []) => {
+      if (requestOnChange) {
+        await onTriggerSearchMethod(...args)
+      }
+      _onTriggerSearch?.(...args)
+    },
+    [requestOnChange, _onTriggerSearch, onTriggerSearchMethod]
   )
 
   // 初始化
@@ -234,7 +245,6 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     table.init = init
     table.onSearch = onSearch
     table.onReset = onReset
-    table.onEnter = onEnter
     table.getSearchModel = () => searchModel!
     table.setSearchModel = setSearchModel!
     table.getPagination = () => pagination!
@@ -248,7 +258,6 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     init,
     onSearch,
     onReset,
-    onEnter,
     searchModel,
     setSearchModel,
     pagination,
@@ -270,10 +279,11 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
           columns={searchColumns}
           model={searchModel!}
           setModel={setSearchModel!}
-          onChange={onSearchChange}
           onSearch={onSearch}
           onReset={onReset}
-          onEnter={onEnter}
+          onEnter={onSearchEnter}
+          onChange={onSearchChange}
+          onTriggerSearch={onTriggerSearch}
         />
       )}
       <Table

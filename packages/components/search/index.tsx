@@ -52,10 +52,11 @@ export interface SearchProps {
   extraBtn?: ReactNode
 
   // method
-  onEnter?: (...args: any) => unknown
-  onChange?: (...args: any) => unknown
   onSearch?: (...args: any) => unknown
   onReset?: (...args: any) => unknown
+  onEnter?: (...args: any) => unknown
+  onChange?: (...args: any) => unknown
+  onTriggerSearch?: (...args: any) => unknown
   [key: string]: any
 }
 
@@ -86,19 +87,15 @@ function _Search(
     btnStyle = {},
     btnInnerStyle = {},
     extraBtn,
+    onSearch: _onSearch,
+    onReset: _onReset,
     onEnter: _onEnter,
     onChange: _onChange,
-    onSearch: _onSearch,
-    onReset: _onReset
+    onTriggerSearch: _onTriggerSearch
   } = props
 
   const mergeColumnStyle = (...styles: any[]) => {
     return Object.assign({}, componentStyle, ...styles.filter(Boolean))
-  }
-
-  const onChange = (key: string, value: any, context: any) => {
-    setModel((state: Record<string, any>) => ({ ...state, [key]: value }))
-    _onChange?.(key, value, { ...model, [key]: value }, context)
   }
 
   const onSearch = () => {
@@ -109,8 +106,30 @@ function _Search(
     _onReset?.()
   }
 
-  const onEnter = (key: string, value: any, context: any) => {
-    _onEnter?.(key, value, { ...model, [key]: value }, context)
+  const buildVal = (column: Record<string, any>, value: any, context: any) => {
+    return { key: column.key, value, model: { ...props.model, [column.key]: value }, context }
+  }
+
+  const ignoreSearchTypes = ['input', 'input-number']
+  const onTriggerSearch = (column: Record<string, any>, value: any, context: any) => {
+    if (column.triggerSearch === false) {
+      return
+    }
+    _onTriggerSearch?.(buildVal(column, value, context))
+  }
+
+  const onEnter = (column: Record<string, any>, value: any, context: any) => {
+    _onEnter?.(buildVal(column, value, context))
+    onTriggerSearch(column, value, context)
+  }
+
+  const onChange = (column: Record<string, any>, value: any, context: any) => {
+    setModel((state: Record<string, any>) => ({ ...state, [column.key]: value }))
+    _onChange?.(buildVal(column, value, context))
+    if (ignoreSearchTypes.includes(column.searchType)) {
+      return
+    }
+    onTriggerSearch(column, value, context)
   }
 
   const contents: Record<string, Function> = {
@@ -119,11 +138,10 @@ function _Search(
         value={model[column.key]}
         className="search-item-input search-item-component !w-full"
         style={mergeColumnStyle(column.style)}
-        showLimitNumber={column.props?.showLimitNumber !== false}
         clearable={column.props?.clearable !== false}
         {...column.props}
-        onChange={(value: any, context: any) => onChange(column.key, value, context)}
-        onEnter={(value: any, context: any) => onEnter(column.key, value, context)}
+        onChange={(value: any, context: any) => onChange(column, value, context)}
+        onEnter={(value: any, context: any) => onEnter(column, value, context)}
       />
     ),
     'input-number': (column: Record<string, any>) => (
@@ -134,8 +152,8 @@ function _Search(
         clearable={column.props?.clearable !== false}
         theme={column.props?.theme || 'normal'}
         {...column.props}
-        onChange={(value: any, context: any) => onChange(column.key, value, context)}
-        onEnter={(value: any, context: any) => onEnter(column.key, value, context)}
+        onChange={(value: any, context: any) => onChange(column, value, context)}
+        onEnter={(value: any, context: any) => onEnter(column, value, context)}
       />
     ),
     select: (column: Record<string, any>) => (
@@ -145,8 +163,8 @@ function _Search(
         style={mergeColumnStyle(column.style)}
         clearable={column.props?.clearable !== false}
         {...column.props}
-        onChange={(value: any, context: any) => onChange(column.key, value, context)}
-        onEnter={(context: any) => onEnter(column.key, null, context)}
+        onChange={(value: any, context: any) => onChange(column, value, context)}
+        onEnter={(context: any) => onEnter(column, null, context)}
       />
     ),
     'tree-select': (column: Record<string, any>) => (
@@ -156,8 +174,8 @@ function _Search(
         style={mergeColumnStyle(column.style)}
         clearable={column.props?.clearable !== false}
         {...column.props}
-        onChange={(value: any, context: any) => onChange(column.key, value, context)}
-        onEnter={(context: any) => onEnter(column.key, null, context)}
+        onChange={(value: any, context: any) => onChange(column, value, context)}
+        onEnter={(context: any) => onEnter(column, null, context)}
       />
     ),
     cascader: (column: Record<string, any>) => (
@@ -167,7 +185,7 @@ function _Search(
         style={mergeColumnStyle(column.style)}
         clearable={column.props?.clearable !== false}
         {...column.props}
-        onChange={(value: any, context: any) => onChange(column.key, value, context)}
+        onChange={(value: any, context: any) => onChange(column, value, context)}
       />
     ),
     'date-picker': (column: Record<string, any>) => (
@@ -177,7 +195,7 @@ function _Search(
         style={mergeColumnStyle(column.style)}
         clearable={column.props?.clearable !== false}
         {...column.props}
-        onChange={(value: any, context: any) => onChange(column.key, value, context)}
+        onChange={(value: any, context: any) => onChange(column, value, context)}
       />
     ),
     'range-picker': (column: Record<string, any>) => (
@@ -187,7 +205,7 @@ function _Search(
         style={mergeColumnStyle(column.style)}
         clearable={column.props?.clearable !== false}
         {...column.props}
-        onChange={(value: any, context: any) => onChange(column.key, value, context)}
+        onChange={(value: any, context: any) => onChange(column, value, context)}
       />
     )
   }

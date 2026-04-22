@@ -90,6 +90,11 @@ export function useData(api: (...args: any[]) => any, dataOptions: DataOptions =
     await init({ ..._params, page: initialPage })
   }
 
+  const onTriggerSearch = async (val: Record<string, any> = {}) => {
+    const _params = val?.key ? { [val.key]: val.value } : {}
+    await init(_params)
+  }
+
   const onTableChange = async (data: any, context: any, _params: Record<string, any> = {}) => {
     console.log('onTableChange', { data, context, _params })
     const { pagination } = data
@@ -117,6 +122,7 @@ export function useData(api: (...args: any[]) => any, dataOptions: DataOptions =
     setPagination,
     init,
     onSearch,
+    onTriggerSearch,
     onTableChange
   }
 }
