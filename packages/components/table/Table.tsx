@@ -22,6 +22,9 @@ export interface SearchTableProps extends Partial<Omit<TableProps, 'pagination'>
   tableEllipsis?: boolean
   pagination?: TableProps['pagination'] | false
 
+  // toolbar
+  toolbar?: React.ReactNode
+
   // search
   showSearch?: boolean
   searchProps?: Partial<SearchProps & { class?: string; style?: React.CSSProperties }>
@@ -30,6 +33,7 @@ export interface SearchTableProps extends Partial<Omit<TableProps, 'pagination'>
   setSearchModel?: (...args: any[]) => void
   searchLabelWidth?: SearchProps['labelWidth']
   searchShowResetBtn?: SearchProps['showResetBtn']
+  searchExtraBtn?: SearchProps['extraBtn']
 
   // method
   extraParams?: Record<string, any>
@@ -65,6 +69,9 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     tableEllipsis = false,
     pagination: _pagination,
 
+    // toolbar
+    toolbar,
+
     // search
     showSearch = true,
     searchProps: _searchProps,
@@ -73,6 +80,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     setSearchModel,
     searchLabelWidth,
     searchShowResetBtn,
+    searchExtraBtn,
 
     // method
     extraParams,
@@ -276,6 +284,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
           {...searchProps}
           card={false}
           style={{ marginBottom: '16px', ...searchProps.style }}
+          extraBtn={searchExtraBtn}
           columns={searchColumns}
           model={searchModel!}
           setModel={setSearchModel!}
@@ -285,6 +294,11 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
           onChange={onSearchChange}
           onTriggerSearch={onTriggerSearch}
         />
+      )}
+      {toolbar && (
+        <div className="search-table-toolbar flex items-center justify-between gap-4 mb-4">
+          {toolbar}
+        </div>
       )}
       <Table
         {...tableProps}

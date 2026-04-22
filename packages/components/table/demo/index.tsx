@@ -101,7 +101,8 @@ export default function DemoPage() {
         setSearchModel={setSearch}
         searchLabelWidth="42px"
         searchShowResetBtn={true}
-        searchProps={{ extraBtn: <Button theme="primary">导出</Button> }}
+        searchExtraBtn={<Button theme="primary">导出</Button>}
+        toolbar={<div>表格是非常实用的组件</div>}
         tableColumns={tableColumns}
         tableEllipsis={true}
         requestApi={getList}
