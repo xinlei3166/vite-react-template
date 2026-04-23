@@ -111,10 +111,10 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
       showResetBtn: searchShowResetBtn,
       ..._searchProps
     }),
-    [_searchProps, searchLabelWidth, searchShowResetBtn]
+    [_searchProps, searchLabelWidth, searchShowResetBtn, searchBtnSpan, searchSpan]
   )
 
-  const actionColKeys = useMemo(() => ['row-select'], [])
+  const actionColKeys = useMemo(() => ['row-select', 'operation'], [])
   const tableColumns = useMemo(() => {
     return _tableColumns.map((col: any) => {
       if (tableEllipsis && col.ellipsis === undefined && !actionColKeys.includes(col.colKey)) {
