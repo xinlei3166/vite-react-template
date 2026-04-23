@@ -28,6 +28,8 @@ export interface SearchTableProps extends Partial<Omit<TableProps, 'pagination'>
   // search
   showSearch?: boolean
   searchProps?: Partial<SearchProps & { class?: string; style?: React.CSSProperties }>
+  searchSpan?: SearchProps['span']
+  searchBtnSpan?: SearchProps['btnSpan']
   searchColumns?: Record<string, any>[]
   searchModel?: Record<string, any>
   setSearchModel?: (...args: any[]) => void
@@ -75,6 +77,8 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     // search
     showSearch = true,
     searchProps: _searchProps,
+    searchSpan = 3,
+    searchBtnSpan,
     searchColumns = [],
     searchModel,
     setSearchModel,
@@ -101,6 +105,8 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
 
   const searchProps = useMemo(
     () => ({
+      span: searchSpan,
+      btnSpan: searchBtnSpan,
       labelWidth: searchLabelWidth,
       showResetBtn: searchShowResetBtn,
       ..._searchProps
