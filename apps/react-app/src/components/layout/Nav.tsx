@@ -14,7 +14,7 @@ const options: DropdownProps['options'] = [
     value: 'person',
     content: (
       <>
-        <Icon name="user" className="menu-item-icon" />
+        <Icon name="user" className="text-4 mr-2" />
         个人中心
       </>
     )
@@ -23,7 +23,7 @@ const options: DropdownProps['options'] = [
     value: 'setting',
     content: (
       <>
-        <Icon name="setting-1" className="menu-item-icon" />
+        <Icon name="setting-1" className="text-4 mr-2" />
         个人设置
       </>
     )
@@ -32,7 +32,7 @@ const options: DropdownProps['options'] = [
     value: 'logout',
     content: (
       <>
-        <Icon name="logout" className="menu-item-icon" />
+        <Icon name="logout" className="text-4 mr-2" />
         退出登录
       </>
     )

@@ -1,6 +1,8 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
+import type { DialogHeaderRef } from './index'
 
 export function useDialogHeader() {
+  const dialogHeaderRef = useRef<DialogHeaderRef>(null)
   const [dialogFullscreen, setDialogFullscreen] = useState(false)
 
   const mode = useMemo(() => {
@@ -12,10 +14,12 @@ export function useDialogHeader() {
   }
 
   const handleDialogFullscreen = (val: boolean) => {
+    dialogHeaderRef.current?.resetState()
     setDialogFullscreen(val)
   }
 
   return {
+    dialogHeaderRef,
     mode,
     resetMode,
     dialogFullscreen,

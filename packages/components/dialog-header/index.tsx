@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, forwardRef, useImperativeHandle } from 'react'
 import { Tooltip, Button } from 'tdesign-react'
 import IconFullscreenExit from './icon/icon-fullscreen-exit.svg'
 import IconFullscreen from './icon/icon-fullscreen.svg'
@@ -8,15 +8,27 @@ type Props = {
   onDialogFullscreen?: (val: boolean) => void
 }
 
-export default function DialogHeader(props: Props) {
+export type DialogHeaderRef = {
+  resetState: () => void
+}
+
+const DialogHeader = forwardRef<DialogHeaderRef, Props>((props, ref) => {
   const { title = '标题', onDialogFullscreen } = props
 
   const [fullscreen, setFullscreen] = useState(false)
+
+  const resetState = () => {
+    setFullscreen(false)
+  }
 
   const onClickFullscreen = (val: boolean) => {
     setFullscreen(val)
     onDialogFullscreen?.(val)
   }
+
+  useImperativeHandle(ref, () => ({
+    resetState
+  }))
 
   return (
     <div className="dialog-header-title">
@@ -49,4 +61,6 @@ export default function DialogHeader(props: Props) {
       </div>
     </div>
   )
-}
+})
+
+export default DialogHeader
