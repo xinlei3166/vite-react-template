@@ -29,7 +29,7 @@ interface DataOptions {
 export function useData(api: (...args: any[]) => any, dataOptions: DataOptions = {}) {
   const {
     params,
-    pagination = {},
+    pagination,
     dataKey = 'records',
     callback,
     method = 'get',
@@ -41,7 +41,7 @@ export function useData(api: (...args: any[]) => any, dataOptions: DataOptions =
     paramsRef.current = params || {}
   }, [params])
 
-  const mergedPagination = pagination || {}
+  const mergedPagination: Record<string, any> = pagination || {}
   const {
     loading,
     setLoading,
@@ -85,33 +85,9 @@ export function useData(api: (...args: any[]) => any, dataOptions: DataOptions =
     callback?.({ sourceData: res.data, data: d })
   }
 
-  const onSearch = async (_params: Record<string, any> = {}) => {
+  const search = async (_params: Record<string, any> = {}) => {
     setPagination((state: any) => ({ ...state, current: 1 }))
     await init({ ..._params, page: initialPage })
-  }
-
-  const onTriggerSearch = async (val: Record<string, any> = {}) => {
-    const _params = val?.key ? { [val.key]: val.value } : {}
-    await init(_params)
-  }
-
-  const onTableChange = async (data: any, context: any, _params: Record<string, any> = {}) => {
-    console.log('onTableChange', { data, context, _params })
-    const { pagination } = data
-    if (pagination) {
-      setPagination((state: any) => ({
-        ...state,
-        current: pagination.current,
-        pageSize: pagination.pageSize
-      }))
-      await init({
-        page: pagination.current,
-        page_size: pagination.pageSize,
-        ..._params
-      })
-    } else {
-      await init({ ..._params })
-    }
   }
 
   return {
@@ -121,9 +97,7 @@ export function useData(api: (...args: any[]) => any, dataOptions: DataOptions =
     pagination: pagination === false ? undefined : pag,
     setPagination,
     init,
-    onSearch,
-    onTriggerSearch,
-    onTableChange
+    search
   }
 }
 

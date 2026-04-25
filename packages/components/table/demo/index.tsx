@@ -1,5 +1,4 @@
-import type { TableChangeData, SortInfo } from 'tdesign-react'
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo } from 'react'
 import { Select, Button } from 'tdesign-react'
 // @ts-ignore
 import { getList } from '@/api'
@@ -7,7 +6,7 @@ import SearchTable, { useSearchTable } from '../index'
 import { createSearchColumns, createTableColumns } from './columns'
 
 export default function DemoPage() {
-  const [search, setSearch] = useState<Record<string, any>>({
+  const [searchModel, setSearchModel] = useState<Record<string, any>>({
     name1: undefined,
     name2: undefined,
     name3: undefined,
@@ -26,14 +25,14 @@ export default function DemoPage() {
         {
           label: '性别',
           key: 'name6',
-          render: ({ model, onChange, className }: any) => {
+          render: ({ model, column, onChange, className }: any) => {
             return (
               <Select
                 value={model.name6}
                 className={className}
                 clearable
                 placeholder="请选择性别"
-                onChange={value => onChange('name6', value)}
+                onChange={(value: any, context: any) => onChange(column, value, context)}
               >
                 <Select.Option value="male">男</Select.Option>
                 <Select.Option value="female">女</Select.Option>
@@ -64,18 +63,13 @@ export default function DemoPage() {
     []
   )
 
-  const transformTableParams = useCallback((data: TableChangeData) => {
-    const sorter = data.sorter as SortInfo
-    const sortBy = sorter?.sortBy
-      ? sorter.descending
-        ? `-${sorter.sortBy}`
-        : sorter.sortBy
-      : undefined
-    return { sortBy }
-  }, [])
   const extraParams = useMemo(() => ({ extraParams1: 'test' }), [])
 
   const table = useSearchTable()
+
+  const transformSearchParams = (params: Record<string, any>) => {
+    return { ...params, name1: params.name1 ? `transformed-${params.name1}` : undefined }
+  }
 
   const onReset = async () => {
     // console.log('onReset')
@@ -93,12 +87,15 @@ export default function DemoPage() {
   return (
     <>
       <SearchTable
-        requestOnChange
-        transformTableParams={transformTableParams}
+        card={true}
+        fixedPagination={true}
+        searchOnChange
+        transformSearchParams={transformSearchParams}
+        transformTableParams
         table={table}
         searchColumns={searchColumns}
-        searchModel={search}
-        setSearchModel={setSearch}
+        searchModel={searchModel}
+        setSearchModel={setSearchModel}
         searchLabelWidth="42px"
         searchShowResetBtn={true}
         searchExtraBtn={<Button theme="primary">导出</Button>}

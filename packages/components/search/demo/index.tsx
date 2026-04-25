@@ -9,7 +9,7 @@ import Search from '../index'
 import { createSearchColumns, createTableColumns } from './columns'
 
 export default function DemoPage() {
-  const [search, setSearch] = useState<Record<string, any>>({
+  const [searchModel, setSearchModel] = useState<Record<string, any>>({
     name1: undefined,
     name2: undefined,
     name3: undefined,
@@ -28,14 +28,14 @@ export default function DemoPage() {
         {
           label: '性别',
           key: 'name6',
-          render: ({ model, onChange, className }: any) => {
+          render: ({ model, column, onChange, className }: any) => {
             return (
               <Select
                 value={model.name6}
                 className={className}
                 clearable
                 placeholder="请选择性别"
-                onChange={value => onChange('name6', value)}
+                onChange={(value: any, context: any) => onChange(column, value, context)}
               >
                 <Select.Option value="male">男</Select.Option>
                 <Select.Option value="female">女</Select.Option>
@@ -67,6 +67,7 @@ export default function DemoPage() {
   )
 
   const [sorter, setSorter] = useState<any>({})
+  const [filter, setFilter] = useState<any>({})
   const transformTableParams = (data: TableChangeData) => {
     const sorter = data.sorter as SortInfo
     const sortBy = sorter?.sortBy
@@ -79,39 +80,61 @@ export default function DemoPage() {
 
   const params = useMemo(
     () => ({
-      ...search,
+      ...searchModel,
       ...transformTableParams({ sorter })
     }),
-    [search, sorter]
+    [searchModel, sorter]
   )
-  const {
-    loading,
-    data,
-    pagination,
-    init,
-    onSearch,
-    onTriggerSearch,
-    onTableChange: _onTableChange
-  } = useData(getList, {
+  const { loading, data, pagination, setPagination, init, search } = useData(getList, {
     params
   })
 
-  const onTableChange = (data: any, context: any) => {
-    setSorter(data.sorter)
-    const tableParams = transformTableParams(data)
-    _onTableChange(data, context, tableParams)
-  }
-
   useMount(init)
 
+  const onTableChange = async (data: any, context: any) => {
+    console.log('onTableChange', data, context)
+    setSorter(data.sorter)
+    setFilter(data.filter)
+    const tableParams = transformTableParams(data)
+    const { pagination } = data
+    if (pagination) {
+      setPagination((state: any) => ({
+        ...state,
+        current: pagination.current,
+        pageSize: pagination.pageSize
+      }))
+      await init({
+        page: pagination.current,
+        page_size: pagination.pageSize,
+        ...tableParams
+      })
+    } else {
+      await init({ ...tableParams })
+    }
+  }
+
+  const onSearch = async (trigger: string, payload: Record<string, any>) => {
+    console.log('onSearch', trigger, payload)
+    if (trigger === 'reset') {
+      await onReset()
+    } else {
+      const _params: Record<string, any> = {}
+      if (trigger === 'change') {
+        const { key, value } = payload
+        _params[key] = value
+      }
+      await search(_params)
+    }
+  }
+
   const onReset = async () => {
-    const _state = { ...search }
+    const _state = { ...searchModel }
     Object.keys(_state).forEach(key => {
       _state[key] = undefined
     })
     _state['name10'] = []
-    setSearch(_state)
-    await onSearch(_state)
+    setSearchModel(_state)
+    await search(_state)
   }
 
   const onEdit = () => {
@@ -127,12 +150,10 @@ export default function DemoPage() {
       <Search
         className="mb-4"
         columns={searchColumns}
-        model={search}
+        model={searchModel}
+        setModel={setSearchModel}
         labelWidth="42px"
-        setModel={setSearch}
         onSearch={onSearch}
-        onReset={onReset}
-        onTriggerSearch={onTriggerSearch}
         extraBtn={<Button theme="primary">导出</Button>}
       />
       <Card bordered={false} bodyStyle={{ padding: '16px 16px 0' }}>

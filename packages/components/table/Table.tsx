@@ -20,13 +20,14 @@ export interface SearchTableProps extends Partial<Omit<TableProps, 'pagination'>
   rowKey?: TableProps['rowKey']
   tableColumns?: TableProps['columns']
   tableEllipsis?: boolean
-  pagination?: TableProps['pagination'] | false
+  pagination?: TableProps['pagination'] | boolean
 
   // toolbar
   toolbar?: React.ReactNode
 
   // search
   showSearch?: boolean
+  searchOnChange?: SearchProps['searchOnChange']
   searchProps?: Partial<SearchProps & { class?: string; style?: React.CSSProperties }>
   searchSpan?: SearchProps['span']
   searchBtnSpan?: SearchProps['btnSpan']
@@ -39,18 +40,17 @@ export interface SearchTableProps extends Partial<Omit<TableProps, 'pagination'>
 
   // method
   extraParams?: Record<string, any>
-  transformTableParams?: ((...args: any[]) => Record<string, any>) | true
+  transformTableParams?: ((...args: any[]) => Record<string, any>) | boolean
+  transformSearchParams?: (...args: any[]) => Record<string, any>
   useDataParams?: Record<string, any>
   requestApi: (...args: any[]) => Promise<any>
   requestOnMount?: boolean // 是否在组件挂载后自动请求数据，默认为 true
-  requestOnChange?: boolean // 是否在搜索条件改变时自动请求数据，默认为 true
-  onTableChange?: (...args: any[]) => void
-  init?: (...args: any[]) => void
   onSearch?: (...args: any[]) => void
+  onQuery?: (...args: any[]) => void
   onReset?: (...args: any[]) => void
   onSearchEnter?: (...args: any[]) => void
   onSearchChange?: (...args: any[]) => void
-  onTriggerSearch?: (...args: any[]) => void
+  onTableChange?: (...args: any[]) => void
   [key: string]: any
 }
 
@@ -76,6 +76,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
 
     // search
     showSearch = true,
+    searchOnChange = true,
     searchProps: _searchProps,
     searchSpan = 3,
     searchBtnSpan,
@@ -89,17 +90,17 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     // method
     extraParams,
     transformTableParams: _transformTableParams,
+    transformSearchParams,
     useDataParams: _useDataParams,
     requestApi,
     requestOnMount = true,
-    requestOnChange = true,
     onTableChange: _onTableChange,
     init: _init,
-    onSearch: _onSearch,
+    onQuery: _onQuery,
     onReset: _onReset,
     onSearchEnter: _onSearchEnter,
     onSearchChange: _onSearchChange,
-    onTriggerSearch: _onTriggerSearch,
+    onSearch: _onSearch,
     ...tableProps
   } = props
 
@@ -155,8 +156,14 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
 
   // useData
   const params = useMemo(() => {
-    return { ...searchModel, ...extraParams, ...tableParams }
-  }, [searchModel, extraParams, tableParams])
+    const _params: Record<string, any> = {
+      ...searchModel,
+      ...extraParams,
+      ...tableParams
+    }
+    if (!transformSearchParams) return _params
+    return transformSearchParams(_params)
+  }, [searchModel, extraParams, tableParams, transformSearchParams])
 
   const useDataParams = useMemo(() => {
     const mergedParams = deepClone(_useDataParams || {})
@@ -166,46 +173,80 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     return { ...mergedParams, params }
   }, [_useDataParams, params, _pagination])
 
-  const {
-    loading,
-    data,
-    pagination,
-    setPagination,
-    init: initMethod,
-    onSearch: onSearchMethod,
-    onTriggerSearch: onTriggerSearchMethod,
-    onTableChange: onTableChangeMethod
-  } = useData(requestApi, useDataParams)
+  const { loading, data, pagination, setPagination, init, search } = useData(
+    requestApi,
+    useDataParams
+  )
+
+  const handlePaginationChange = useCallback(
+    async (data: any, context: any) => {
+      const tableParams = transformTableParams ? transformTableParams(data) : {}
+      const { pagination } = data
+      if (pagination) {
+        setPagination((state: any) => ({
+          ...state,
+          current: pagination.current,
+          pageSize: pagination.pageSize
+        }))
+        await init({
+          page: pagination.current,
+          page_size: pagination.pageSize,
+          ...tableParams
+        })
+      } else {
+        await init({ ...tableParams })
+      }
+      _onTableChange?.(data, context)
+    },
+    [_onTableChange, transformTableParams, init, setPagination]
+  )
 
   const onTableChange = useCallback(
     (data: any, context: any) => {
       setSorter(data.sorter)
       setFilter(data.filter)
-      const tableParams = transformTableParams ? transformTableParams(data) : {}
-      onTableChangeMethod(data, context, tableParams)
-      _onTableChange?.(data, context)
+      handlePaginationChange(data, context)
     },
-    [onTableChangeMethod, _onTableChange, setSorter, setFilter, transformTableParams]
+    [setSorter, setFilter, handlePaginationChange]
   )
+
   const onPaginationChange = useCallback(
     (pageInfo: any) => {
-      onTableChangeMethod({ pagination: pageInfo }, { trigger: 'pagination', currentData: [] })
+      handlePaginationChange({ pagination: pageInfo }, { trigger: 'pagination', currentData: [] })
     },
-    [onTableChangeMethod]
+    [handlePaginationChange]
   )
 
   // 方法回调
-  const init = useCallback(async () => {
-    await initMethod()
-    _init?.()
-  }, [initMethod, _init])
+  const onQuery = useCallback(
+    async (payload: Record<string, any>) => {
+      _onQuery?.(payload)
+    },
+    [_onQuery]
+  )
 
-  const onSearch = useCallback(async () => {
-    await onSearchMethod()
-    _onSearch?.()
-  }, [onSearchMethod, _onSearch])
+  const onReset = useCallback(
+    async (payload: Record<string, any>) => {
+      _onReset?.(payload)
+    },
+    [_onReset]
+  )
 
-  const onReset = useCallback(async () => {
+  const onSearchEnter = useCallback(
+    (payload: Record<string, any>) => {
+      _onSearchEnter?.(payload)
+    },
+    [_onSearchEnter]
+  )
+
+  const onSearchChange = useCallback(
+    (payload: Record<string, any>) => {
+      _onSearchChange?.(payload)
+    },
+    [_onSearchChange]
+  )
+
+  const reset = useCallback(async () => {
     const _state = { ...searchModel }
     Object.keys(_state).forEach(key => {
       const col = searchColumns.find((item: any) => item.key === key)
@@ -218,32 +259,25 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
       }
     })
     setSearchModel?.(_state)
-    await onSearchMethod(_state)
-    _onReset?.()
-  }, [onSearchMethod, _onReset, searchModel, setSearchModel, searchColumns])
+    await search(_state)
+  }, [search, searchModel, setSearchModel, searchColumns])
 
-  const onSearchEnter = useCallback(
-    (...args: []) => {
-      _onSearchEnter?.(...args)
-    },
-    [_onSearchEnter]
-  )
-
-  const onSearchChange = useCallback(
-    (...args: []) => {
-      _onSearchChange?.(...args)
-    },
-    [_onSearchChange]
-  )
-
-  const onTriggerSearch = useCallback(
-    async (...args: []) => {
-      if (requestOnChange) {
-        await onTriggerSearchMethod(...args)
+  const onSearch = useCallback(
+    async (trigger: string, payload: Record<string, any>) => {
+      console.log('onSearch', trigger, payload)
+      if (trigger === 'reset') {
+        await reset()
+      } else {
+        const _params: Record<string, any> = {}
+        if (trigger === 'change') {
+          const { key, value } = payload
+          _params[key] = value
+        }
+        await search(_params)
       }
-      _onTriggerSearch?.(...args)
+      _onSearch?.(trigger, payload)
     },
-    [requestOnChange, _onTriggerSearch, onTriggerSearchMethod]
+    [_onSearch, reset, search]
   )
 
   // 初始化
@@ -257,8 +291,8 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
   useEffect(() => {
     if (!table) return
     table.init = init
-    table.onSearch = onSearch
-    table.onReset = onReset
+    table.onSearch = search
+    table.onReset = reset
     table.getSearchModel = () => searchModel!
     table.setSearchModel = setSearchModel!
     table.getPagination = () => pagination!
@@ -270,8 +304,8 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
   }, [
     table,
     init,
-    onSearch,
-    onReset,
+    search,
+    reset,
     searchModel,
     setSearchModel,
     pagination,
@@ -294,11 +328,12 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
           columns={searchColumns}
           model={searchModel!}
           setModel={setSearchModel!}
-          onSearch={onSearch}
+          searchOnChange={searchOnChange}
+          onQuery={onQuery}
           onReset={onReset}
           onEnter={onSearchEnter}
           onChange={onSearchChange}
-          onTriggerSearch={onTriggerSearch}
+          onSearch={onSearch}
         />
       )}
       {toolbar && (
