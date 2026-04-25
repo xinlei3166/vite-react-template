@@ -29,7 +29,7 @@ interface DataOptions {
 export function useData(api: (...args: any[]) => any, dataOptions: DataOptions = {}) {
   const {
     params,
-    pagination,
+    pagination = {},
     dataKey = 'records',
     callback,
     method = 'get',
