@@ -4,7 +4,7 @@ export interface SearchTableInstance {
   init?: (...args: any[]) => unknown
   onSearch?: (...args: any[]) => unknown
   onReset?: (...args: any[]) => unknown
-  onEnter?: (...args: any[]) => unknown
+  onRefresh?: (...args: any[]) => unknown
   getSearchModel?: () => Record<string, any> | undefined
   setSearchModel?: (...args: any[]) => void
   getPagination?: () => Record<string, any> | undefined

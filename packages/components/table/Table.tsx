@@ -46,8 +46,8 @@ export interface SearchTableProps extends Partial<Omit<TableProps, 'pagination'>
   requestApi: (...args: any[]) => Promise<any>
   requestOnMount?: boolean // 是否在组件挂载后自动请求数据，默认为 true
   onSearch?: (...args: any[]) => void
-  onQuery?: (...args: any[]) => void
-  onReset?: (...args: any[]) => void
+  onSearchQuery?: (...args: any[]) => void
+  onSearchReset?: (...args: any[]) => void
   onSearchEnter?: (...args: any[]) => void
   onSearchChange?: (...args: any[]) => void
   onTableChange?: (...args: any[]) => void
@@ -96,8 +96,8 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     requestOnMount = true,
     onTableChange: _onTableChange,
     init: _init,
-    onQuery: _onQuery,
-    onReset: _onReset,
+    onSearchQuery: _onSearchQuery,
+    onSearchReset: _onSearchReset,
     onSearchEnter: _onSearchEnter,
     onSearchChange: _onSearchChange,
     onSearch: _onSearch,
@@ -217,19 +217,19 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     [handlePaginationChange]
   )
 
-  // 方法回调
-  const onQuery = useCallback(
+  // event
+  const onSearchQuery = useCallback(
     async (payload: Record<string, any>) => {
-      _onQuery?.(payload)
+      _onSearchQuery?.(payload)
     },
-    [_onQuery]
+    [_onSearchQuery]
   )
 
-  const onReset = useCallback(
+  const onSearchReset = useCallback(
     async (payload: Record<string, any>) => {
-      _onReset?.(payload)
+      _onSearchReset?.(payload)
     },
-    [_onReset]
+    [_onSearchReset]
   )
 
   const onSearchEnter = useCallback(
@@ -246,21 +246,24 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     [_onSearchChange]
   )
 
-  const reset = useCallback(async () => {
-    const _state = { ...searchModel }
-    Object.keys(_state).forEach(key => {
-      const col = searchColumns.find((item: any) => item.key === key)
-      if (col && col.defaultValue !== undefined) {
-        _state[key] = col.defaultValue
-      } else if (Array.isArray(_state[key])) {
-        _state[key] = []
-      } else {
-        _state[key] = undefined
-      }
-    })
-    setSearchModel?.(_state)
-    await search(_state)
-  }, [search, searchModel, setSearchModel, searchColumns])
+  const reset = useCallback(
+    async (params?: Record<string, any>) => {
+      const _state = { ...searchModel }
+      Object.keys(_state).forEach(key => {
+        const col = searchColumns.find((item: any) => item.key === key)
+        if (col && col.defaultValue !== undefined) {
+          _state[key] = col.defaultValue
+        } else if (Array.isArray(_state[key])) {
+          _state[key] = []
+        } else {
+          _state[key] = undefined
+        }
+      })
+      setSearchModel?.(_state)
+      await search({ ..._state, ...params })
+    },
+    [search, searchModel, setSearchModel, searchColumns]
+  )
 
   const onSearch = useCallback(
     async (trigger: string, payload: Record<string, any>) => {
@@ -280,6 +283,26 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     [_onSearch, reset, search]
   )
 
+  // method
+  interface RefreshOptions {
+    action?: string
+    params?: Record<string, any>
+    callback?: () => void
+  }
+  const refresh = useCallback(
+    async ({ action, params, callback }: RefreshOptions = {}) => {
+      if (['add', 'search'].includes(action || '')) {
+        await search(params)
+      } else if (action === 'reset') {
+        await reset(params)
+      } else {
+        await init(params)
+      }
+      callback?.()
+    },
+    [search, reset, init]
+  )
+
   // 初始化
   useMount(() => {
     if (requestOnMount) {
@@ -293,6 +316,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     table.init = init
     table.onSearch = search
     table.onReset = reset
+    table.onRefresh = refresh
     table.getSearchModel = () => searchModel!
     table.setSearchModel = setSearchModel!
     table.getPagination = () => pagination!
@@ -306,6 +330,7 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
     init,
     search,
     reset,
+    refresh,
     searchModel,
     setSearchModel,
     pagination,
@@ -329,10 +354,10 @@ function SearchTable(props: PropsWithChildren<SearchTableProps> & HTMLAttributes
           model={searchModel!}
           setModel={setSearchModel!}
           searchOnChange={searchOnChange}
-          onQuery={onQuery}
-          onReset={onReset}
-          onEnter={onSearchEnter}
-          onChange={onSearchChange}
+          onSearchQuery={onSearchQuery}
+          onSearchReset={onSearchReset}
+          onSearchEnter={onSearchEnter}
+          onSearchChange={onSearchChange}
           onSearch={onSearch}
         />
       )}
