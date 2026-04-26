@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Icon } from 'tdesign-icons-react'
 import { Drawer, Select, Switch, Input } from 'tdesign-react'
 import { Color } from 'tvision-color'
-import { generateColorMap, insertThemeStylesheet } from '@packages/utils'
+import { changeThemeColor } from '@packages/utils'
 import './Setting.less'
 import type { ThemeState } from '@/store'
 import { useAppSelector, useAppDispatch, setTheme } from '@/store'
@@ -42,15 +42,8 @@ function Setting() {
 
     const mode = theme.theme
     const hex = t.themeColor
-    const { colors: newPalette, primary: brandColorIndex } = Color.getColorGradations({
-      colors: [hex],
-      step: 10,
-      remainInput: false // 是否保留输入 不保留会矫正不合适的主题色
-    })[0]
-    const newColorMap = generateColorMap(hex!, newPalette, mode, brandColorIndex)
-    insertThemeStylesheet(hex!, newColorMap, mode)
-
-    document.documentElement.setAttribute('theme-color', hex || '')
+    if (!hex) return
+    changeThemeColor(hex, mode)
   }
 
   return (
