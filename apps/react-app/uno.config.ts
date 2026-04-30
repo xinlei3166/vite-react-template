@@ -15,6 +15,14 @@ export default defineConfig({
   // rules: [[/^opacity-brand-(\w+)$/, ([, d]) => ({ opacity: `var(--${d}-opacity)` })]],
   theme: {
     colors: {
+      // 自定义品牌透明色
+      ...Object.fromEntries(
+        [10, ...Array.from({ length: 17 }, (_, i) => 15 + i * 5)].map(alpha => [
+          `brandAlpha${alpha}`,
+          `var(--brand-color-alpha-${alpha})`
+        ])
+      ),
+
       // 文字 & 图标 颜色
       fontWhite1: 'var(--td-font-white-1)',
       fontWhite2: 'var(--td-font-white-2)',
@@ -28,7 +36,7 @@ export default defineConfig({
       // 基础颜色
       brand: 'var(--td-brand-color)', // 色彩-品牌-可操作
       brandHover: 'var(--td-brand-color-hover)', // hover态
-      brandFocus: 'var( --td-brand-color-focus)', // focus态，包括鼠标和键盘
+      brandFocus: 'var(--td-brand-color-focus)', // focus态，包括鼠标和键盘
       brandActive: 'var(--td-brand-color-active)', // 点击态
       brandDisabled: 'var(--td-brand-color-disabled)', // 禁用态
       brandLight: 'var(--td-brand-color-light)', // 浅色的选中态
