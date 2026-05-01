@@ -1,12 +1,12 @@
 import type { Middleware } from '@reduxjs/toolkit'
-import { configureStore } from '@reduxjs/toolkit'
 import type { TypedUseSelectorHook } from 'react-redux'
+import { configureStore } from '@reduxjs/toolkit'
+import Raven from 'raven-js'
 import { useDispatch, useSelector } from 'react-redux'
 import { createLogger } from 'redux-logger'
-import Raven from 'raven-js'
-import user from './user'
-import todo from './todo'
 import theme from './theme'
+import todo from './todo'
+import user from './user'
 
 const logger = createLogger()
 
@@ -42,8 +42,7 @@ const store = configureStore({
     todo,
     theme
   },
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(middlewares),
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares),
   devTools: DEV
 })
 
@@ -51,7 +50,6 @@ export * from './user'
 export * from './todo'
 export * from './theme'
 export * from './menu'
-export * from './cos'
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
