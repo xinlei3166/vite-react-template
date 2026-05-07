@@ -2,7 +2,12 @@ import axios from 'axios'
 import { MessagePlugin } from 'tdesign-react'
 import type { Config, RequestsConfig, Method } from '@packages/types'
 import { ContentTypeEnum } from '@packages/types/enums'
-import { getToken, writeFile, writeBase64File } from '@packages/utils'
+import {
+  getToken,
+  writeFile,
+  writeBase64File,
+  getFileNameFromContentDisposition
+} from '@packages/utils'
 // import { useTokenRefresh } from './useTokenRefresh'
 import { parseBlobError } from './utils'
 
@@ -163,19 +168,9 @@ const createRequests = (requestsConfig: RequestsConfig = {}) => {
           if (useHeaderFileName) {
             data = res.data
             // 从response的headers中获取filename, "Content-disposition", "attachment; filename=xxxx.docx"
-            // 1.获取 Header，注意大小写兼容
             const contentDisposition =
               res.headers['content-disposition'] || res.headers['Content-Disposition']
-            if (contentDisposition) {
-              // 2.匹配 filename 或 filename*
-              const fileNameMatch = contentDisposition.match(
-                /filename\*?=['"]?(?:UTF-8'')?([^;'\n]*)['"]?/i
-              )
-              if (fileNameMatch && fileNameMatch[1]) {
-                // 3.解码
-                headerFileName = decodeURIComponent(fileNameMatch[1])
-              }
-            }
+            headerFileName = getFileNameFromContentDisposition(contentDisposition)
             console.log('headerFileName:', headerFileName)
           } else {
             data = res
@@ -186,7 +181,7 @@ const createRequests = (requestsConfig: RequestsConfig = {}) => {
           data = stringify ? JSON.stringify(_data) : _data
         }
         const write = responseType === 'base64' ? writeBase64File : writeFile
-        await write(fileName as string, data, blobOptions)
+        await write(headerFileName || (fileName as string), data, blobOptions)
         return true
       })
       .catch(e => console.log(e))
