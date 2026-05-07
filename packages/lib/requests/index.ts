@@ -9,7 +9,8 @@ import { parseBlobError } from './utils'
 const createRequests = (requestsConfig: RequestsConfig = {}) => {
   const baseURL = requestsConfig.baseURL || import.meta.env.VITE_API_URL
   const authorizationKey = requestsConfig.authorizationKey || 'Authorization'
-  const errorCodes = requestsConfig.errorCodes || [20004, 20010]
+  // 20004: 登录超时, 20010: token错误, 20012: token版本错误, 20102: 用户已禁用
+  const errorCodes = requestsConfig.errorCodes || [20004, 20010, 20012, 20102]
   const codeKey = requestsConfig.codeKey || 'code'
   const messageKey = requestsConfig.messageKey || 'msg'
   const successCode = requestsConfig.successCode || 0
@@ -64,7 +65,13 @@ const createRequests = (requestsConfig: RequestsConfig = {}) => {
       if (responseType === 'blob') {
         const contentType = response.headers?.['content-type']
         if (contentType.includes('application/json')) {
-          const blobError = await parseBlobError(response.data, messageKey)
+          const blobError = await parseBlobError(response.data, codeKey, messageKey)
+
+          // token 过期，需要续期
+          // if (blobError.code === 20011 && !noRefreshToken) {
+          //   return handleRefreshed(service, response.config)
+          // }
+
           MessagePlugin.error(blobError.message || '下载失败')
           return
         }
