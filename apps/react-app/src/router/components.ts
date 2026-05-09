@@ -1,3 +1,6 @@
+import { link } from 'fs'
+import { redirect } from 'react-router-dom'
+
 // 存放左侧菜单相关的路由，icon不能为空
 export default [
   {
@@ -57,10 +60,18 @@ export default [
     element: () => import('@/components/layout/Router'),
     children: [
       {
-        id: 'othersReact',
-        path: '/others/react',
-        handle: { title: 'react' },
-        element: () => import('@/views/others/react')
+        id: 'othersFramework',
+        path: '/others/framework',
+        handle: { title: 'framework' },
+        element: () => import('@/components/layout/Router'),
+        children: [
+          {
+            id: 'othersReact',
+            path: '/others/framework/react',
+            handle: { title: 'react' },
+            element: () => import('@/views/others/react')
+          }
+        ]
       },
       {
         id: 'othersHello',

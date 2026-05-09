@@ -36,7 +36,18 @@ function Siderbar() {
   const changeRoute = () => {
     const level = matchRoutes.length
     const route = matchRoutes.at(-1)
-    const routeValue = level > 3 ? matchRoutes[2]?.pathname : route?.pathname
+    let routeValue
+    if (matchRoutes[1]?.handle?.link) {
+      // 如果一级菜单没有子级 / 外链
+      routeValue = matchRoutes[1]?.pathname
+    } else if (level > 3 && route?.handle?.hidden) {
+      // 如果当前路由大于 3 级，并且是隐藏页，比如详情页，高亮它的上一级
+      routeValue = matchRoutes.at(-2)?.pathname || ''
+    } else {
+      // 正常菜单，高亮当前路由
+      routeValue = route?.pathname
+    }
+
     if (selectedValue !== routeValue) {
       setSelectedValue(routeValue)
     }
@@ -51,13 +62,16 @@ function Siderbar() {
     //     setExpanded(prev => [...new Set([...prev, ...parentPaths])])
     //   }, 100)
     // }
+
     // 展开单个父级菜单
-    const parentRoute = matchRoutes[1]
-    if (parentRoute && !parentRoute.handle?.link) {
-      setTimeout(() => {
-        setExpanded([parentRoute.pathname])
-      }, 100)
-    }
+    const expandedPaths = matchRoutes
+      .slice(1, -1)
+      .filter(item => !item.handle?.link)
+      .map(item => item.pathname)
+      .filter(Boolean)
+    setTimeout(() => {
+      setExpanded(expandedPaths)
+    }, 100)
   }
 
   const onExpand = (value: any[]) => {
