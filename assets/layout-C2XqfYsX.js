@@ -1,0 +1,1 @@
+import{n as e}from"./router-BuJv2x-U.js";export{e as default};
