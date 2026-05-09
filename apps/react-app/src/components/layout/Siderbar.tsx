@@ -155,13 +155,13 @@ function Siderbar() {
           onChange={onChange}
           logo={theme.layout !== 'mix' && <Logo />}
           operations={
-            <div className="sider-trigger-wrap" onClick={() => onCollapse(!theme.collapsed)}>
+            <button className="sider-trigger" onClick={() => onCollapse(!theme.collapsed)}>
               {theme.collapsed ? (
-                <Iconfont name="icon-indent" className="sider-trigger" />
+                <Iconfont name="icon-indent" className="sider-trigger-icon" />
               ) : (
-                <Iconfont name="icon-outdent" className="sider-trigger" />
+                <Iconfont name="icon-outdent" className="sider-trigger-icon" />
               )}
-            </div>
+            </button>
           }
         >
           {renderMenuItems(menuRoutes)}
