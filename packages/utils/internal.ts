@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie'
+import { MessagePlugin } from 'tdesign-react'
 // @ts-ignore
 import router from '@/router'
 // @ts-ignore
@@ -37,9 +38,24 @@ export const removeLocalValue = (key: string) => {
 }
 
 // logout
-export const logoutCleanup = () => {
+interface LogoutCleanupOptions {
+  msg?: string
+  destroy?: boolean
+  [key: string]: any
+}
+export const logoutCleanup = ({ msg, destroy = false }: LogoutCleanupOptions = {}) => {
   removeToken()
-  router.navigate('/login')
   store.dispatch(cleanupUser())
   store.dispatch(cleanupMenu())
+
+  if (destroy) {
+    MessagePlugin.closeAll()
+  }
+  if (msg) {
+    MessagePlugin.error(msg)
+  }
+
+  setTimeout(() => {
+    router.navigate('/login')
+  }, 50)
 }

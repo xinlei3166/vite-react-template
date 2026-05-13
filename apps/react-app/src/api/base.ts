@@ -1,20 +1,9 @@
-import { redirect } from 'react-router-dom'
-import { MessagePlugin } from 'tdesign-react'
 import { useRequests } from '@packages/lib'
 import type { Request } from '@packages/types'
-import { removeToken } from '@packages/utils'
-import { useAppDispatch, cleanupUser, cleanupMenu } from '@/store'
+import { logoutCleanup } from '@packages/utils'
 
 const errorHandler = (msg: string) => {
-  const dispatch = useAppDispatch()
-  removeToken()
-  dispatch(cleanupUser())
-  dispatch(cleanupMenu())
-  MessagePlugin.closeAll()
-  MessagePlugin.error(msg)
-  setTimeout(() => {
-    redirect('/login')
-  }, 50)
+  logoutCleanup({ msg })
 }
 
 const baseURL = import.meta.env.VITE_API_URL

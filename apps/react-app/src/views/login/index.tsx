@@ -118,7 +118,7 @@ function Login() {
               ></Input>
             </Form.FormItem>
             <Form.FormItem name="remember">
-              <Checkbox>自动登录</Checkbox>
+              <Checkbox>记住账号</Checkbox>
               <a className="text-btn ml-auto" href="#">
                 忘记密码
               </a>
