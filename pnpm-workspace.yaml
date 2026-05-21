@@ -1,5 +1,14 @@
 packages:
   - 'packages/**'
   - 'apps/**'
+allowBuilds:
+  '@swc/core': true
+  core-js-pure: true
+  cos-js-sdk-v5: true
+  cpu-features: true
+  esbuild: true
+  sharp: true
+  simple-git-hooks: true
+  ssh2: true
 peerDependencyRules:
   ignoreMissing: []
