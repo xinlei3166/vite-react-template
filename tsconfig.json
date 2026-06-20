@@ -11,23 +11,13 @@
     "allowJs": false,
     "noImplicitAny": true,
     "skipLibCheck": false,
-    "esModuleInterop": false,
+    "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["vite/client", "node"],
-    "ignoreDeprecations": "6.0"
-    //    "baseUrl": "./",
-    //    "paths": {
-    //      "@/*": ["src/*"]
-    //    }
+    "types": ["vite-plus/client", "node"]
   },
-  "include": [
-    "scripts/**/*.ts",
-    "packages/**/*.ts",
-    "packages/**/*.d.ts",
-    "packages/**/*.tsx"
-  ],
+  "include": ["scripts/**/*.ts", "packages/**/*.ts", "packages/**/*.d.ts", "packages/**/*.tsx"],
   "exclude": ["node_modules"]
 }

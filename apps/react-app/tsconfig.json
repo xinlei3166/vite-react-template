@@ -11,16 +11,13 @@
     "allowJs": false,
     "noImplicitAny": true,
     "skipLibCheck": false,
-    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["vite/client", "node"],
-    "ignoreDeprecations": "6.0",
-    "baseUrl": "./",
+    "types": ["vite-plus/client", "node"],
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./src/*"],
       "features/*": ["../../features/*"]
     }
   },
